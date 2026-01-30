@@ -1,266 +1,423 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Reserva da Van | WayCompanyGG</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: linear-gradient(135deg, #0f0f0f, #1b1b1b);
-      font-family: Arial, sans-serif;
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    body{
+      margin:0;
+      min-height:100vh;
+      background:linear-gradient(135deg,#0f0f0f,#1b1b1b);
+      font-family:Arial, sans-serif;
+      color:#fff;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:16px;
     }
 
-    .card {
-      background: #121212;
-      padding: 32px;
-      border-radius: 18px;
-      width: 100%;
-      max-width: 500px;
-      box-shadow: 0 20px 50px rgba(0,0,0,.6);
+    .card{
+      width:100%;
+      max-width:720px;
+      background:#121212;
+      border-radius:18px;
+      box-shadow:0 20px 50px rgba(0,0,0,.6);
+      padding:20px;
     }
 
-    h1 { text-align: center; margin: 0 0 8px; }
-    p  { text-align: center; opacity: .8; margin: 0 0 18px; }
+    h1{ margin:0 0 6px; text-align:center; font-size:22px; }
+    p{ margin:0 0 14px; text-align:center; opacity:.8; font-size:14px; }
 
-    .admin-badge {
-      text-align: center;
-      color: #ef4444;
-      font-size: 13px;
-      margin-bottom: 10px;
-      display: none;
+    .row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin: 10px 0 14px;
+      justify-content:center;
     }
 
-    .van {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-bottom: 14px;
+    .btn{
+      border:none;
+      border-radius:10px;
+      padding:10px 12px;
+      cursor:pointer;
+      font-weight:700;
+      font-size:14px;
+      color:#fff;
+      background:#374151;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      min-width: 160px;
+    }
+    .btn:hover{ opacity:.9; }
+    .btn-admin{ background:#ef4444; }
+    .btn-layout{ background:#2563eb; }
+    .btn-save{ background:#16a34a; }
+    .btn-back{ background:#374151; }
+
+    .badge{
+      text-align:center;
+      font-size:12px;
+      color:#ef4444;
+      margin-bottom:8px;
+      display:none;
     }
 
-    .seat {
-      background: #2a2a2a;
-      border-radius: 10px;
-      padding: 16px 6px;
-      text-align: center;
-      cursor: pointer;
-      font-size: 14px;
-      transition: .15s;
-      user-select: none;
+    /* Palco da van */
+    .stage{
+      position:relative;
+      width:100%;
+      max-width:680px;
+      margin:0 auto;
+      background:#0b0b0b;
+      border-radius:16px;
+      padding:12px;
     }
 
-    .seat:hover { background: #3a3a3a; }
-
-    /* Reservado por pessoa */
-    .seat.reserved {
-      background: #7c3aed;
-      cursor: default;
+    .vanWrap{
+      position:relative;
+      width:100%;
+      border-radius:14px;
+      overflow:hidden;
+      background:#0b0b0b;
     }
 
-    /* Bloqueado pelo admin */
-    .seat.blocked {
-      background: #ef4444;
-      cursor: not-allowed;
+    .vanImg{
+      width:100%;
+      display:block;
+      user-select:none;
+      -webkit-user-drag:none;
+      pointer-events:none;
     }
 
-    /* Destaque quando admin está ativo */
-    .seat.admin-outline {
-      outline: 2px solid rgba(239, 68, 68, 0.85);
+    /* Assentos */
+    .seat{
+      position:absolute;
+      width:34px;
+      height:34px;
+      border-radius:8px;
+      background:#2a2a2a;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:12px;
+      font-weight:800;
+      cursor:pointer;
+      user-select:none;
+      transform: translate(-50%, -50%); /* posicionamento pelo centro */
+      transition: .12s;
+      box-shadow: 0 6px 18px rgba(0,0,0,.35);
     }
+    .seat:hover{ opacity:.9; }
 
-    .legend {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      font-size: 12px;
-      opacity: .9;
-      margin-bottom: 14px;
+    .seat.reserved{ background:#7c3aed; }
+    .seat.blocked{ background:#ef4444; cursor:not-allowed; }
+    .seat.layouting{
+      outline: 2px dashed rgba(255,255,255,.45);
+      cursor: grab;
     }
-    .legend span { display:flex; align-items:center; gap:6px; }
-    .box { width: 14px; height: 14px; border-radius: 4px; }
-    .box.free { background:#2a2a2a; }
-    .box.res { background:#7c3aed; }
-    .box.blk { background:#ef4444; }
+    .seat.layouting:active{ cursor: grabbing; }
 
-    .btn {
-      width: 100%;
-      padding: 12px;
-      border-radius: 10px;
-      border: none;
-      font-size: 15px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-bottom: 10px;
-      text-decoration: none;
-      display: block;
-      text-align: center;
+    .legend{
+      display:flex;
+      gap:14px;
+      justify-content:center;
+      align-items:center;
+      font-size:12px;
+      opacity:.9;
+      margin-top:12px;
+      flex-wrap:wrap;
     }
+    .legend .item{ display:flex; align-items:center; gap:6px; }
+    .box{ width:14px; height:14px; border-radius:4px; }
+    .bfree{ background:#2a2a2a; }
+    .bres{ background:#7c3aed; }
+    .bblk{ background:#ef4444; }
 
-    .btn-admin { background: #ef4444; color: #fff; }
-    .btn-exit  { background: #374151; color: #fff; }
-
-    .footer { margin-top: 10px; text-align:center; font-size: 12px; opacity:.6; }
+    .hint{
+      margin-top:10px;
+      text-align:center;
+      font-size:12px;
+      opacity:.65;
+    }
   </style>
 </head>
 
 <body>
   <div class="card">
     <h1>🚐 Reserva da Van</h1>
-    <p>Escolha seu lugar e informe seu nome</p>
+    <p>Clique em um lugar livre para reservar com seu nome</p>
 
-    <div id="adminBadge" class="admin-badge">👮‍♂️ MODO ADMIN ATIVO</div>
+    <div id="adminBadge" class="badge">👮‍♂️ MODO ADMIN ATIVO</div>
 
-    <div class="van" id="van"></div>
+    <div class="row">
+      <button id="adminBtn" class="btn btn-admin">👮‍♂️ Entrar Admin</button>
+      <button id="exitAdminBtn" class="btn btn-back" style="display:none;">Sair Admin</button>
 
-    <div class="legend">
-      <span><span class="box free"></span> Livre</span>
-      <span><span class="box res"></span> Reservado</span>
-      <span><span class="box blk"></span> Bloqueado</span>
+      <button id="layoutBtn" class="btn btn-layout" style="display:none;">🧩 Editar posições</button>
+      <button id="saveLayoutBtn" class="btn btn-save" style="display:none;">💾 Salvar posições</button>
+
+      <a href="index.html" class="btn btn-back">⬅ Voltar</a>
     </div>
 
-    <button id="adminBtn" class="btn btn-admin">Entrar como Admin</button>
-    <button id="exitAdminBtn" class="btn btn-exit" style="display:none;">Sair do Admin</button>
+    <div class="stage">
+      <div id="vanWrap" class="vanWrap">
+        <!-- TROQUE AQUI se seu PNG tiver outro nome -->
+        <img class="vanImg" src="van.png" alt="Van" />
+        <!-- Assentos vão ser inseridos via JS -->
+      </div>
 
-    <a href="index.html" class="btn btn-exit">⬅ Voltar para o site principal</a>
+      <div class="legend">
+        <div class="item"><span class="box bfree"></span> Livre</div>
+        <div class="item"><span class="box bres"></span> Reservado</div>
+        <div class="item"><span class="box bblk"></span> Bloqueado</div>
+      </div>
 
-    <div class="footer">WayCompanyGG ©</div>
+      <div class="hint">
+        Admin: clique em um lugar para <b>Bloquear/Desbloquear</b> ou <b>Liberar</b>. <br/>
+        Modo “Editar posições”: arraste os lugares em cima do PNG e clique “Salvar posições”.
+      </div>
+    </div>
   </div>
 
-  <script>
-    const TOTAL_SEATS = 12;
-    const van = document.getElementById("van");
-    const adminBtn = document.getElementById("adminBtn");
-    const exitAdminBtn = document.getElementById("exitAdminBtn");
-    const adminBadge = document.getElementById("adminBadge");
+<script>
+  // ===== CONFIG =====
+  const TOTAL_SEATS = 12;              // quantidade de lugares
+  const ADMIN_PASSWORD = "1234";       // troque se quiser
+  const STORAGE_SEATS = "vanSeatsV3";  // status (livre/reservado/bloqueado)
+  const STORAGE_LAYOUT = "vanLayoutV1";// posições
+  // ==================
 
-    // seat: { status: "free" | "reserved" | "blocked", name?: string }
-    const defaultSeats = Array.from({ length: TOTAL_SEATS }, () => ({ status: "free" }));
+  const vanWrap = document.getElementById("vanWrap");
+  const adminBtn = document.getElementById("adminBtn");
+  const exitAdminBtn = document.getElementById("exitAdminBtn");
+  const layoutBtn = document.getElementById("layoutBtn");
+  const saveLayoutBtn = document.getElementById("saveLayoutBtn");
+  const adminBadge = document.getElementById("adminBadge");
 
-    let isAdmin = false;
-    let seats = loadSeats();
+  let isAdmin = false;
+  let isLayoutMode = false;
 
-    function loadSeats() {
-      const raw = localStorage.getItem("vanSeatsV2");
-      if (!raw) return structuredClone(defaultSeats);
-      try {
-        const parsed = JSON.parse(raw);
-        // fallback básico se vier algo antigo
-        if (!Array.isArray(parsed) || parsed.length !== TOTAL_SEATS) {
-          return structuredClone(defaultSeats);
-        }
-        return parsed;
-      } catch {
-        return structuredClone(defaultSeats);
+  // Status por assento: { status: "free"|"reserved"|"blocked", name?: string }
+  let seats = loadSeats();
+
+  // Layout por assento: { x: 0..1, y: 0..1 } relativo ao container (responsivo)
+  let layout = loadLayout();
+
+  function loadSeats(){
+    const raw = localStorage.getItem(STORAGE_SEATS);
+    if(!raw){
+      return Array.from({length: TOTAL_SEATS}, () => ({status:"free"}));
+    }
+    try{
+      const parsed = JSON.parse(raw);
+      if(!Array.isArray(parsed) || parsed.length !== TOTAL_SEATS){
+        return Array.from({length: TOTAL_SEATS}, () => ({status:"free"}));
       }
+      return parsed;
+    }catch{
+      return Array.from({length: TOTAL_SEATS}, () => ({status:"free"}));
     }
+  }
 
-    function saveSeats() {
-      localStorage.setItem("vanSeatsV2", JSON.stringify(seats));
-      render();
+  function saveSeats(){
+    localStorage.setItem(STORAGE_SEATS, JSON.stringify(seats));
+  }
+
+  function defaultLayout(){
+    // layout inicial “ok” em grid (você depois arrasta pra encaixar no seu PNG)
+    const positions = [];
+    const cols = 4;
+    const rows = Math.ceil(TOTAL_SEATS / cols);
+    for(let i=0;i<TOTAL_SEATS;i++){
+      const c = i % cols;
+      const r = Math.floor(i / cols);
+      // normalizado com margenzinha
+      const x = (c + 1) / (cols + 1);
+      const y = (r + 1) / (rows + 1);
+      positions.push({x,y});
     }
+    return positions;
+  }
 
-    function render() {
-      van.innerHTML = "";
+  function loadLayout(){
+    const raw = localStorage.getItem(STORAGE_LAYOUT);
+    if(!raw) return defaultLayout();
+    try{
+      const parsed = JSON.parse(raw);
+      if(!Array.isArray(parsed) || parsed.length !== TOTAL_SEATS) return defaultLayout();
+      return parsed;
+    }catch{
+      return defaultLayout();
+    }
+  }
 
-      seats.forEach((s, index) => {
-        const seat = document.createElement("div");
-        seat.className = "seat";
+  function saveLayout(){
+    localStorage.setItem(STORAGE_LAYOUT, JSON.stringify(layout));
+  }
 
-        // estilos por status
-        if (s.status === "reserved") seat.classList.add("reserved");
-        if (s.status === "blocked") seat.classList.add("blocked");
-        if (isAdmin) seat.classList.add("admin-outline");
+  function render(){
+    // remove assentos antigos
+    vanWrap.querySelectorAll(".seat").forEach(el => el.remove());
 
-        // texto
-        if (s.status === "reserved") seat.textContent = s.name || "Reservado";
-        else if (s.status === "blocked") seat.textContent = "Bloqueado";
-        else seat.textContent = `Lugar ${index + 1}`;
+    const rect = vanWrap.getBoundingClientRect();
 
-        seat.onclick = () => handleSeatClick(index);
-        van.appendChild(seat);
+    for(let i=0;i<TOTAL_SEATS;i++){
+      const s = seats[i];
+      const pos = layout[i];
+
+      const seatEl = document.createElement("div");
+      seatEl.className = "seat";
+      seatEl.dataset.index = i;
+
+      // status visual
+      if(s.status === "reserved") seatEl.classList.add("reserved");
+      if(s.status === "blocked") seatEl.classList.add("blocked");
+      if(isLayoutMode) seatEl.classList.add("layouting");
+
+      // texto
+      seatEl.textContent = (s.status === "reserved" && s.name) ? s.name : (i+1);
+
+      // posicionado em porcentagem (responsivo)
+      seatEl.style.left = (pos.x * 100) + "%";
+      seatEl.style.top  = (pos.y * 100) + "%";
+
+      // click / drag
+      seatEl.addEventListener("click", (e) => {
+        if(isLayoutMode) return; // no layout mode, clique não reserva
+        handleSeatClick(i);
       });
+
+      // drag no layout mode
+      seatEl.addEventListener("pointerdown", (e) => {
+        if(!isLayoutMode) return;
+        seatEl.setPointerCapture(e.pointerId);
+        const onMove = (ev) => {
+          const wrapRect = vanWrap.getBoundingClientRect();
+          const x = (ev.clientX - wrapRect.left) / wrapRect.width;
+          const y = (ev.clientY - wrapRect.top) / wrapRect.height;
+          // clamp 0..1
+          layout[i] = { x: Math.min(0.98, Math.max(0.02, x)), y: Math.min(0.98, Math.max(0.02, y)) };
+          seatEl.style.left = (layout[i].x * 100) + "%";
+          seatEl.style.top  = (layout[i].y * 100) + "%";
+        };
+        const onUp = () => {
+          seatEl.removeEventListener("pointermove", onMove);
+          seatEl.removeEventListener("pointerup", onUp);
+          seatEl.removeEventListener("pointercancel", onUp);
+        };
+        seatEl.addEventListener("pointermove", onMove);
+        seatEl.addEventListener("pointerup", onUp);
+        seatEl.addEventListener("pointercancel", onUp);
+      });
+
+      vanWrap.appendChild(seatEl);
     }
+  }
 
-    function handleSeatClick(index) {
-      const s = seats[index];
+  function handleSeatClick(i){
+    const s = seats[i];
 
-      // Usuário normal
-      if (!isAdmin) {
-        if (s.status !== "free") return; // não clica em reservado/bloqueado
-        const name = prompt(`Digite seu nome para reservar o lugar ${index + 1}:`);
-        if (!name) return;
-        seats[index] = { status: "reserved", name: name.trim() };
-        saveSeats();
-        return;
-      }
-
-      // Admin
-      if (s.status === "free") {
-        const action = prompt(
-          `Admin - Lugar ${index + 1}\n` +
-          `Digite:\n` +
-          `1 = Reservar (com nome)\n` +
-          `2 = Bloquear\n` +
-          `3 = Cancelar`
-        );
-
-        if (action === "1") {
-          const name = prompt("Nome para reservar:");
-          if (!name) return;
-          seats[index] = { status: "reserved", name: name.trim() };
-          saveSeats();
-        } else if (action === "2") {
-          seats[index] = { status: "blocked" };
-          saveSeats();
-        }
-        return;
-      }
-
-      if (s.status === "reserved") {
-        const ok = confirm(`Liberar o lugar reservado por "${s.name || "alguém"}"?`);
-        if (!ok) return;
-        seats[index] = { status: "free" };
-        saveSeats();
-        return;
-      }
-
-      if (s.status === "blocked") {
-        const ok = confirm("Desbloquear este lugar?");
-        if (!ok) return;
-        seats[index] = { status: "free" };
-        saveSeats();
-        return;
-      }
-    }
-
-    adminBtn.onclick = () => {
-      const senha = prompt("Senha do admin:");
-      if (senha === "1234") {
-        isAdmin = true;
-        adminBadge.style.display = "block";
-        adminBtn.style.display = "none";
-        exitAdminBtn.style.display = "block";
-        render();
-      } else {
-        alert("Senha incorreta");
-      }
-    };
-
-    exitAdminBtn.onclick = () => {
-      isAdmin = false;
-      adminBadge.style.display = "none";
-      adminBtn.style.display = "block";
-      exitAdminBtn.style.display = "none";
+    // usuário normal
+    if(!isAdmin){
+      if(s.status !== "free") return; // reservado/bloqueado não clicável
+      const name = prompt(`Digite seu nome para reservar o lugar ${i+1}:`);
+      if(!name) return;
+      seats[i] = { status: "reserved", name: name.trim() };
+      saveSeats();
       render();
-    };
+      return;
+    }
 
+    // admin
+    if(s.status === "free"){
+      const action = prompt(
+        `Admin - Lugar ${i+1}\n` +
+        `1 = Reservar (com nome)\n` +
+        `2 = Bloquear (vermelho)\n` +
+        `3 = Cancelar`
+      );
+      if(action === "1"){
+        const name = prompt("Nome para reservar:");
+        if(!name) return;
+        seats[i] = { status:"reserved", name: name.trim() };
+        saveSeats(); render();
+      } else if(action === "2"){
+        seats[i] = { status:"blocked" };
+        saveSeats(); render();
+      }
+      return;
+    }
+
+    if(s.status === "reserved"){
+      const ok = confirm(`Liberar o lugar reservado por "${s.name || "alguém"}"?`);
+      if(!ok) return;
+      seats[i] = { status:"free" };
+      saveSeats(); render();
+      return;
+    }
+
+    if(s.status === "blocked"){
+      const ok = confirm("Desbloquear este lugar?");
+      if(!ok) return;
+      seats[i] = { status:"free" };
+      saveSeats(); render();
+      return;
+    }
+  }
+
+  // Admin login
+  adminBtn.onclick = () => {
+    const pass = prompt("Senha do admin:");
+    if(pass === ADMIN_PASSWORD){
+      isAdmin = true;
+      adminBadge.style.display = "block";
+      adminBtn.style.display = "none";
+      exitAdminBtn.style.display = "inline-flex";
+      layoutBtn.style.display = "inline-flex";
+      render();
+    } else {
+      alert("Senha incorreta");
+    }
+  };
+
+  exitAdminBtn.onclick = () => {
+    isAdmin = false;
+    isLayoutMode = false;
+    adminBadge.style.display = "none";
+    adminBtn.style.display = "inline-flex";
+    exitAdminBtn.style.display = "none";
+    layoutBtn.style.display = "none";
+    saveLayoutBtn.style.display = "none";
     render();
-  </script>
+  };
+
+  layoutBtn.onclick = () => {
+    isLayoutMode = !isLayoutMode;
+    if(isLayoutMode){
+      layoutBtn.textContent = "🧩 Saindo do editar";
+      saveLayoutBtn.style.display = "inline-flex";
+    }else{
+      layoutBtn.textContent = "🧩 Editar posições";
+      saveLayoutBtn.style.display = "none";
+    }
+    render();
+  };
+
+  saveLayoutBtn.onclick = () => {
+    saveLayout();
+    alert("Posições salvas! ✅");
+  };
+
+  // Render inicial
+  render();
+
+  // re-render ao redimensionar (garante posição perfeita)
+  window.addEventListener("resize", () => render());
+</script>
 </body>
 </html>
