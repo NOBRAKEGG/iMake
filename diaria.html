@@ -1,397 +1,797 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Calculadora de Diária | Lalaiá</title>
 
 <style>
-@font-face{
-  font-family:"Rokiest";
-  src:url("https://waycompanygg.github.io/roteiro/assets/fonts/Rokiest-Extrabold.otf") format("opentype");
-  font-weight:800;
-}
+  @font-face{
+    font-family:"Rokiest";
+    src:url("https://waycompanygg.github.io/roteiro/assets/fonts/Rokiest-Extrabold.otf") format("opentype");
+    font-weight:800;
+    font-style:normal;
+    font-display:swap;
+  }
 
-:root{
-  --bg1:#0b0f19;
-  --bg2:#0f172a;
-  --card:rgba(11,18,32,.85);
-  --stroke:rgba(255,255,255,.12);
-  --text:#e5e7eb;
-  --muted:rgba(229,231,235,.65);
-  --blue:#2563eb;
-  --amber:#f59e0b;
-  --danger:#ef4444;
-}
+  :root{
+    --bg1:#0b0f19;
+    --bg2:#0f172a;
+    --panel: rgba(11,18,32,.82);
+    --panel2: rgba(2,6,23,.55);
+    --stroke: rgba(255,255,255,.10);
+    --text:#e5e7eb;
+    --muted: rgba(229,231,235,.65);
+    --shadow: 0 24px 70px rgba(0,0,0,.65);
 
-*{box-sizing:border-box}
+    --blue:#2563eb;
+    --amber:#f59e0b;
+    --red:#ef4444;
+    --green:#22c55e;
+  }
 
-body{
-  margin:0;
-  min-height:100vh;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
-  background:
-    radial-gradient(800px 420px at 10% 10%, rgba(245,158,11,.18), transparent 60%),
-    radial-gradient(800px 420px at 90% 20%, rgba(37,99,235,.22), transparent 60%),
-    linear-gradient(135deg,var(--bg1),var(--bg2));
-  color:var(--text);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:22px;
-}
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    min-height:100vh;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+    color:var(--text);
+    background:
+      radial-gradient(900px 520px at 10% 10%, rgba(37,99,235,.20), transparent 60%),
+      radial-gradient(900px 520px at 90% 15%, rgba(245,158,11,.16), transparent 60%),
+      linear-gradient(135deg, var(--bg1), var(--bg2));
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:22px;
+  }
 
-.home{
-  position:fixed;
-  top:16px; left:16px;
-  background:rgba(17,24,39,.9);
-  border:1px solid var(--stroke);
-  padding:10px 14px;
-  border-radius:12px;
-  font-weight:900;
-  text-decoration:none;
-  color:#fff;
-}
+  /* Home fixo */
+  .home-fab{
+    position: fixed;
+    top: 16px; left: 16px;
+    z-index: 9999;
+    background: rgba(17, 24, 39, .92);
+    border: 1px solid rgba(255,255,255,.12);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 900;
+    font-size: 14px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    box-shadow: 0 12px 30px rgba(0,0,0,.45);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    backdrop-filter: blur(8px);
+    transition:.15s;
+  }
+  .home-fab:hover{ transform: translateY(-1px); opacity:.92; }
 
-.card{
-  width:100%;
-  max-width:1000px;
-  background:var(--card);
-  border:1px solid var(--stroke);
-  border-radius:20px;
-  padding:22px;
-  box-shadow:0 30px 80px rgba(0,0,0,.6);
-}
+  .wrap{
+    width: min(1050px, 100%);
+    background: var(--panel);
+    border: 1px solid var(--stroke);
+    border-radius: 22px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(10px);
+    padding: 18px;
+    animation: in .45s ease both;
+  }
+  @keyframes in{ from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:translateY(0)} }
 
-h1{
-  font-family:"Rokiest";
-  margin:0;
-  letter-spacing:.8px;
-}
+  /* header */
+  .header{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    align-items:flex-start;
+    padding: 8px 8px 14px;
+  }
+  .title{
+    margin:0;
+    font-family:"Rokiest", sans-serif;
+    letter-spacing:.8px;
+    font-size: 30px;
+  }
+  .desc{
+    margin:6px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .badge{
+    border:1px solid var(--stroke);
+    background: rgba(255,255,255,.04);
+    padding: 6px 10px;
+    border-radius: 999px;
+    color: rgba(229,231,235,.85);
+    font-size: 12px;
+    font-weight: 900;
+    white-space:nowrap;
+  }
 
-.sub{
-  margin:6px 0 14px;
-  color:var(--muted);
-  font-size:13px;
-}
+  /* cards */
+  .card{
+    background: rgba(255,255,255,.04);
+    border: 1px solid var(--stroke);
+    border-radius: 18px;
+    padding: 14px;
+  }
 
-/* ===== TOPBAR ===== */
-.topbar{
-  display:grid;
-  grid-template-columns:1fr auto;
-  gap:12px;
-  margin-top:10px;
-}
+  /* controls bar */
+  .controls{
+    display:grid;
+    grid-template-columns: auto 1.2fr auto auto auto auto;
+    gap:10px;
+    align-items:end;
+  }
 
-.leftControls{
-  display:flex;
-  gap:10px;
-  align-items:flex-end;
-  flex-wrap:wrap;
-}
+  .field{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    min-width: 150px;
+  }
+  label{
+    font-size:12px;
+    color: rgba(229,231,235,.75);
+  }
 
-.fieldMini{
-  min-width:220px;
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-}
+  input, select{
+    height:44px;
+    width:100%;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: var(--panel2);
+    color: var(--text);
+    padding: 10px 12px;
+    outline:none;
+    transition:.15s;
+  }
+  input:focus, select:focus{
+    border-color: rgba(37,99,235,.55);
+    box-shadow: 0 0 0 4px rgba(37,99,235,.18);
+  }
 
-label{font-size:12px;color:var(--muted)}
+  .btn{
+    height:44px;
+    border-radius: 12px;
+    border: 0;
+    padding: 0 14px;
+    cursor:pointer;
+    font-weight: 900;
+    color:#fff;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    transition:.15s;
+    white-space:nowrap;
+  }
+  .btn:hover{ transform: translateY(-1px); opacity:.95; }
+  .btn:active{ transform: translateY(0); opacity:.9; }
+  .btn-blue{ background: var(--blue); box-shadow: 0 10px 26px rgba(37,99,235,.26); }
+  .btn-ghost{ background: rgba(255,255,255,.06); border:1px solid var(--stroke); }
+  .btn-red{ background: rgba(239,68,68,.18); border:1px solid rgba(239,68,68,.35); }
+  .btn-amber{ background: var(--amber); color:#111827; }
+  .btn-small{ padding: 0 12px; }
 
-input,select{
-  height:44px;
-  padding:10px 12px;
-  border-radius:12px;
-  border:1px solid var(--stroke);
-  background:#020617;
-  color:#fff;
-}
+  /* table */
+  .table{
+    margin-top: 12px;
+    overflow:hidden;
+    border-radius: 18px;
+    border:1px solid var(--stroke);
+    background: rgba(2,6,23,.35);
+  }
+  .thead, .trow{
+    display:grid;
+    grid-template-columns: 1.3fr .5fr .45fr .20fr;
+    gap:10px;
+    align-items:center;
+    padding: 10px 12px;
+  }
+  .thead{
+    background: rgba(255,255,255,.03);
+    color: rgba(229,231,235,.65);
+    font-size:12px;
+    font-weight: 900;
+  }
+  .trow{
+    border-top:1px solid rgba(255,255,255,.06);
+  }
 
-.btn{
-  height:44px;
-  padding:0 16px;
-  border-radius:12px;
-  border:0;
-  cursor:pointer;
-  font-weight:900;
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-}
+  .money{ font-variant-numeric: tabular-nums; }
 
-.btn-blue{background:var(--blue);color:#fff}
-.btn-amber{background:var(--amber);color:#000}
-.btn-ghost{
-  background:rgba(255,255,255,.06);
-  color:#fff;
-  border:1px solid var(--stroke);
-}
+  /* toggle meia */
+  .toggle{
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    gap:10px;
+  }
+  .switch{
+    width: 44px;
+    height: 26px;
+    border-radius: 999px;
+    border:1px solid rgba(255,255,255,.14);
+    background: rgba(255,255,255,.06);
+    position:relative;
+    cursor:pointer;
+    flex: 0 0 auto;
+    transition:.15s;
+  }
+  .knob{
+    position:absolute;
+    top: 3px; left: 3px;
+    width: 20px; height: 20px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.85);
+    transition:.15s;
+  }
+  .switch.on{
+    background: rgba(34,197,94,.18);
+    border-color: rgba(34,197,94,.35);
+  }
+  .switch.on .knob{ left: 21px; background: rgba(34,197,94,.95); }
 
-.gridHeader,.gridRow{
-  display:grid;
-  grid-template-columns:1.2fr .6fr .4fr .2fr;
-  gap:10px;
-  align-items:center;
-}
+  .pill{
+    font-size:12px;
+    font-weight: 900;
+    color: rgba(229,231,235,.85);
+    border:1px solid rgba(255,255,255,.12);
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.04);
+  }
 
-.gridHeader{
-  margin-top:18px;
-  font-size:12px;
-  color:var(--muted);
-}
+  .iconBtn{
+    height:44px;
+    width:44px;
+    border-radius: 12px;
+    border:1px solid rgba(239,68,68,.30);
+    background: rgba(239,68,68,.16);
+    color:#fff;
+    cursor:pointer;
+    font-weight:900;
+    transition:.15s;
+  }
+  .iconBtn:hover{ transform: translateY(-1px); opacity:.95; }
 
-.gridRow{margin-top:10px}
+  /* total card */
+  .footerRow{
+    margin-top: 12px;
+    display:grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    align-items:center;
+  }
+  .totalCard{
+    border-radius: 18px;
+    border:1px solid var(--stroke);
+    background: rgba(255,255,255,.03);
+    padding: 14px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+  }
+  .totalTitle{
+    font-size:13px;
+    color: rgba(229,231,235,.78);
+    font-weight:900;
+  }
+  .totalHint{
+    font-size:12px;
+    color: rgba(229,231,235,.55);
+    margin-top:2px;
+  }
+  .totalValue{
+    font-family:"Rokiest", sans-serif;
+    font-size: 34px;
+    letter-spacing:.8px;
+    cursor:pointer;
+    user-select:none;
+    padding: 8px 10px;
+    border-radius: 14px;
+    transition:.15s;
+    white-space:nowrap;
+  }
+  .totalValue:hover{
+    background: rgba(245,158,11,.10);
+    transform: translateY(-1px);
+  }
 
-.check{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  background:#020617;
-  border:1px solid var(--stroke);
-  padding:10px 12px;
-  border-radius:12px;
-}
+  .smallNote{
+    font-size:12px;
+    color: rgba(229,231,235,.55);
+    padding: 0 6px;
+  }
 
-.remove{
-  background:rgba(239,68,68,.2);
-  border:1px solid rgba(239,68,68,.4);
-  color:#fff;
-  border-radius:12px;
-  height:44px;
-  cursor:pointer;
-}
+  /* toast */
+  .toast{
+    position: fixed;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(17,24,39,.95);
+    border:1px solid rgba(255,255,255,.12);
+    padding: 10px 12px;
+    border-radius: 12px;
+    box-shadow: 0 12px 30px rgba(0,0,0,.45);
+    color: #fff;
+    font-weight: 900;
+    opacity: 0;
+    pointer-events:none;
+    transition: .2s;
+    z-index: 9999;
+  }
+  .toast.show{ opacity: 1; }
 
-.totalBox{
-  margin-top:20px;
-  border:1px solid var(--stroke);
-  border-radius:16px;
-  padding:14px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-}
+  /* loading overlay */
+  .loading{
+    position:fixed;
+    inset:0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    background:
+      radial-gradient(700px 420px at 20% 15%, rgba(245,158,11,.20), transparent 60%),
+      radial-gradient(700px 420px at 80% 20%, rgba(37,99,235,.20), transparent 60%),
+      rgba(0,0,0,.55);
+    backdrop-filter: blur(10px);
+    z-index: 99999;
+  }
+  .loading .box{
+    width: min(520px, 92vw);
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,.14);
+    background: rgba(11,18,32,.86);
+    box-shadow: 0 20px 60px rgba(0,0,0,.65);
+    padding: 18px;
+    text-align:center;
+    animation: in .25s ease both;
+  }
+  .ring{
+    width:56px; height:56px;
+    border-radius:999px;
+    border: 3px solid rgba(255,255,255,.18);
+    border-top-color: rgba(245,158,11,.95);
+    margin: 10px auto 12px;
+    animation: spin .9s linear infinite;
+  }
+  @keyframes spin{ to{ transform: rotate(360deg); } }
+  .loading h3{
+    font-family:"Rokiest", sans-serif;
+    margin:0;
+    letter-spacing:.7px;
+  }
+  .loading p{
+    margin:6px 0 0;
+    color: rgba(229,231,235,.72);
+    font-size:13px;
+  }
 
-.total{
-  font-family:"Rokiest";
-  font-size:30px;
-  cursor:pointer;
-}
+  /* login */
+  .login{
+    display:flex;
+    justify-content:center;
+    padding: 6px 0 2px;
+  }
+  .login .box{
+    width: min(520px, 100%);
+    border-radius: 18px;
+    border:1px solid var(--stroke);
+    background: rgba(255,255,255,.03);
+    padding: 16px;
+  }
+  .login .row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top: 12px;
+  }
+  .login .row .btn{ flex: 1 1 180px; }
 
-.toast{
-  position:fixed;
-  bottom:20px;
-  left:50%;
-  transform:translateX(-50%);
-  background:#111827;
-  padding:10px 16px;
-  border-radius:12px;
-  font-weight:900;
-  opacity:0;
-  transition:.2s;
-}
-.toast.show{opacity:1}
-
-/* LOGIN */
-.login{
-  text-align:center;
-}
-.login input{max-width:300px}
-
-.loader{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.6);
-  display:none;
-  justify-content:center;
-  align-items:center;
-}
-.loader div{
-  width:60px;height:60px;
-  border:4px solid rgba(255,255,255,.2);
-  border-top-color:var(--amber);
-  border-radius:50%;
-  animation:spin .9s linear infinite;
-}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-@media(max-width:900px){
-  .topbar{grid-template-columns:1fr}
-  .gridHeader,.gridRow{grid-template-columns:1fr}
-  .btn,input,select{width:100%}
-}
+  /* responsive */
+  @media (max-width: 980px){
+    .controls{
+      grid-template-columns: 1fr;
+    }
+    .thead, .trow{
+      grid-template-columns: 1fr;
+    }
+    .footerRow{
+      grid-template-columns: 1fr;
+    }
+    .totalValue{ font-size: 30px; }
+  }
 </style>
 </head>
 
 <body>
+  <a class="home-fab" href="index.html">🏠 Home</a>
 
-<a class="home" href="index.html">🏠 Home</a>
-
-<div class="loader" id="loader"><div></div></div>
-
-<div class="card">
-  <h1>Calculadora de Diária</h1>
-  <p class="sub">Somar músicos, aplicar meia diária, multiplicar por dias e copiar total.</p>
-
-  <!-- LOGIN -->
-  <div id="login" class="login">
-    <input id="pass" type="password" placeholder="Senha admin">
-    <br><br>
-    <button class="btn btn-amber" onclick="entrar()">🔑 Entrar</button>
+  <div id="loading" class="loading">
+    <div class="box">
+      <div class="ring"></div>
+      <h3>Carregando área Admin…</h3>
+      <p>Aguarde um instante</p>
+    </div>
   </div>
 
-  <!-- APP -->
-  <div id="app" style="display:none">
-
-    <div class="topbar">
-      <div class="leftControls">
-        <button class="btn btn-blue" onclick="add()">➕ Adicionar músico</button>
-
-        <div class="fieldMini">
-          <label>Presets</label>
-          <select id="preset" onchange="loadPreset()"></select>
-        </div>
-
-        <button class="btn btn-ghost" onclick="savePreset()">💾 Salvar</button>
-        <button class="btn btn-ghost" onclick="deletePreset()">🗑️</button>
-      </div>
-
-      <div class="leftControls">
-        <div class="fieldMini" style="min-width:180px">
-          <label>Quantidade de dias</label>
-          <input id="dias" type="number" min="1" value="1" oninput="calc()">
-        </div>
-        <button class="btn btn-ghost" onclick="clearAll()">🧹 Limpar</button>
-        <button class="btn btn-ghost" onclick="logout()">🚪 Sair</button>
-      </div>
-    </div>
-
-    <div class="gridHeader">
-      <div>Músico</div>
-      <div>Valor</div>
-      <div>Meia diária</div>
-      <div></div>
-    </div>
-
-    <div id="rows"></div>
-
-    <div class="totalBox">
+  <div class="wrap">
+    <div class="header">
       <div>
-        <div style="font-size:13px;color:var(--muted)">Total final</div>
-        <div style="font-size:12px;color:var(--muted)">Clique para copiar</div>
+        <h1 class="title">Calculadora de Diária</h1>
+        <p class="desc">Somar músicos, aplicar meia diária, multiplicar por dias e copiar o total.</p>
       </div>
-      <div class="total" onclick="copy()">R$ 0,00</div>
+      <span class="badge">Admin</span>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="loginWrap" class="login">
+      <div class="box">
+        <div class="card">
+          <div style="font-weight:900; margin-bottom:10px;">🔒 Acesso Admin</div>
+          <div class="controls" style="grid-template-columns: 1fr auto;">
+            <div class="field" style="min-width:auto;">
+              <label>Senha</label>
+              <input id="adminPass" type="password" placeholder="Digite a senha" />
+            </div>
+            <button class="btn btn-amber" onclick="entrar()">🔑 Entrar</button>
+          </div>
+          <div class="smallNote" style="margin-top:10px;">A sessão fica salva neste navegador.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- APP -->
+    <div id="app" style="display:none;">
+      <div class="card">
+        <div class="controls">
+          <button class="btn btn-blue" onclick="addLinha()">➕ Adicionar</button>
+
+          <div class="field">
+            <label>Presets</label>
+            <select id="presetSelect" onchange="onPresetChange()">
+              <option value="">— Selecionar preset —</option>
+            </select>
+          </div>
+
+          <button class="btn btn-ghost btn-small" onclick="salvarPreset()">💾 Salvar</button>
+          <button class="btn btn-red btn-small" onclick="deletarPreset()">🗑️ Excluir</button>
+
+          <div class="field" style="min-width:140px;">
+            <label>Dias</label>
+            <input id="dias" type="number" min="1" step="1" value="1" oninput="onDias()">
+          </div>
+
+          <button class="btn btn-ghost btn-small" onclick="limpar()">🧹 Limpar</button>
+          <button class="btn btn-ghost btn-small" onclick="sair()">🚪 Sair</button>
+        </div>
+
+        <div class="table" style="margin-top:14px;">
+          <div class="thead">
+            <div>Músico</div>
+            <div>Valor (R$)</div>
+            <div>Meia diária</div>
+            <div></div>
+          </div>
+          <div id="linhas"></div>
+        </div>
+
+        <div class="footerRow">
+          <div class="smallNote">
+            ✅ “Meia diária” conta metade do valor daquele músico.<br>
+            ✅ Total = (soma ajustada) × dias. Clique no total para copiar.
+          </div>
+
+          <div class="totalCard">
+            <div>
+              <div class="totalTitle">Total final</div>
+              <div class="totalHint">Clique para copiar</div>
+            </div>
+            <div id="total" class="totalValue" onclick="copiarTotal()">R$ 0,00</div>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
-</div>
 
-<div class="toast" id="toast">✅ Copiado!</div>
+  <div id="toast" class="toast">✅ Copiado!</div>
 
 <script>
-const ADMIN="1234";
-const STORE="diaria_rows";
-const PRESETS="diaria_presets";
+  // ===== CONFIG =====
+  const ADMIN_PASSWORD = "1234"; // <-- troque aqui
+  const STORE_KEY = "diaria_rows_v3";
+  const AUTH_KEY  = "diaria_admin_ok_v3";
+  const PRESET_KEY = "diaria_presets_v3";
+  const SETTINGS_KEY = "diaria_settings_v3";
 
-function entrar(){
-  if(pass.value!==ADMIN) return alert("Senha incorreta");
-  loader.style.display="flex";
-  setTimeout(()=>{
-    loader.style.display="none";
-    login.style.display="none";
-    app.style.display="block";
-    init();
-  },900);
-}
+  // ===== Helpers =====
+  const brl = (n) => (Number(n)||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+  const $ = (id)=>document.getElementById(id);
 
-function logout(){location.reload()}
+  function toast(msg){
+    const t = $("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    setTimeout(()=>t.classList.remove("show"), 1200);
+  }
 
-function init(){
-  if(!localStorage.getItem(STORE))
-    localStorage.setItem(STORE,JSON.stringify([{n:"",v:"",m:false}]));
-  render();
-  loadPresetList();
-}
+  function showLoading(ms=800){
+    $("loading").style.display="flex";
+    setTimeout(()=> $("loading").style.display="none", ms);
+  }
 
-function rows(){return JSON.parse(localStorage.getItem(STORE))}
-function save(r){localStorage.setItem(STORE,JSON.stringify(r));render()}
+  function parseMoney(v){
+    const cleaned = String(v ?? "")
+      .replace(/[^\d.,]/g,"")
+      .replace(",", ".");
+    return parseFloat(cleaned) || 0;
+  }
 
-function add(){const r=rows();r.push({n:"",v:"",m:false});save(r)}
-function remove(i){const r=rows();r.splice(i,1);save(r)}
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, s => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[s]));
+  }
 
-function render(){
-  rowsEl.innerHTML=rows().map((r,i)=>`
-    <div class="gridRow">
-      <input value="${r.n}" oninput="upd(${i},'n',this.value)">
-      <input value="${r.v}" oninput="upd(${i},'v',this.value)">
-      <label class="check">
-        <input type="checkbox" ${r.m?"checked":""} onchange="upd(${i},'m',this.checked)"> Meia
-      </label>
-      <button class="remove" onclick="remove(${i})">🗑️</button>
-    </div>
-  `).join("");
-  calc();
-}
+  // ===== AUTH =====
+  function isAuthed(){ return sessionStorage.getItem(AUTH_KEY) === "1"; }
 
-function upd(i,k,v){const r=rows();r[i][k]=v;save(r)}
+  function entrar(){
+    const pass = ($("adminPass").value || "").trim();
+    if(pass !== ADMIN_PASSWORD){
+      toast("❌ Senha incorreta");
+      return;
+    }
+    sessionStorage.setItem(AUTH_KEY, "1");
+    showLoading(900);
+    setTimeout(()=>{
+      $("loginWrap").style.display="none";
+      $("app").style.display="block";
+      bootApp();
+      toast("✅ Admin liberado");
+    }, 900);
+  }
 
-function calc(){
-  const d=parseInt(dias.value||1);
-  const t=rows().reduce((a,r)=>a+(parseFloat(r.v||0)*(r.m?.5:1)),0)*d;
-  document.querySelector(".total").innerText=t.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
-}
+  function sair(){
+    sessionStorage.removeItem(AUTH_KEY);
+    location.reload();
+  }
 
-function copy(){
-  navigator.clipboard.writeText(document.querySelector(".total").innerText);
-  toast.classList.add("show");
-  setTimeout(()=>toast.classList.remove("show"),1200);
-}
+  // ===== DATA =====
+  function loadRows(){
+    try{
+      const raw = localStorage.getItem(STORE_KEY);
+      const arr = raw ? JSON.parse(raw) : [];
+      return Array.isArray(arr) ? arr : [];
+    }catch(e){ return []; }
+  }
 
-/* PRESETS */
-function loadPresetList(){
-  const p=JSON.parse(localStorage.getItem(PRESETS)||"{}");
-  preset.innerHTML='<option value="">— Preset —</option>'+Object.keys(p).map(k=>`<option>${k}</option>`).join("");
-}
+  function saveRows(arr){
+    localStorage.setItem(STORE_KEY, JSON.stringify(arr));
+  }
 
-function savePreset(){
-  const name=prompt("Nome do preset");
-  if(!name) return;
-  const p=JSON.parse(localStorage.getItem(PRESETS)||"{}");
-  p[name]={rows:rows(),dias:dias.value};
-  localStorage.setItem(PRESETS,JSON.stringify(p));
-  loadPresetList();
-}
+  function loadSettings(){
+    try{
+      const raw = localStorage.getItem(SETTINGS_KEY);
+      const obj = raw ? JSON.parse(raw) : { dias: 1 };
+      return obj && typeof obj === "object" ? obj : { dias: 1 };
+    }catch(e){ return { dias: 1 }; }
+  }
 
-function loadPreset(){
-  const p=JSON.parse(localStorage.getItem(PRESETS)||"{}");
-  if(!preset.value) return;
-  localStorage.setItem(STORE,JSON.stringify(p[preset.value].rows));
-  dias.value=p[preset.value].dias;
-  render();
-}
+  function saveSettings(obj){
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(obj));
+  }
 
-function deletePreset(){
-  const p=JSON.parse(localStorage.getItem(PRESETS)||"{}");
-  if(!preset.value) return;
-  delete p[preset.value];
-  localStorage.setItem(PRESETS,JSON.stringify(p));
-  loadPresetList();
-}
+  // ===== PRESETS =====
+  function loadPresets(){
+    try{
+      const raw = localStorage.getItem(PRESET_KEY);
+      const obj = raw ? JSON.parse(raw) : {};
+      return obj && typeof obj === "object" ? obj : {};
+    }catch(e){ return {}; }
+  }
 
-function clearAll(){
-  localStorage.setItem(STORE,JSON.stringify([{n:"",v:"",m:false}]));
-  render();
-}
+  function savePresets(obj){
+    localStorage.setItem(PRESET_KEY, JSON.stringify(obj));
+  }
 
-const rowsEl=document.getElementById("rows");
-const pass=document.getElementById("pass");
-const login=document.getElementById("login");
-const app=document.getElementById("app");
-const loader=document.getElementById("loader");
-const toast=document.getElementById("toast");
-const dias=document.getElementById("dias");
-const preset=document.getElementById("preset");
+  function refreshPresetDropdown(selected=""){
+    const presets = loadPresets();
+    const sel = $("presetSelect");
+    const names = Object.keys(presets).sort((a,b)=>a.localeCompare(b));
+
+    sel.innerHTML = `<option value="">— Selecionar preset —</option>` +
+      names.map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join("");
+
+    if(selected && presets[selected]) sel.value = selected;
+  }
+
+  function salvarPreset(){
+    const nome = prompt("Nome do preset (ex: Equipe Manaus):");
+    if(!nome) return;
+
+    const presets = loadPresets();
+    const settings = loadSettings();
+    presets[nome] = {
+      dias: settings.dias || 1,
+      rows: loadRows()
+    };
+
+    savePresets(presets);
+    refreshPresetDropdown(nome);
+    toast("✅ Preset salvo");
+  }
+
+  function deletarPreset(){
+    const nome = $("presetSelect").value;
+    if(!nome){ toast("Escolha um preset"); return; }
+    if(!confirm(`Excluir preset "${nome}"?`)) return;
+
+    const presets = loadPresets();
+    delete presets[nome];
+    savePresets(presets);
+    refreshPresetDropdown("");
+    toast("🗑️ Preset excluído");
+  }
+
+  function onPresetChange(){
+    const nome = $("presetSelect").value;
+    if(!nome) return;
+
+    const presets = loadPresets();
+    const p = presets[nome];
+    if(!p) return;
+
+    saveRows(Array.isArray(p.rows) ? p.rows : []);
+    const s = loadSettings();
+    s.dias = Math.max(1, parseInt(p.dias || 1, 10));
+    saveSettings(s);
+    $("dias").value = s.dias;
+
+    render();
+    toast("📦 Preset carregado");
+  }
+
+  // ===== UI / RENDER =====
+  function onDias(){
+    const d = Math.max(1, parseInt($("dias").value || "1", 10));
+    $("dias").value = d;
+    const s = loadSettings();
+    s.dias = d;
+    saveSettings(s);
+    calcTotal();
+  }
+
+  function addLinha(){
+    const rows = loadRows();
+    rows.push({ nome:"", valor:"", meia:false });
+    saveRows(rows);
+    render();
+  }
+
+  function remover(i){
+    const rows = loadRows();
+    rows.splice(i,1);
+    saveRows(rows);
+    render();
+  }
+
+  function onNome(i, v){
+    const rows = loadRows();
+    rows[i].nome = v;
+    saveRows(rows);
+  }
+
+  function onValor(i, v){
+    const cleaned = String(v).replace(/[^\d.,]/g,"").replace(",", ".");
+    const rows = loadRows();
+    rows[i].valor = cleaned;
+    saveRows(rows);
+    calcTotal();
+  }
+
+  function onMeia(i, checked){
+    const rows = loadRows();
+    rows[i].meia = !!checked;
+    saveRows(rows);
+    calcTotal();
+    render(); // para atualizar o toggle visual
+  }
+
+  function limpar(){
+    saveRows([{ nome:"", valor:"", meia:false }]);
+    render();
+    toast("🧹 Limpo");
+  }
+
+  function rowTemplate(item, idx){
+    const meia = !!item.meia;
+
+    return `
+      <div class="trow">
+        <input placeholder="Nome do músico" value="${escapeHtml(item.nome||"")}" oninput="onNome(${idx}, this.value)" />
+
+        <input class="money" placeholder="Ex: 250" value="${escapeHtml(item.valor ?? "")}" oninput="onValor(${idx}, this.value)" />
+
+        <div class="toggle">
+          <div class="switch ${meia ? "on" : ""}" onclick="onMeia(${idx}, ${!meia})">
+            <div class="knob"></div>
+          </div>
+          <span class="pill">${meia ? "Meia" : "Inteira"}</span>
+        </div>
+
+        <button class="iconBtn" title="Remover" onclick="remover(${idx})">🗑️</button>
+      </div>
+    `;
+  }
+
+  function render(){
+    const rows = loadRows();
+    $("linhas").innerHTML = rows.map((it,i)=> rowTemplate(it,i)).join("");
+    calcTotal();
+  }
+
+  function calcTotal(){
+    const rows = loadRows();
+    const dias = Math.max(1, parseInt($("dias").value || "1", 10));
+
+    const soma = rows.reduce((acc, it)=>{
+      const v = parseMoney(it.valor);
+      return acc + (it.meia ? v * 0.5 : v);
+    }, 0);
+
+    $("total").textContent = brl(soma * dias);
+  }
+
+  async function copiarTotal(){
+    const text = $("total").textContent.trim();
+    try{
+      await navigator.clipboard.writeText(text);
+      toast("✅ Copiado: " + text);
+    }catch(e){
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      ta.remove();
+      toast("✅ Copiado: " + text);
+    }
+  }
+
+  // ===== BOOT =====
+  function bootApp(){
+    refreshPresetDropdown("");
+    const settings = loadSettings();
+    $("dias").value = Math.max(1, parseInt(settings.dias || 1, 10));
+
+    if(loadRows().length === 0){
+      saveRows([
+        { nome:"", valor:"", meia:false },
+        { nome:"", valor:"", meia:false },
+        { nome:"", valor:"", meia:false }
+      ]);
+    }else{
+      // normalize
+      saveRows(loadRows().map(x=>({ nome:x.nome||"", valor:x.valor??"", meia:!!x.meia })));
+    }
+
+    render();
+  }
+
+  (function boot(){
+    if(isAuthed()){
+      $("loginWrap").style.display="none";
+      $("app").style.display="block";
+      bootApp();
+    }
+  })();
 </script>
-
 </body>
 </html>
