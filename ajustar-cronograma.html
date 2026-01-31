@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>Ajustar Cronograma | Equipe</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <style>
     body{
       margin:0;
@@ -39,7 +40,13 @@
       box-sizing:border-box;
     }
 
-    .row{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:12px; }
+    .row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:center;
+      margin-top:12px;
+    }
 
     .btn{
       display:inline-flex;
@@ -57,10 +64,17 @@
       min-width:220px;
     }
     .btn:hover{ opacity:.92; }
+
     .btn-open{ background:#2563eb; }
     .btn-sheet{ background:#16a34a; }
     .btn-logout{ background:#ef4444; }
-    .small{ font-size:12px; opacity:.7; margin-top:10px; line-height:1.35; }
+
+    .small{
+      font-size:12px;
+      opacity:.7;
+      margin-top:10px;
+      line-height:1.35;
+    }
 
     .box{
       margin-top:12px;
@@ -72,7 +86,7 @@
       display:none;
     }
 
-    /* HOME FIXO */
+    /* BOTÃO HOME FIXO */
     .home-fab{
       position: fixed;
       top: 16px;
@@ -100,12 +114,14 @@
 </head>
 
 <body>
-  <a class="home-fab" href="index.html" aria-label="Voltar para Home">🏠 Home</a>
+  <!-- BOTÃO HOME -->
+  <a class="home-fab" href="index.html">🏠 Home</a>
 
   <div class="card">
     <h1>🛠️ Ajustar Cronograma (Equipe)</h1>
-    <p>Entre uma vez e abra a planilha ou o formulário do cronograma.</p>
+    <p>Entre uma vez e abra a planilha ou o formulário.</p>
 
+    <!-- LOGIN -->
     <div id="login">
       <input id="pass" class="input" type="password" placeholder="Senha da equipe" />
       <div class="row">
@@ -113,50 +129,56 @@
         <a class="btn" href="index.html">⬅ Voltar</a>
       </div>
       <div class="small">
-        ✅ Depois de entrar, a sessão fica salva (não pede senha de novo até você sair).
+        Depois de entrar, não pede senha novamente até você sair.
       </div>
     </div>
 
+    <!-- ÁREA LIBERADA -->
     <div id="area" class="box">
       <p style="margin:0 0 10px;"><b>✅ Acesso liberado</b></p>
 
       <div class="row">
-        <a class="btn btn-sheet" id="sheetLink" href="#" target="_blank" rel="noopener">
+        <!-- ABRIR PLANILHA (via JavaScript) -->
+        <button class="btn btn-sheet" onclick="abrirPlanilha()">
           📊 Abrir Planilha (Sheets)
-        </a>
+        </button>
 
-        <a class="btn btn-open" id="formLink" href="#" target="_blank" rel="noopener">
-          📝 Abrir Formulário (Web App)
+        <!-- ABRIR FORMULÁRIO -->
+        <a class="btn btn-open"
+           href="https://script.google.com/macros/s/AKfycbzOBfcv09wJdxM7uIvsS4EVvOJCkhu5ptY5gYY_-PI/exec"
+           target="_blank" rel="noopener">
+          📝 Abrir Formulário
         </a>
 
         <button class="btn btn-logout" onclick="sair()">Sair</button>
       </div>
 
       <div class="small">
-        Planilha e Formulário abrem em outra aba. Se não abrir, veja se o navegador bloqueou pop-up.
+        A planilha abre na mesma aba. O formulário abre em nova aba.
       </div>
     </div>
   </div>
 
 <script>
-  // ✅ SENHA DO PORTAL (no site)
+  /* ===== CONFIGURAÇÕES ===== */
+
+  // SENHA DO PORTAL
   const TEAM_PASSWORD = "1234";
 
-  // ✅ SUA PLANILHA (já preenchida)
-  const SHEETS_URL = "https://docs.google.com/spreadsheets/d/1lbYZWkFIGQr9FYd6EATkyymrUf5iupM1H55oxSy0uUg/edit?usp=sharing";
+  // LINK DA SUA PLANILHA (JÁ CONFIGURADO)
+  const SHEETS_URL =
+    "https://docs.google.com/spreadsheets/d/1lbYZWkFIGQr9FYd6EATkyymrUf5iupM1H55oxSy0uUg/edit?usp=sharing";
 
-  // ✅ SEU WEB APP (use /exec no site)
-  const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzOBfcv09wJdxM7uIvsS4EVvOJCkhu5ptY5gYY_-PI/exec";
+  /* ===== FUNÇÕES ===== */
 
-  function setLinks(){
-    document.getElementById("sheetLink").href = SHEETS_URL;
-    document.getElementById("formLink").href = WEBAPP_URL;
+  function abrirPlanilha(){
+    // abre SEMPRE, sem bloqueio
+    window.location.href = SHEETS_URL;
   }
 
   function showArea(){
     document.getElementById("login").style.display = "none";
     document.getElementById("area").style.display = "block";
-    setLinks();
   }
 
   function entrar(){
@@ -176,6 +198,7 @@
     document.getElementById("login").style.display = "block";
   }
 
+  // mantém login enquanto a aba estiver aberta
   if(sessionStorage.getItem("cronograma_autorizado") === "1"){
     showArea();
   }
