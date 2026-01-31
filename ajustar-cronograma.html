@@ -133,19 +133,19 @@
       </div>
 
       <div class="small">
-        Se algum botão não abrir, é porque o link ainda está vazio no código (SHEETS_URL).
+        Planilha e Formulário abrem em outra aba. Se não abrir, veja se o navegador bloqueou pop-up.
       </div>
     </div>
   </div>
 
 <script>
-  // ✅ TROQUE A SENHA AQUI (portal do site)
+  // ✅ SENHA DO PORTAL (no site)
   const TEAM_PASSWORD = "1234";
 
-  // ✅ COLE AQUI O LINK DA SUA PLANILHA (Sheets)
-  const SHEETS_URL = "COLE_AQUI_O_LINK_DA_SUA_PLANILHA";
+  // ✅ SUA PLANILHA (já preenchida)
+  const SHEETS_URL = "https://docs.google.com/spreadsheets/d/1lbYZWkFIGQr9FYd6EATkyymrUf5iupM1H55oxSy0uUg/edit?usp=sharing";
 
-  // ✅ LINK DO SEU WEB APP (FORMULÁRIO) - use /exec
+  // ✅ SEU WEB APP (use /exec no site)
   const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzOBfcv09wJdxM7uIvsS4EVvOJCkhu5ptY5gYY_-PI/exec";
 
   function setLinks(){
@@ -176,7 +176,6 @@
     document.getElementById("login").style.display = "block";
   }
 
-  // ✅ se já entrou antes nessa sessão, não pede senha de novo
   if(sessionStorage.getItem("cronograma_autorizado") === "1"){
     showArea();
   }
