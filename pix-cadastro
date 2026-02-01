@@ -1,1 +1,400 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Cadastro de Pix | Lalaiá</title>
 
+<style>
+  @font-face{
+    font-family:"Rokiest";
+    src:url("https://waycompanygg.github.io/roteiro/assets/fonts/Rokiest-Extrabold.otf") format("opentype");
+    font-weight:800; font-display:swap;
+  }
+  :root{
+    --bg1:#0b0f19; --bg2:#0f172a;
+    --panel: rgba(11,18,32,.82);
+    --stroke: rgba(255,255,255,.10);
+    --text:#e5e7eb; --muted: rgba(229,231,235,.65);
+    --cyan:#06b6d4; --green:#22c55e; --red:#ef4444; --amber:#f59e0b;
+    --shadow: 0 24px 70px rgba(0,0,0,.65);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; min-height:100vh;
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+    color:var(--text);
+    background:
+      radial-gradient(900px 520px at 10% 10%, rgba(6,182,212,.18), transparent 60%),
+      radial-gradient(900px 520px at 90% 15%, rgba(34,197,94,.12), transparent 60%),
+      linear-gradient(135deg,var(--bg1),var(--bg2));
+    display:flex; align-items:center; justify-content:center;
+    padding:22px;
+  }
+  .home{
+    position:fixed; top:16px; left:16px;
+    background:rgba(17,24,39,.92);
+    border:1px solid rgba(255,255,255,.12);
+    color:#fff; text-decoration:none;
+    font-weight:900; font-size:14px;
+    padding:10px 12px; border-radius:12px;
+    box-shadow:0 12px 30px rgba(0,0,0,.45);
+    z-index: 10;
+    transition:.15s;
+  }
+  .home:hover{transform:translateY(-1px); opacity:.92}
+
+  .wrap{
+    width:min(980px,100%);
+    background:var(--panel);
+    border:1px solid var(--stroke);
+    border-radius:22px;
+    box-shadow:var(--shadow);
+    padding:18px;
+    backdrop-filter: blur(10px);
+    animation: in .45s ease both;
+  }
+  @keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+  h1{font-family:"Rokiest"; margin:0; letter-spacing:.8px; font-size:34px}
+  .sub{margin:8px 0 14px; color:var(--muted); font-size:13px}
+
+  .card{
+    background:rgba(255,255,255,.04);
+    border:1px solid var(--stroke);
+    border-radius:18px;
+    padding:14px;
+  }
+
+  .row{display:flex; gap:10px; flex-wrap:wrap}
+  .field{display:flex; flex-direction:column; gap:6px; flex:1 1 220px}
+  label{font-size:12px; color: rgba(229,231,235,.72)}
+  input, select, textarea{
+    width:100%;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,.12);
+    background: rgba(2,6,23,.55);
+    color: var(--text);
+    padding: 10px 12px;
+    outline:none;
+  }
+  input, select{ height:44px; }
+  textarea{ min-height: 92px; resize: vertical; }
+
+  input:focus, select:focus, textarea:focus{
+    border-color: rgba(6,182,212,.55);
+    box-shadow: 0 0 0 4px rgba(6,182,212,.18);
+  }
+
+  .btnRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
+  button{
+    height:44px; border-radius:12px; border:0;
+    padding:0 14px; font-weight:900; cursor:pointer;
+    color:#001018;
+    background: var(--cyan);
+    transition:.15s;
+    flex: 1 1 220px;
+  }
+  button:hover{transform:translateY(-1px); opacity:.95}
+  .ghost{
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.12);
+    color: #fff;
+  }
+
+  .table{
+    margin-top:12px;
+    border:1px solid var(--stroke);
+    border-radius:18px;
+    overflow:hidden;
+    background:rgba(2,6,23,.35);
+  }
+  .thead,.trow{
+    display:grid;
+    grid-template-columns: 1.2fr .9fr .9fr 1.2fr auto;
+    gap:10px;
+    align-items:center;
+    padding:10px 12px;
+  }
+  .thead{
+    background:rgba(255,255,255,.03);
+    color:rgba(229,231,235,.65);
+    font-size:12px;
+    font-weight:900;
+  }
+  .trow{
+    border-top:1px solid rgba(255,255,255,.06);
+    font-size:12px;
+    color:rgba(229,231,235,.88);
+  }
+
+  .pill{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:12px;
+    font-weight:900;
+    padding:6px 10px;
+    border-radius:999px;
+    background:rgba(6,182,212,.14);
+    border:1px solid rgba(6,182,212,.22);
+  }
+
+  .actions{display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap}
+  .mini{
+    height:36px;
+    border-radius:10px;
+    padding:0 10px;
+    font-weight:900;
+    cursor:pointer;
+    border:1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.06);
+    color:#fff;
+    transition:.15s;
+  }
+  .mini:hover{transform:translateY(-1px); opacity:.95}
+  .danger{border-color: rgba(239,68,68,.30); background: rgba(239,68,68,.14)}
+  .ok{border-color: rgba(34,197,94,.30); background: rgba(34,197,94,.14)}
+
+  .toast{
+    position:fixed; bottom:18px; left:50%;
+    transform:translateX(-50%);
+    background: rgba(17,24,39,.95);
+    border:1px solid rgba(255,255,255,.12);
+    padding:10px 12px;
+    border-radius:12px;
+    font-weight:900;
+    opacity:0; pointer-events:none;
+    transition:.2s;
+    z-index: 100000;
+  }
+  .toast.show{opacity:1}
+
+  .overlay{
+    position:fixed; inset:0;
+    display:none;
+    align-items:center; justify-content:center;
+    background: rgba(0,0,0,.55);
+    backdrop-filter: blur(10px);
+    z-index: 99999;
+    padding: 18px;
+  }
+  .modal{
+    width: min(520px, 100%);
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,.14);
+    background: rgba(11,18,32,.92);
+    box-shadow: 0 20px 70px rgba(0,0,0,.70);
+    padding: 16px;
+    animation: pop .22s ease both;
+    text-align:center;
+  }
+  @keyframes pop{from{opacity:0;transform:scale(.98)}to{opacity:1;transform:scale(1)}}
+  .ring{
+    width:56px; height:56px;
+    border-radius:999px;
+    border:3px solid rgba(255,255,255,.18);
+    border-top-color:rgba(6,182,212,.95);
+    margin:10px auto 12px;
+    animation:spin .9s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  @media(max-width:900px){
+    .thead,.trow{grid-template-columns:1fr}
+    .actions{justify-content:flex-start}
+  }
+</style>
+</head>
+
+<body>
+<a class="home" href="index.html">🏠 Home</a>
+
+<div id="loading" class="overlay">
+  <div class="modal">
+    <div class="ring"></div>
+    <div style="font-family:Rokiest;letter-spacing:.6px;font-size:22px;">Salvando…</div>
+    <div style="margin-top:6px;color:rgba(229,231,235,.65);font-size:13px;">Aguarde</div>
+  </div>
+</div>
+
+<div class="wrap">
+  <h1>Cadastro de Pix</h1>
+  <div class="sub">Cadastre favorecidos e chaves Pix. (Modo teste: salva no navegador)</div>
+
+  <div class="card">
+    <div class="row">
+      <div class="field">
+        <label>Favorecido</label>
+        <input id="favorecido" placeholder="Nome completo">
+      </div>
+      <div class="field">
+        <label>CPF/CNPJ</label>
+        <input id="doc" placeholder="Somente números (opcional)">
+      </div>
+      <div class="field">
+        <label>Banco</label>
+        <input id="banco" placeholder="Ex: Itaú, Bradesco, Nubank">
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:10px;">
+      <div class="field" style="flex:0 0 220px;">
+        <label>Tipo de chave</label>
+        <select id="tipo">
+          <option value="CPF">CPF</option>
+          <option value="CNPJ">CNPJ</option>
+          <option value="Telefone">Telefone</option>
+          <option value="Email">Email</option>
+          <option value="Aleatória">Aleatória</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Chave Pix</label>
+        <input id="chave" placeholder="Digite a chave">
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:10px;">
+      <div class="field">
+        <label>Observação</label>
+        <textarea id="obs" placeholder="Ex: Cachê show, transporte, etc."></textarea>
+      </div>
+    </div>
+
+    <div class="btnRow">
+      <button onclick="salvar()">Salvar</button>
+      <button class="ghost" onclick="limpar()">Limpar</button>
+    </div>
+  </div>
+
+  <div class="table">
+    <div class="thead">
+      <div>Favorecido</div>
+      <div>Banco</div>
+      <div>Tipo</div>
+      <div>Chave</div>
+      <div>Ações</div>
+    </div>
+    <div id="rows"></div>
+  </div>
+</div>
+
+<div id="toast" class="toast">✅</div>
+
+<script>
+  const LS_KEY = "lalaia_pix_list_v1";
+
+  function toast(msg){
+    const t=document.getElementById("toast");
+    t.textContent=msg;
+    t.classList.add("show");
+    setTimeout(()=>t.classList.remove("show"), 1500);
+  }
+
+  function loading(on){
+    document.getElementById("loading").style.display = on ? "flex" : "none";
+  }
+
+  function getList(){
+    try{
+      return JSON.parse(localStorage.getItem(LS_KEY) || "[]");
+    }catch{ return []; }
+  }
+  function setList(list){
+    localStorage.setItem(LS_KEY, JSON.stringify(list));
+  }
+
+  function render(){
+    const list = getList();
+    const el = document.getElementById("rows");
+
+    if(!list.length){
+      el.innerHTML = `<div class="trow">
+        <div style="grid-column:1/-1;color:rgba(229,231,235,.65);font-weight:900;">
+          Nenhum Pix cadastrado ainda.
+        </div>
+      </div>`;
+      return;
+    }
+
+    el.innerHTML = list.map((it, i) => `
+      <div class="trow">
+        <div><b>${escapeHtml(it.favorecido)}</b><div style="color:rgba(229,231,235,.55);font-size:11px;margin-top:4px;">
+          ${it.doc ? "Doc: " + escapeHtml(it.doc) : ""}
+        </div></div>
+        <div>${escapeHtml(it.banco || "—")}</div>
+        <div><span class="pill">${escapeHtml(it.tipo)}</span></div>
+        <div style="word-break:break-all">${escapeHtml(it.chave)}</div>
+        <div class="actions">
+          <button class="mini ok" onclick="copiarChave(${i})">📋 Copiar</button>
+          <button class="mini danger" onclick="remover(${i})">🗑️</button>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  function escapeHtml(s){
+    return String(s||"").replace(/[&<>"']/g, m => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[m]));
+  }
+
+  function limpar(){
+    ["favorecido","doc","banco","chave","obs"].forEach(id=>document.getElementById(id).value="");
+    document.getElementById("tipo").value="CPF";
+    toast("🧼 Limpo");
+  }
+
+  async function salvar(){
+    const favorecido = (document.getElementById("favorecido").value||"").trim();
+    const doc = (document.getElementById("doc").value||"").trim();
+    const banco = (document.getElementById("banco").value||"").trim();
+    const tipo = document.getElementById("tipo").value;
+    const chave = (document.getElementById("chave").value||"").trim();
+    const obs = (document.getElementById("obs").value||"").trim();
+
+    if(!favorecido || !chave){
+      return toast("❌ Favorecido e Chave são obrigatórios");
+    }
+
+    loading(true);
+    const list = getList();
+    list.unshift({
+      favorecido, doc, banco, tipo, chave, obs,
+      createdAt: new Date().toISOString()
+    });
+    setList(list);
+    setTimeout(()=>{
+      loading(false);
+      toast("✅ Pix salvo");
+      limpar();
+      render();
+    }, 350);
+  }
+
+  async function copiarChave(i){
+    const list = getList();
+    const it = list[i];
+    if(!it) return;
+    try{
+      await navigator.clipboard.writeText(it.chave);
+      toast("📋 Chave copiada!");
+    }catch{
+      toast("❌ Não foi possível copiar");
+    }
+  }
+
+  function remover(i){
+    const list = getList();
+    list.splice(i, 1);
+    setList(list);
+    toast("🗑️ Removido");
+    render();
+  }
+
+  render();
+</script>
+
+</body>
+</html>
