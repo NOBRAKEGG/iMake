@@ -433,37 +433,41 @@
     }
   }
 
-  async function refreshCodes(){
-    overlay(true);
-    const r = await api("vipAdminListCodes", { adminPass: adminPass() });
-    overlay(false);
-    if(!r.ok) return toast("❌ " + r.error);
+async function refreshCodes(){
+  overlay(true);
+  const r = await api("vipAdminListCodes", { adminPass: adminPass() });
+  overlay(false);
+  if(!r.ok) return toast("❌ " + r.error);
 
-    const rows = r.rows || [];
-    const sel = document.getElementById("codeSelect");
-    const keep = sel.value;
+  const rows = r.rows || [];
+  const sel = document.getElementById("codeSelect");
+  const keep = sel.value;
 
-    sel.innerHTML = rows.length
-      ? rows.map(x => `<option value="${x.code}">${x.code} • allowed:${x.slotsAllowed} • assigned:${x.slotsAssigned}${x.expired ? " • EXPIRADO":""}${!x.active?" • OFF":""}</option>`).join("")
-      : `<option value="">(nenhum código)</option>`;
+  sel.innerHTML = rows.length
+    ? rows.map(x => `<option value="${x.code}">${x.code} • allowed:${x.slotsAllowed} • assigned:${x.slotsAssigned}${x.expired ? " • EXPIRADO":""}${!x.active?" • OFF":""}</option>`).join("")
+    : `<option value="">(nenhum código)</option>`;
 
-    if(keep) sel.value = keep;
+  // ✅ se não tiver código selecionado, seleciona o primeiro
+  if(keep && rows.some(x => x.code === keep)) sel.value = keep;
+  else if(rows.length) sel.value = rows[0].code;
 
-    document.getElementById("kCodes").textContent = String(rows.length);
-    document.getElementById("kAllowed").textContent = String(r.totalAllowed||0);
-    document.getElementById("kAssigned").textContent = String(r.totalCreated||0);
-    document.getElementById("kPoolHint").textContent = String(r.totalAllowed||0);
-  }
+  // KPIs
+  document.getElementById("kCodes").textContent   = String(rows.length);
+  document.getElementById("kAllowed").textContent = String(r.totalAllowed || 0);
+  document.getElementById("kAssigned").textContent = String(r.totalAssigned || r.totalCreated || 0);
+  document.getElementById("kPoolHint").textContent = String(r.totalAllowed || 0);
+}
 
-  async function setPool(){
-    const total = Number(document.getElementById("poolTotal").value||0);
-    overlay(true);
-    const r = await api("vipAdminSetGlobalSlotCount", { adminPass: adminPass(), total });
-    overlay(false);
-    if(!r.ok) return toast("❌ " + r.error);
+async function setPool(){
+  const total = Number(document.getElementById("poolTotal").value||0);
+  overlay(true);
+  const r = await api("vipAdminSetGlobalSlotCount", { adminPass: adminPass(), total });
+  overlay(false);
+  if(!r.ok) return toast("❌ " + r.error);
 
-    toast("✅ Pool aplicado");
-  }
+  toast("✅ Pool aplicado");
+  await refreshCodes(); // ✅ atualiza KPIs
+}
 
   async function createCode(){
     const minutes = Number(document.getElementById("mins").value||60);
@@ -492,17 +496,18 @@
   });
 
   async function assignSlots(){
-    const code = currentCode();
-    if(!code) return toast("Selecione um código");
-    overlay(true);
-    const r = await api("vipAdminAssignSlotsToCode", { adminPass: adminPass(), code });
-    overlay(false);
-    if(!r.ok) return toast("❌ " + r.error);
+  const code = currentCode();
+  if(!code) return toast("Selecione um código");
 
-    toast(`✅ +${r.added} atribuídos (assigned ${r.assigned}/${r.allowed})`);
-    await refreshCodes();
-    await loadSlots();
-  }
+  overlay(true);
+  const r = await api("vipAdminAssignSlotsToCode", { adminPass: adminPass(), code });
+  overlay(false);
+  if(!r.ok) return toast("❌ " + r.error);
+
+  toast(`✅ +${r.added} atribuídos (assigned ${r.assigned}/${r.allowed})`);
+  await refreshCodes();
+  await loadSlots(); // ✅ agora aparece lá embaixo automaticamente
+}
 
   async function unassignSlots(){
     const code = currentCode();
