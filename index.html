@@ -6,6 +6,7 @@
   <title>Dashboard | OFF Company</title>
 
   <style>
+    /* ===== FONT ===== */
     @font-face{
       font-family:"Rokiest";
       src:url("https://waycompanygg.github.io/roteiro/assets/fonts/Rokiest-Extrabold.otf") format("opentype");
@@ -13,20 +14,24 @@
       font-display:swap;
     }
 
+    /* ===== THEME (mantendo paleta atual) ===== */
     :root{
       --bg1:#050611; --bg2:#0b1220;
-      --panel: rgba(10,16,28,.70);
+      --panel: rgba(10,16,28,.66);
+      --panel2: rgba(2,6,23,.35);
       --stroke: rgba(255,255,255,.10);
-      --text: #e5e7eb;
+      --text:#e5e7eb;
       --muted: rgba(229,231,235,.62);
-      --shadow: 0 24px 90px rgba(0,0,0,.70);
+      --shadow: 0 26px 90px rgba(0,0,0,.72);
 
       --purple:#8b5cf6;
       --cyan:#06b6d4;
-      --blue:#2563eb;
       --green:#22c55e;
       --amber:#f59e0b;
       --red:#ef4444;
+
+      --r: 22px;
+      --r2: 18px;
     }
 
     *{box-sizing:border-box}
@@ -43,7 +48,16 @@
       overflow-x:hidden;
     }
 
-    /* ===== SHELL ===== */
+    /* ===== subtle noise ===== */
+    .noise{
+      pointer-events:none;
+      position:fixed; inset:0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
+      opacity:.18;
+      mix-blend-mode: overlay;
+    }
+
+    /* ===== layout ===== */
     .shell{
       display:flex;
       min-height:100vh;
@@ -51,37 +65,30 @@
       padding:18px;
     }
 
-    /* ===== SIDEBAR ===== */
+    /* ===== sidebar ===== */
     .side{
-      width:78px;
-      flex:0 0 78px;
-      position:sticky;
-      top:18px;
-      align-self:flex-start;
+      width:84px; flex:0 0 84px;
+      position:sticky; top:18px; align-self:flex-start;
       height: calc(100vh - 36px);
-      border-radius:22px;
+      border-radius: 26px;
       border:1px solid rgba(255,255,255,.10);
-      background: rgba(10,16,28,.40);
-      backdrop-filter: blur(12px);
+      background: rgba(10,16,28,.42);
+      backdrop-filter: blur(14px);
       box-shadow: 0 18px 70px rgba(0,0,0,.55);
-      padding:10px 10px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap:10px;
+      padding:10px;
+      display:flex; flex-direction:column; align-items:center; gap:10px;
       overflow:hidden;
     }
 
-    .logo{
-      width:52px;height:52px;
-      border-radius:16px;
-      display:grid;place-items:center;
+    .brandMark{
+      width:58px; height:58px;
+      border-radius: 18px;
+      display:grid; place-items:center;
       font-family:"Rokiest";
       letter-spacing:.9px;
-      color:#fff;
       background:
-        radial-gradient(90px 90px at 30% 30%, rgba(139,92,246,.75), transparent 60%),
-        radial-gradient(90px 90px at 80% 70%, rgba(6,182,212,.55), transparent 65%),
+        radial-gradient(90px 90px at 30% 25%, rgba(139,92,246,.75), transparent 60%),
+        radial-gradient(90px 90px at 78% 70%, rgba(6,182,212,.55), transparent 65%),
         rgba(255,255,255,.06);
       border:1px solid rgba(255,255,255,.12);
       box-shadow: 0 14px 40px rgba(0,0,0,.55);
@@ -89,24 +96,21 @@
     }
 
     .nav{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      margin-top:6px;
       width:100%;
+      display:flex; flex-direction:column; gap:10px;
       align-items:center;
+      margin-top:2px;
     }
-
     .nav a{
-      width:54px;height:54px;
-      border-radius:18px;
-      display:grid;place-items:center;
+      width:58px; height:58px;
+      border-radius: 20px;
+      display:grid; place-items:center;
       text-decoration:none;
-      color:rgba(229,231,235,.88);
-      border:1px solid rgba(255,255,255,.10);
+      color: rgba(229,231,235,.88);
+      border: 1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.04);
-      position:relative;
       transition: .18s;
+      position:relative;
       overflow:hidden;
     }
     .nav a:hover{
@@ -117,48 +121,63 @@
     .nav a.active{
       border-color: rgba(139,92,246,.35);
       background:
-        radial-gradient(80px 80px at 30% 30%, rgba(139,92,246,.30), transparent 60%),
+        radial-gradient(120px 120px at 30% 25%, rgba(139,92,246,.28), transparent 60%),
+        radial-gradient(120px 120px at 80% 70%, rgba(6,182,212,.14), transparent 65%),
         rgba(255,255,255,.05);
-      box-shadow: 0 14px 40px rgba(139,92,246,.15);
+      box-shadow: 0 18px 60px rgba(139,92,246,.14);
     }
 
-    /* ===== MAIN ===== */
+    /* ===== main ===== */
     .main{
       flex:1 1 auto;
       min-width:0;
-      border-radius:26px;
+      border-radius: 26px;
       border:1px solid rgba(255,255,255,.10);
       background: var(--panel);
       backdrop-filter: blur(14px);
       box-shadow: var(--shadow);
-      padding:18px;
+      overflow:hidden;
       animation: in .45s ease both;
     }
-
     @keyframes in{
       from{opacity:0; transform: translateY(10px)}
       to{opacity:1; transform: translateY(0)}
     }
 
+    /* ===== topbar ===== */
     .topbar{
+      padding:16px 16px 10px;
       display:flex;
       justify-content:space-between;
       gap:14px;
       flex-wrap:wrap;
-      align-items:flex-end;
-      padding:8px 8px 14px;
+      align-items:center;
+      position:relative;
     }
 
-    .title h1{
+    .titleWrap{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .titleWrap h1{
       margin:0;
-      font-family: "Rokiest";
+      font-family:"Rokiest";
       letter-spacing:.9px;
-      font-size:42px;
+      font-size:44px;
+      line-height:1;
     }
     .subtitle{
-      margin-top:6px;
       color: var(--muted);
       font-size:13px;
+    }
+
+    .topRight{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      justify-content:flex-end;
     }
 
     .pill{
@@ -175,22 +194,63 @@
       user-select:none;
     }
 
-    /* ===== CARDS ===== */
+    /* ===== tabs ===== */
+    .tabs{
+      padding:0 16px 14px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .tab{
+      height:40px;
+      padding:0 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      color:rgba(229,231,235,.86);
+      font-weight:900;
+      font-size:12px;
+      cursor:pointer;
+      transition:.18s;
+      position:relative;
+      overflow:hidden;
+    }
+    .tab:hover{transform: translateY(-1px); opacity:.95}
+    .tab.active{
+      border-color: rgba(139,92,246,.35);
+      background:
+        radial-gradient(140px 80px at 20% 30%, rgba(139,92,246,.35), transparent 60%),
+        rgba(255,255,255,.05);
+      box-shadow: 0 18px 50px rgba(139,92,246,.12);
+    }
+
+    /* ===== content ===== */
+    .content{
+      padding: 0 16px 16px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:12px;
+    }
+    @media(max-width:1100px){ .grid{grid-template-columns:1fr} }
+
     .card{
       border:1px solid rgba(255,255,255,.10);
       background: rgba(2,6,23,.28);
-      border-radius:22px;
+      border-radius: var(--r);
       padding:14px;
-      margin-top:14px;
-      overflow:hidden;
       position:relative;
+      overflow:hidden;
     }
     .card:before{
       content:"";
       position:absolute; inset:-2px;
       background:
-        radial-gradient(420px 180px at 10% 0%, rgba(139,92,246,.10), transparent 60%),
-        radial-gradient(420px 180px at 90% 10%, rgba(6,182,212,.08), transparent 62%);
+        radial-gradient(420px 200px at 10% 0%, rgba(139,92,246,.10), transparent 60%),
+        radial-gradient(420px 200px at 90% 10%, rgba(6,182,212,.08), transparent 62%);
       pointer-events:none;
     }
     .card > *{position:relative}
@@ -201,97 +261,166 @@
       gap:12px;
       flex-wrap:wrap;
       align-items:center;
-      margin-bottom:10px;
+      margin-bottom:12px;
     }
-
     .cardHead h2{
       margin:0;
       font-size:16px;
-      letter-spacing:.3px;
+      letter-spacing:.2px;
     }
     .hint{
       color: rgba(229,231,235,.55);
       font-size:12px;
     }
 
-    .row{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
-
-    .btn{
-      height:44px;
-      border-radius:14px;
-      padding:0 14px;
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      text-decoration:none;
-      color:#fff;
-      font-weight:900;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.06);
-      transition:.18s;
-      position:relative;
-      overflow:hidden;
-    }
-    .btn:hover{transform: translateY(-1px); opacity:.95}
-
-    .btn.primary{
-      background:
-        radial-gradient(120px 120px at 20% 20%, rgba(139,92,246,.65), transparent 60%),
-        radial-gradient(120px 120px at 80% 60%, rgba(6,182,212,.40), transparent 65%),
-        rgba(255,255,255,.06);
-      border-color: rgba(139,92,246,.35);
-      box-shadow: 0 18px 50px rgba(139,92,246,.18);
-    }
-
-    .btn.ghost{
-      background: rgba(255,255,255,.05);
-    }
-
-    /* ===== STATS ===== */
-    .stats{
+    /* ===== big menu tiles ===== */
+    .tiles{
       display:grid;
       grid-template-columns: repeat(4, 1fr);
       gap:10px;
-      margin-top:10px;
     }
-    @media(max-width:980px){ .stats{grid-template-columns: 1fr 1fr;} }
-    @media(max-width:560px){ .stats{grid-template-columns: 1fr;} }
+    @media(max-width:1100px){ .tiles{grid-template-columns: repeat(3, 1fr);} }
+    @media(max-width:820px){ .tiles{grid-template-columns: repeat(2, 1fr);} }
+    @media(max-width:520px){ .tiles{grid-template-columns: 1fr;} }
+
+    .tile{
+      border-radius: 20px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      padding:14px;
+      min-height: 120px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      gap:12px;
+      text-decoration:none;
+      color: var(--text);
+      position:relative;
+      overflow:hidden;
+      transform: translateZ(0);
+      transition: .18s;
+    }
+    .tile:hover{transform: translateY(-2px); border-color: rgba(139,92,246,.22)}
+    .tile:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(220px 160px at 20% 10%, rgba(139,92,246,.22), transparent 60%),
+        radial-gradient(220px 160px at 90% 60%, rgba(6,182,212,.14), transparent 62%);
+      opacity:.9;
+      pointer-events:none;
+    }
+    .tile:after{
+      content:"";
+      position:absolute;
+      inset:-60px -80px auto auto;
+      width:160px;height:160px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.14), transparent 55%);
+      transform: rotate(18deg);
+      opacity:.55;
+      pointer-events:none;
+    }
+
+    .tileTop{display:flex; justify-content:space-between; align-items:flex-start; gap:10px}
+    .tileIcon{
+      width:42px; height:42px;
+      border-radius:14px;
+      display:grid; place-items:center;
+      background: rgba(2,6,23,.45);
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow: 0 14px 40px rgba(0,0,0,.35);
+      font-size:18px;
+    }
+    .tileTag{
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      font-size:12px;
+      font-weight:900;
+      color: rgba(229,231,235,.75);
+      white-space:nowrap;
+    }
+    .tileTitle{
+      font-weight:900;
+      font-size:16px;
+      letter-spacing:.2px;
+    }
+    .tileDesc{
+      color: rgba(229,231,235,.62);
+      font-size:12px;
+      line-height:1.3;
+    }
+
+    /* ===== stat chips ===== */
+    .stats{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap:10px;
+    }
+    @media(max-width:520px){ .stats{grid-template-columns:1fr;} }
 
     .stat{
+      border-radius: 18px;
       border:1px solid rgba(255,255,255,.10);
       background: rgba(2,6,23,.25);
-      border-radius:18px;
       padding:12px;
-      transform: translateZ(0);
       transition:.18s;
     }
     .stat:hover{transform: translateY(-1px)}
     .stat .k{font-size:12px; color: rgba(229,231,235,.62); font-weight:900}
     .stat .v{margin-top:6px; font-size:20px; font-weight:900}
     .green{color: var(--green)}
+    .purple{color: var(--purple)}
+    .cyan{color: var(--cyan)}
+    .amber{color: var(--amber)}
+
+    /* ===== animations (shimmer) ===== */
+    .shimmer{
+      position:relative;
+      overflow:hidden;
+    }
+    .shimmer:before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,.08), transparent);
+      transform: translateX(-120%);
+      animation: shimmer 3.5s ease-in-out infinite;
+      pointer-events:none;
+      opacity:.55;
+    }
+    @keyframes shimmer{
+      0%{transform: translateX(-140%)}
+      45%{transform: translateX(140%)}
+      100%{transform: translateX(140%)}
+    }
+
     .footer{
-      margin-top:16px;
-      padding:10px 8px 0;
+      padding:14px 16px 16px;
       display:flex;
       justify-content:space-between;
       gap:10px;
       flex-wrap:wrap;
       color:rgba(229,231,235,.55);
       font-size:12px;
+      border-top:1px solid rgba(255,255,255,.06);
+      background: rgba(2,6,23,.12);
     }
+
+    /* ===== hide sections by tab ===== */
+    [data-view]{display:none}
+    [data-view].show{display:block}
+
   </style>
 </head>
 
 <body>
-  <div class="shell">
+  <div class="noise"></div>
 
+  <div class="shell">
     <aside class="side">
-      <div class="logo">OFF</div>
+      <div class="brandMark">OFF</div>
 
       <nav class="nav">
         <a class="active" href="index.html" title="Home">🏠</a>
@@ -308,441 +437,236 @@
 
     <main class="main">
       <div class="topbar">
-        <div class="title">
+        <div class="titleWrap">
           <h1>Dashboard</h1>
           <div class="subtitle">OFF Company • Central de Controle</div>
         </div>
-        <div class="pill">⚙️ Sistema</div>
+
+        <div class="topRight">
+          <div class="pill">⚙️ Sistema</div>
+          <div class="pill">🟢 Online</div>
+        </div>
       </div>
 
-      <section class="card">
-        <div class="cardHead">
-          <h2>Área do Usuário</h2>
-          <div class="hint">Acessos principais</div>
-        </div>
-        <div class="row">
-          <a class="btn primary" href="vip.html">🎟️ Lista VIP</a>
-          <a class="btn ghost" href="pix.html">💸 PIX</a>
-          <a class="btn ghost" href="diaria.html">📒 Diária</a>
-          <a class="btn ghost" href="van.html">🚐 Van</a>
-        </div>
-      </section>
+      <div class="tabs">
+        <button class="tab active" data-tab="overview">Overview</button>
+        <button class="tab" data-tab="user">Área do Usuário</button>
+        <button class="tab" data-tab="admin">Área Admin</button>
+      </div>
 
-      <section class="card">
-        <div class="cardHead">
-          <h2>Área Administrativa</h2>
-          <div class="hint">Acesso restrito</div>
-        </div>
-        <div class="row">
-          <a class="btn primary" href="vip-admin.html">🧠 VIP Admin</a>
-          <a class="btn ghost" href="pix-admin.html">🛡️ PIX Admin</a>
-          <a class="btn ghost" href="pix-cadastro.html">➕ Cadastro PIX</a>
-          <a class="btn ghost" href="ajustar-cronograma.html">🗓️ Ajustar Cronograma</a>
-        </div>
-      </section>
+      <div class="content">
+        <div class="grid">
 
-      <section class="card">
-        <div class="cardHead">
-          <h2>Status do Sistema</h2>
-          <div class="hint">Resumo rápido</div>
-        </div>
+          <!-- LEFT -->
+          <section class="card shimmer">
+            <div class="cardHead">
+              <h2>Menu Inicial</h2>
+              <div class="hint">Acesso rápido por área</div>
+            </div>
 
-        <div class="stats">
-          <div class="stat">
-            <div class="k">Sistema</div>
-            <div class="v green">Online</div>
-          </div>
-          <div class="stat">
-            <div class="k">VIP</div>
-            <div class="v">Ativo</div>
-          </div>
-          <div class="stat">
-            <div class="k">PIX</div>
-            <div class="v">Disponível</div>
-          </div>
-          <div class="stat">
-            <div class="k">Versão</div>
-            <div class="v">OFF v1.0</div>
-          </div>
+            <!-- OVERVIEW -->
+            <div data-view="overview" class="show">
+              <div class="tiles">
+                <a class="tile" href="vip.html">
+                  <div class="tileTop">
+                    <div class="tileIcon">🎟️</div>
+                    <div class="tileTag">Usuário</div>
+                  </div>
+                  <div>
+                    <div class="tileTitle">Lista VIP</div>
+                    <div class="tileDesc">Entrar com código e reservar slot.</div>
+                  </div>
+                </a>
+
+                <a class="tile" href="pix.html">
+                  <div class="tileTop">
+                    <div class="tileIcon">💸</div>
+                    <div class="tileTag">Usuário</div>
+                  </div>
+                  <div>
+                    <div class="tileTitle">PIX</div>
+                    <div class="tileDesc">Acesso à área PIX e informações.</div>
+                  </div>
+                </a>
+
+                <a class="tile" href="diaria.html">
+                  <div class="tileTop">
+                    <div class="tileIcon">📒</div>
+                    <div class="tileTag">Usuário</div>
+                  </div>
+                  <div>
+                    <div class="tileTitle">Diária</div>
+                    <div class="tileDesc">Consulta e controle de diária.</div>
+                  </div>
+                </a>
+
+                <a class="tile" href="van.html">
+                  <div class="tileTop">
+                    <div class="tileIcon">🚐</div>
+                    <div class="tileTag">Usuário</div>
+                  </div>
+                  <div>
+                    <div class="tileTitle">Van</div>
+                    <div class="tileDesc">Acesso ao módulo da van.</div>
+                  </div>
+                </a>
+
+                <a class="tile" href="vip-admin.html">
+                  <div class="tileTop">
+                    <div class="tileIcon">🧠</div>
+                    <div class="tileTag">Admin</div>
+                  </div>
+                  <div>
+                    <div class="tileTitle">VIP Admin</div>
+                    <div class="tileDesc">Pool, códigos, slots e confirmações.</div>
+                  </div>
+                </a>
+
+                <a class="tile" href="pix-admin.html">
+                  <div class="tileTop">
+                    <div class="tileIcon">🛡️</div>
+                    <div class="tileTag">Admin</div>
+                  </div>
+                  <div>
+                    <div class="tileTitle">PIX Admin</div>
+                    <div class="tileDesc">Gestão de favorecidos e dados.</div>
+                  </div>
+                </a>
+
+                <a class="tile" href="pix-cadastro.html">
+                  <div class="tileTop">
+                    <div class="tileIcon">➕</div>
+                    <div class="tileTag">Admin</div>
+                  </div>
+                  <div>
+                    <div class="tileTitle">Cadastro PIX</div>
+                    <div class="tileDesc">Cadastrar PIX com favorecido.</div>
+                  </div>
+                </a>
+
+                <a class="tile" href="ajustar-cronograma.html">
+                  <div class="tileTop">
+                    <div class="tileIcon">🗓️</div>
+                    <div class="tileTag">Admin</div>
+                  </div>
+                  <div>
+                    <div class="tileTitle">Ajustar Cronograma</div>
+                    <div class="tileDesc">Atualizar topo e gerar PDF.</div>
+                  </div>
+                </a>
+              </div>
+            </div>
+
+            <!-- USER -->
+            <div data-view="user">
+              <div class="tiles">
+                <a class="tile" href="vip.html">
+                  <div class="tileTop"><div class="tileIcon">🎟️</div><div class="tileTag">VIP</div></div>
+                  <div><div class="tileTitle">Lista VIP</div><div class="tileDesc">Reservas via código.</div></div>
+                </a>
+                <a class="tile" href="pix.html">
+                  <div class="tileTop"><div class="tileIcon">💸</div><div class="tileTag">PIX</div></div>
+                  <div><div class="tileTitle">PIX</div><div class="tileDesc">Área de pagamentos.</div></div>
+                </a>
+                <a class="tile" href="diaria.html">
+                  <div class="tileTop"><div class="tileIcon">📒</div><div class="tileTag">Diária</div></div>
+                  <div><div class="tileTitle">Diária</div><div class="tileDesc">Controle e consulta.</div></div>
+                </a>
+                <a class="tile" href="van.html">
+                  <div class="tileTop"><div class="tileIcon">🚐</div><div class="tileTag">Van</div></div>
+                  <div><div class="tileTitle">Van</div><div class="tileDesc">Módulo da van.</div></div>
+                </a>
+              </div>
+            </div>
+
+            <!-- ADMIN -->
+            <div data-view="admin">
+              <div class="tiles">
+                <a class="tile" href="vip-admin.html">
+                  <div class="tileTop"><div class="tileIcon">🧠</div><div class="tileTag">VIP</div></div>
+                  <div><div class="tileTitle">VIP Admin</div><div class="tileDesc">Pool, códigos e slots.</div></div>
+                </a>
+                <a class="tile" href="pix-admin.html">
+                  <div class="tileTop"><div class="tileIcon">🛡️</div><div class="tileTag">PIX</div></div>
+                  <div><div class="tileTitle">PIX Admin</div><div class="tileDesc">Gestão de favorecidos.</div></div>
+                </a>
+                <a class="tile" href="pix-cadastro.html">
+                  <div class="tileTop"><div class="tileIcon">➕</div><div class="tileTag">PIX</div></div>
+                  <div><div class="tileTitle">Cadastro PIX</div><div class="tileDesc">Cadastro de chaves.</div></div>
+                </a>
+                <a class="tile" href="ajustar-cronograma.html">
+                  <div class="tileTop"><div class="tileIcon">🗓️</div><div class="tileTag">PDF</div></div>
+                  <div><div class="tileTitle">Ajustar Cronograma</div><div class="tileDesc">Editar e gerar arquivo.</div></div>
+                </a>
+              </div>
+            </div>
+
+          </section>
+
+          <!-- RIGHT -->
+          <section class="card">
+            <div class="cardHead">
+              <h2>Status do Sistema</h2>
+              <div class="hint">Resumo rápido</div>
+            </div>
+
+            <div class="stats">
+              <div class="stat">
+                <div class="k">Sistema</div>
+                <div class="v green">Online</div>
+              </div>
+              <div class="stat">
+                <div class="k">VIP</div>
+                <div class="v purple">Ativo</div>
+              </div>
+              <div class="stat">
+                <div class="k">PIX</div>
+                <div class="v cyan">Disponível</div>
+              </div>
+              <div class="stat">
+                <div class="k">Versão</div>
+                <div class="v amber">OFF v1.0</div>
+              </div>
+            </div>
+
+            <div style="margin-top:12px; border-top:1px solid rgba(255,255,255,.06); padding-top:12px;">
+              <div class="hint" style="margin-bottom:8px;">Acesso rápido</div>
+              <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <span class="pill">🎟️ VIP</span>
+                <span class="pill">💸 PIX</span>
+                <span class="pill">🧠 Admin</span>
+              </div>
+            </div>
+          </section>
+
         </div>
-      </section>
+      </div>
 
       <div class="footer">
         <div>© OFF Company</div>
         <div>Desenvolvido por Lucas Santos</div>
       </div>
-
     </main>
   </div>
-</body>
-</html>
-
-    .modal{
-      width: min(520px, 100%);
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(11,18,32,.92);
-      box-shadow: 0 20px 70px rgba(0,0,0,.70);
-      padding: 16px;
-      animation: pop .22s ease both;
-    }
-    @keyframes pop{from{opacity:0;transform:scale(.98)}to{opacity:1;transform:scale(1)}}
-
-    .ring{
-      width:56px; height:56px;
-      border-radius:999px;
-      border:3px solid rgba(255,255,255,.18);
-      border-top-color:rgba(37,99,235,.95);
-      margin:10px auto 12px;
-      animation:spin .9s linear infinite;
-    }
-    @keyframes spin{to{transform:rotate(360deg)}}
-
-    .mTitle{
-      font-family: "Rokiest";
-      margin: 0;
-      letter-spacing:.6px;
-      font-size: 24px;
-    }
-    .mSub{
-      margin: 6px 0 0;
-      color: rgba(229,231,235,.70);
-      font-size: 13px;
-    }
-
-    .mRow{
-      display:flex; gap:10px; flex-wrap:wrap;
-      margin-top: 12px;
-      align-items:end;
-    }
-    .field{ flex: 1 1 240px; display:flex; flex-direction:column; gap:6px; }
-    label{ font-size:12px; color: rgba(229,231,235,.72); }
-    input{
-      height:44px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(2,6,23,.55);
-      color: var(--text);
-      padding: 10px 12px;
-      outline:none;
-    }
-    input:focus{
-      border-color: rgba(37,99,235,.55);
-      box-shadow: 0 0 0 4px rgba(37,99,235,.18);
-    }
-
-    .btnRow{
-      display:flex; gap:10px; margin-top: 12px; flex-wrap:wrap;
-    }
-    .mBtn{
-      height:44px;
-      border-radius:12px;
-      border:0;
-      padding: 0 14px;
-      font-weight: 900;
-      cursor:pointer;
-      color:#fff;
-      transition:.15s;
-      flex: 1 1 auto;
-    }
-    .mBtn:hover{ transform: translateY(-1px); opacity:.95; }
-    .mBtn.blue{ background: var(--blue); }
-    .mBtn.ghost{ background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.10); }
-
-    .toast{
-      position:fixed;
-      bottom:18px;
-      left:50%;
-      transform:translateX(-50%);
-      background: rgba(17,24,39,.95);
-      border:1px solid rgba(255,255,255,.12);
-      padding:10px 12px;
-      border-radius:12px;
-      font-weight:900;
-      opacity:0;
-      pointer-events:none;
-      transition:.2s;
-      z-index: 100000;
-    }
-    .toast.show{ opacity:1; }
-
-    @media (max-width: 720px){
-      .title{ font-size: 30px; }
-      .grid{ grid-template-columns: 1fr; }
-      .pill{ display:none; }
-      .logo{ width:52px; height:52px; }
-    }
-  </style>
-</head>
-
-<body>
-  <div class="wrap">
-    <div class="header">
-      <div class="brand">
-        <div class="logo">
-          <img src="logo-lalaia.png" alt="Lalaiá Music">
-        </div>
-        <div class="brandText">
-          <h1 class="title">Lalaiá Music</h1>
-          <div class="subtitle">Central oficial • Usuário & Equipe</div>
-        </div>
-      </div>
-
-      <div class="pill">
-        <span class="dot"></span>
-        Online
-      </div>
-    </div>
-
-    <div class="tabs">
-      <div id="tabUser" class="tab active">👤 Usuário</div>
-      <div id="tabAdmin" class="tab">🛡️ Admin</div>
-    </div>
-
-    <!-- USER -->
-    <div id="userArea" class="content">
-      <div class="card">
-        <div style="font-weight:900; margin-bottom:10px;">Acesso rápido</div>
-
-        <div class="grid">
-          <a class="btn" href="cronograma-matheusinho.pdf" target="_blank">
-            <div class="btnLeft">
-              <div class="btnTitle">Cronograma (PDF)</div>
-              <div class="btnDesc">Abrir o cronograma atualizado</div>
-            </div>
-            <span class="chip violet">PDF</span>
-          </a>
-
-          <a class="btn" href="https://wa.me/5521983764623" target="_blank">
-            <div class="btnLeft">
-              <div class="btnTitle">Falar com Produção</div>
-              <div class="btnDesc">WhatsApp oficial</div>
-            </div>
-            <span class="chip green">WhatsApp</span>
-          </a>
-
-          <a class="btn" href="vip.html">
-            <div class="btnLeft">
-              <div class="btnTitle">Lista VIP</div>
-              <div class="btnDesc">Entrar com código e reservar</div>
-            </div>
-            <span class="chip amber">VIP</span>
-          </a>
-
-          <a class="btn" href="pix.html">
-            <div class="btnLeft">
-              <div class="btnTitle">Cadastro de Pix</div>
-              <div class="btnDesc">Favorecido + chave</div>
-            </div>
-            <span class="chip blue">PIX</span>
-          </a>
-        </div>
-      </div>
-
-      <div class="footer">
-        Desenvolvido por WayCompanyGG • © Lalaiá Music
-      </div>
-    </div>
-
-    <!-- ADMIN (bloqueado) -->
-    <div id="adminArea" class="content" style="display:none;">
-      <div class="card">
-        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
-          <div>
-            <div style="font-weight:900;">Painel da Equipe</div>
-            <div style="color:rgba(229,231,235,.65); font-size:12px; margin-top:4px;">
-              Área restrita. Use a senha para liberar as ferramentas.
-            </div>
-          </div>
-
-          <button id="btnUnlock" class="mBtn blue" style="flex:0 0 auto;">Desbloquear</button>
-        </div>
-
-        <div id="adminLockedHint" style="margin-top:12px; color:rgba(229,231,235,.6); font-size:13px;">
-          🔒 Bloqueado — clique em <b>Desbloquear</b> para acessar.
-        </div>
-
-        <div id="adminTools" style="display:none; margin-top:14px;">
-          <div class="grid">
-            <a class="btn" href="vip-admin.html">
-              <div class="btnLeft">
-                <div class="btnTitle">VIP Admin</div>
-                <div class="btnDesc">Gerenciar códigos/slots</div>
-              </div>
-              <span class="chip amber">Admin</span>
-            </a>
-
-            <a class="btn" href="ajustar-cronograma.html">
-              <div class="btnLeft">
-                <div class="btnTitle">Ajustar Cronograma</div>
-                <div class="btnDesc">Atualizar planilha e PDF</div>
-              </div>
-              <span class="chip violet">Equipe</span>
-            </a>
-
-            <a class="btn" href="diaria.html">
-              <div class="btnLeft">
-                <div class="btnTitle">Calculadora de Diária</div>
-                <div class="btnDesc">Músicos + total copiável</div>
-              </div>
-              <span class="chip blue">R$</span>
-            </a>
-
-            <a class="btn" href="pix-admin.html">
-              <div class="btnLeft">
-                <div class="btnTitle">Pix Admin</div>
-                <div class="btnDesc">Gerenciar favorecidos</div>
-              </div>
-              <span class="chip green">PIX</span>
-            </a>
-          </div>
-
-          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
-            <button id="btnLock" class="mBtn ghost">Bloquear</button>
-            <button id="btnLogout" class="mBtn ghost">Sair (limpar senha)</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="footer">
-        Admin • WayCompanyGG • © Lalaiá Music
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL SENHA ADMIN -->
-  <div id="overlay" class="overlay">
-    <div class="modal">
-      <h2 class="mTitle">Acesso Admin</h2>
-      <p class="mSub">Digite a senha para liberar as ferramentas da equipe.</p>
-
-      <div class="mRow">
-        <div class="field">
-          <label>Senha</label>
-          <input id="adminPass" type="password" placeholder="Senha admin">
-        </div>
-      </div>
-
-      <div class="btnRow">
-        <button id="btnCancel" class="mBtn ghost">Cancelar</button>
-        <button id="btnEnter" class="mBtn blue">Entrar</button>
-      </div>
-
-      <div style="margin-top:10px; color:rgba(229,231,235,.55); font-size:12px;">
-        *Dica: você pode deixar a senha salva por 24h neste dispositivo.
-      </div>
-    </div>
-  </div>
-
-  <!-- LOADING -->
-  <div id="loading" class="overlay">
-    <div class="modal" style="text-align:center">
-      <div class="ring"></div>
-      <div style="font-family:Rokiest; font-size:22px; letter-spacing:.6px;">Processando…</div>
-      <div style="margin-top:6px; color:rgba(229,231,235,.65); font-size:13px;">Aguarde</div>
-    </div>
-  </div>
-
-  <div id="toast" class="toast">✅</div>
 
   <script>
-    // ===== helpers
-    const $ = (id)=>document.getElementById(id);
-    function toast(msg){
-      const t=$("toast");
-      t.textContent=msg;
-      t.classList.add("show");
-      setTimeout(()=>t.classList.remove("show"), 1600);
-    }
-    function loading(on){ $("loading").style.display = on ? "flex":"none"; }
-    function modal(on){ $("overlay").style.display = on ? "flex":"none"; }
+    // Tabs controller (sem dependências)
+    const tabs = Array.from(document.querySelectorAll(".tab"));
+    const views = Array.from(document.querySelectorAll("[data-view]"));
 
-    // ===== tabs
-    function setTab(tab){
-      $("tabUser").classList.toggle("active", tab==="user");
-      $("tabAdmin").classList.toggle("active", tab==="admin");
-      $("userArea").style.display = tab==="user" ? "block":"none";
-      $("adminArea").style.display = tab==="admin" ? "block":"none";
+    function setTab(name){
+      tabs.forEach(t => t.classList.toggle("active", t.dataset.tab === name));
+      views.forEach(v => v.classList.toggle("show", v.getAttribute("data-view") === name));
+      // fallback: overview sempre que não achar
+      if(!views.some(v => v.classList.contains("show"))){
+        views.forEach(v => v.classList.toggle("show", v.getAttribute("data-view") === "overview"));
+      }
     }
 
-    $("tabUser").onclick = ()=>setTab("user");
-    $("tabAdmin").onclick = ()=>setTab("admin");
+    tabs.forEach(t => t.addEventListener("click", ()=> setTab(t.dataset.tab)));
 
-    // ===== admin lock state
-    const KEY = "lalaia_admin_session_v1";
-
-    function isUnlocked(){
-      try{
-        const raw = localStorage.getItem(KEY);
-        if(!raw) return false;
-        const obj = JSON.parse(raw);
-        return obj && obj.ok === true && Date.now() < obj.expiresAt;
-      }catch{ return false; }
-    }
-
-    function unlockSave(pass){
-      // Aqui você pode trocar por validação via API depois.
-      // Por enquanto, é “local” (não expõe suas páginas se o link for conhecido).
-      const ok = (String(pass||"").trim().length >= 4);
-      if(!ok) return false;
-
-      localStorage.setItem(KEY, JSON.stringify({
-        ok:true,
-        expiresAt: Date.now() + (24*60*60*1000) // 24h
-      }));
-      return true;
-    }
-
-    function lock(){
-      $("adminTools").style.display = "none";
-      $("adminLockedHint").style.display = "block";
-      toast("🔒 Bloqueado");
-    }
-
-    function showTools(){
-      $("adminTools").style.display = "block";
-      $("adminLockedHint").style.display = "none";
-    }
-
-    function refreshAdminUI(){
-      if(isUnlocked()) showTools();
-      else lock();
-    }
-
-    // ===== buttons
-    $("btnUnlock").onclick = ()=>{ modal(true); };
-    $("btnCancel").onclick = ()=>{ modal(false); };
-    $("btnEnter").onclick = ()=>{
-      const pass = $("adminPass").value || "";
-      loading(true);
-      setTimeout(()=>{
-        loading(false);
-        if(unlockSave(pass)){
-          modal(false);
-          $("adminPass").value = "";
-          toast("✅ Admin liberado");
-          showTools();
-        }else{
-          toast("❌ Senha inválida");
-        }
-      }, 550);
-    };
-
-    $("btnLock").onclick = ()=>{
-      lock();
-      toast("🔒 Bloqueado");
-    };
-    $("btnLogout").onclick = ()=>{
-      localStorage.removeItem(KEY);
-      lock();
-      toast("🧹 Sessão limpa");
-    };
-
-    // fechar modal clicando fora
-    $("overlay").onclick = (e)=>{ if(e.target && e.target.id==="overlay") modal(false); };
-
-    // init
-    refreshAdminUI();
+    // default
+    setTab("overview");
   </script>
 </body>
 </html>
