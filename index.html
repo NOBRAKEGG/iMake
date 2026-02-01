@@ -1,168 +1,609 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>LALAIÁ MUSIC | WayCompanyGG</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>Lalaiá Music | WayCompanyGG</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <!-- Fonte Rokiest -->
   <style>
-    /* ===== FONTE ROKIEST ===== */
-    @font-face {
-      font-family: "Rokiest";
-      src: url("https://waycompanygg.github.io/roteiro/assets/fonts/Rokiest-Extrabold.otf") format("opentype");
-      font-weight: 800;
-      font-style: normal;
-      font-display: swap;
+    @font-face{
+      font-family:"Rokiest";
+      src:url("https://waycompanygg.github.io/roteiro/assets/fonts/Rokiest-Extrabold.otf") format("opentype");
+      font-weight:800;
+      font-display:swap;
     }
 
     :root{
-      --bg1:#0b0f19;
-      --bg2:#0f172a;
-      --card: rgba(11,18,32,.78);
+      --bg1:#0b0f19; --bg2:#0f172a;
+      --panel: rgba(11,18,32,.82);
       --stroke: rgba(255,255,255,.10);
-      --text:#e5e7eb;
-      --muted: rgba(229,231,235,.72);
-      --shadow: 0 20px 60px rgba(0,0,0,.6);
-
-      --purple:#7c3aed;
-      --green:#25D366;
-      --red:#ef4444;
-      --blue:#2563eb;
+      --text:#e5e7eb; --muted: rgba(229,231,235,.65);
+      --blue:#2563eb; --green:#22c55e; --red:#ef4444; --amber:#f59e0b; --violet:#7c3aed;
+      --shadow: 0 24px 70px rgba(0,0,0,.65);
+      --radius: 22px;
     }
 
     *{ box-sizing:border-box; }
-
     body{
       margin:0;
       min-height:100vh;
-      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-      color:var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color: var(--text);
       background:
-        radial-gradient(800px 420px at 10% 10%, rgba(124,58,237,.25), transparent 60%),
-        radial-gradient(800px 420px at 90% 20%, rgba(37,99,235,.22), transparent 60%),
+        radial-gradient(900px 520px at 10% 10%, rgba(124,58,237,.18), transparent 60%),
+        radial-gradient(900px 520px at 90% 15%, rgba(37,99,235,.20), transparent 60%),
+        radial-gradient(900px 520px at 50% 95%, rgba(34,197,94,.10), transparent 60%),
         linear-gradient(135deg, var(--bg1), var(--bg2));
       display:flex;
       justify-content:center;
       align-items:center;
-      padding:22px;
+      padding: 22px;
+    }
+
+    /* Container */
+    .wrap{
+      width: min(980px, 100%);
+      background: var(--panel);
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      backdrop-filter: blur(10px);
+      animation: in .45s ease both;
+      overflow:hidden;
+      position: relative;
+    }
+    @keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+    /* Header */
+    .header{
+      display:flex;
+      gap:14px;
+      align-items:center;
+      justify-content:space-between;
+      padding: 8px 6px 14px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .brand{
+      display:flex;
+      gap:14px;
+      align-items:center;
+      min-width: 0;
+    }
+    .logo{
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.10);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      flex: 0 0 auto;
+    }
+    .logo img{ width:100%; height:100%; object-fit:cover; }
+    .brandText{
+      min-width: 0;
+    }
+    .title{
+      font-family: "Rokiest";
+      margin:0;
+      letter-spacing:.8px;
+      font-size: 34px;
+      line-height: 1.1;
+    }
+    .subtitle{
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .pill{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.10);
+      padding: 10px 12px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .dot{
+      width:10px; height:10px; border-radius:999px;
+      background: rgba(34,197,94,.85);
+      box-shadow: 0 0 0 6px rgba(34,197,94,.12);
+    }
+
+    /* Tabs */
+    .tabs{
+      display:flex;
+      gap:10px;
+      padding: 14px 6px 0;
+      flex-wrap: wrap;
+    }
+    .tab{
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 12px;
+      font-weight: 900;
+      cursor:pointer;
+      transition:.15s;
+      user-select:none;
+    }
+    .tab:hover{ transform: translateY(-1px); opacity:.95; }
+    .tab.active{
+      background: rgba(37,99,235,.20);
+      border-color: rgba(37,99,235,.30);
+      box-shadow: 0 10px 30px rgba(37,99,235,.12);
+    }
+
+    /* Content */
+    .content{
+      padding: 14px 6px 6px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:12px;
     }
 
     .card{
-      width:100%;
-      max-width:440px;
-      background:var(--card);
-      border:1px solid var(--stroke);
-      border-radius:18px;
-      padding:36px 28px;
-      text-align:center;
-      box-shadow:var(--shadow);
-      backdrop-filter: blur(10px);
-      animation: fadeUp .5s ease both;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 18px;
+      padding: 14px;
     }
 
-    @keyframes fadeUp{
-      from{ opacity:0; transform:translateY(10px); }
-      to{ opacity:1; transform:translateY(0); }
-    }
-
-    .logo{
-      max-width:170px;
-      margin-bottom:20px;
-    }
-
-    h1{
-      font-family:"Rokiest", sans-serif;
-      font-size:30px;
-      margin:0 0 6px;
-      letter-spacing:.6px;
-    }
-
-    p{
-      margin:0 0 24px;
-      font-size:14px;
-      color:var(--muted);
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
     }
 
     .btn{
-      display:block;
-      width:100%;
-      padding:14px;
-      margin-bottom:14px;
-      border-radius:12px;
-      font-size:15px;
-      font-weight:900;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      width: 100%;
+      padding: 14px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(2,6,23,.45);
+      color: var(--text);
       text-decoration:none;
+      cursor:pointer;
+      transition: transform .15s ease, opacity .15s ease, border-color .15s ease;
+      user-select:none;
+      min-height: 58px;
+    }
+    .btn:hover{ transform: translateY(-1px); opacity:.95; border-color: rgba(255,255,255,.18); }
+    .btn:active{ transform: translateY(0px); opacity:.90; }
+
+    .btnLeft{
+      display:flex; flex-direction:column; gap:4px; min-width:0;
+    }
+    .btnTitle{
+      font-weight: 900;
+      font-size: 15px;
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
+    .btnDesc{
+      font-size: 12px;
+      color: rgba(229,231,235,.68);
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
+    .chip{
+      font-size: 12px;
+      font-weight: 900;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      flex: 0 0 auto;
+    }
+
+    .chip.violet{ border-color: rgba(124,58,237,.30); background: rgba(124,58,237,.15); }
+    .chip.green{ border-color: rgba(34,197,94,.30); background: rgba(34,197,94,.14); }
+    .chip.blue{ border-color: rgba(37,99,235,.30); background: rgba(37,99,235,.15); }
+    .chip.red{ border-color: rgba(239,68,68,.30); background: rgba(239,68,68,.14); }
+    .chip.amber{ border-color: rgba(245,158,11,.30); background: rgba(245,158,11,.14); color:#111827; }
+
+    /* Footer */
+    .footer{
+      margin-top: 10px;
+      text-align:center;
+      color: rgba(229,231,235,.55);
+      font-size: 12px;
+      padding: 8px 6px 4px;
+    }
+
+    /* Overlay / Modal */
+    .overlay{
+      position: fixed;
+      inset: 0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(10px);
+      z-index: 99999;
+      padding: 18px;
+    }
+    .modal{
+      width: min(520px, 100%);
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(11,18,32,.92);
+      box-shadow: 0 20px 70px rgba(0,0,0,.70);
+      padding: 16px;
+      animation: pop .22s ease both;
+    }
+    @keyframes pop{from{opacity:0;transform:scale(.98)}to{opacity:1;transform:scale(1)}}
+
+    .ring{
+      width:56px; height:56px;
+      border-radius:999px;
+      border:3px solid rgba(255,255,255,.18);
+      border-top-color:rgba(37,99,235,.95);
+      margin:10px auto 12px;
+      animation:spin .9s linear infinite;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    .mTitle{
+      font-family: "Rokiest";
+      margin: 0;
+      letter-spacing:.6px;
+      font-size: 24px;
+    }
+    .mSub{
+      margin: 6px 0 0;
+      color: rgba(229,231,235,.70);
+      font-size: 13px;
+    }
+
+    .mRow{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top: 12px;
+      align-items:end;
+    }
+    .field{ flex: 1 1 240px; display:flex; flex-direction:column; gap:6px; }
+    label{ font-size:12px; color: rgba(229,231,235,.72); }
+    input{
+      height:44px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(2,6,23,.55);
+      color: var(--text);
+      padding: 10px 12px;
+      outline:none;
+    }
+    input:focus{
+      border-color: rgba(37,99,235,.55);
+      box-shadow: 0 0 0 4px rgba(37,99,235,.18);
+    }
+
+    .btnRow{
+      display:flex; gap:10px; margin-top: 12px; flex-wrap:wrap;
+    }
+    .mBtn{
+      height:44px;
+      border-radius:12px;
+      border:0;
+      padding: 0 14px;
+      font-weight: 900;
+      cursor:pointer;
       color:#fff;
       transition:.15s;
+      flex: 1 1 auto;
     }
+    .mBtn:hover{ transform: translateY(-1px); opacity:.95; }
+    .mBtn.blue{ background: var(--blue); }
+    .mBtn.ghost{ background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.10); }
 
-    .btn:hover{
-      transform:translateY(-2px);
-      opacity:.95;
+    .toast{
+      position:fixed;
+      bottom:18px;
+      left:50%;
+      transform:translateX(-50%);
+      background: rgba(17,24,39,.95);
+      border:1px solid rgba(255,255,255,.12);
+      padding:10px 12px;
+      border-radius:12px;
+      font-weight:900;
+      opacity:0;
+      pointer-events:none;
+      transition:.2s;
+      z-index: 100000;
     }
+    .toast.show{ opacity:1; }
 
-    .btn-pix { background:#06b6d4; } /* ciano */
-
-    .btn-diaria { background: #f59e0b; box-shadow:0 10px 28px rgba(245,158,11,.30); }
-
-
-    .btn-pdf{ background:var(--purple); box-shadow:0 10px 28px rgba(124,58,237,.35); }
-    .btn-whatsapp{ background:var(--green); box-shadow:0 10px 28px rgba(37,211,102,.35); }
-    .btn-van{ background:var(--red); box-shadow:0 10px 28px rgba(239,68,68,.35); }
-    .btn-ajuste{ background:var(--blue); box-shadow:0 10px 28px rgba(37,99,235,.35); }
-    .btn-vip { background: #22c55e; }
-
-
-    .footer{
-      margin-top:18px;
-      font-size:12px;
-      color:rgba(229,231,235,.55);
-      line-height:1.4;
+    @media (max-width: 720px){
+      .title{ font-size: 30px; }
+      .grid{ grid-template-columns: 1fr; }
+      .pill{ display:none; }
+      .logo{ width:52px; height:52px; }
     }
   </style>
 </head>
 
 <body>
-  <div class="card">
-    <img src="logo-lalaia.png" alt="Lalaiá Music" class="logo">
+  <div class="wrap">
+    <div class="header">
+      <div class="brand">
+        <div class="logo">
+          <img src="logo-lalaia.png" alt="Lalaiá Music">
+        </div>
+        <div class="brandText">
+          <h1 class="title">Lalaiá Music</h1>
+          <div class="subtitle">Central oficial • Usuário & Equipe</div>
+        </div>
+      </div>
 
-    <h1>OFF COMPANY</h1>
-    <p>MENU PRODUÇÃO</p>
+      <div class="pill">
+        <span class="dot"></span>
+        Online
+      </div>
+    </div>
 
-    <a href="cronograma-matheusinho.pdf" target="_blank" class="btn btn-pdf">
-      Abrir Cronograma (PDF)
-    </a>
+    <div class="tabs">
+      <div id="tabUser" class="tab active">👤 Usuário</div>
+      <div id="tabAdmin" class="tab">🛡️ Admin</div>
+    </div>
 
-    <a href="https://wa.me/5521983764623" target="_blank" class="btn btn-whatsapp">
-      Falar com Produção
-    </a>
+    <!-- USER -->
+    <div id="userArea" class="content">
+      <div class="card">
+        <div style="font-weight:900; margin-bottom:10px;">Acesso rápido</div>
 
-    <a href="vip.html" class="btn btn-vip">🎟️ Lista VIP</a>
-    
-    <a href="vip-admin.html" class="btn btn-ajuste">
-      🔐 VIP Admin
-    </a>
-    
-    <a href="pix.html" class="btn btn-pix">
-      💠 PIX (Senha)
-    </a>
+        <div class="grid">
+          <a class="btn" href="cronograma-matheusinho.pdf" target="_blank">
+            <div class="btnLeft">
+              <div class="btnTitle">Cronograma (PDF)</div>
+              <div class="btnDesc">Abrir o cronograma atualizado</div>
+            </div>
+            <span class="chip violet">PDF</span>
+          </a>
 
-    <a href="diaria.html" class="btn btn-diaria">
-      💰 Calculadora de Diária (PRODUTOR)
-    </a>
+          <a class="btn" href="https://wa.me/5521983764623" target="_blank">
+            <div class="btnLeft">
+              <div class="btnTitle">Falar com Produção</div>
+              <div class="btnDesc">WhatsApp oficial</div>
+            </div>
+            <span class="chip green">WhatsApp</span>
+          </a>
 
-    <a href="van.html" class="btn btn-van">
-      🚐 Reserva de Lugar na Van
-    </a>
+          <a class="btn" href="vip.html">
+            <div class="btnLeft">
+              <div class="btnTitle">Lista VIP</div>
+              <div class="btnDesc">Entrar com código e reservar</div>
+            </div>
+            <span class="chip amber">VIP</span>
+          </a>
 
-    <a href="ajustar-cronograma.html" class="btn btn-ajuste">
-      🛠️ Ajustar Cronograma (ADMIN)
-    </a>
+          <a class="btn" href="pix.html">
+            <div class="btnLeft">
+              <div class="btnTitle">Cadastro de Pix</div>
+              <div class="btnDesc">Favorecido + chave</div>
+            </div>
+            <span class="chip blue">PIX</span>
+          </a>
+        </div>
+      </div>
 
-    <div class="footer">
-      Desenvolvido por <b>Lucas Santos</b><br>
-      © Off Company
+      <div class="footer">
+        Desenvolvido por WayCompanyGG • © Lalaiá Music
+      </div>
+    </div>
+
+    <!-- ADMIN (bloqueado) -->
+    <div id="adminArea" class="content" style="display:none;">
+      <div class="card">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+          <div>
+            <div style="font-weight:900;">Painel da Equipe</div>
+            <div style="color:rgba(229,231,235,.65); font-size:12px; margin-top:4px;">
+              Área restrita. Use a senha para liberar as ferramentas.
+            </div>
+          </div>
+
+          <button id="btnUnlock" class="mBtn blue" style="flex:0 0 auto;">Desbloquear</button>
+        </div>
+
+        <div id="adminLockedHint" style="margin-top:12px; color:rgba(229,231,235,.6); font-size:13px;">
+          🔒 Bloqueado — clique em <b>Desbloquear</b> para acessar.
+        </div>
+
+        <div id="adminTools" style="display:none; margin-top:14px;">
+          <div class="grid">
+            <a class="btn" href="vip-admin.html">
+              <div class="btnLeft">
+                <div class="btnTitle">VIP Admin</div>
+                <div class="btnDesc">Gerenciar códigos/slots</div>
+              </div>
+              <span class="chip amber">Admin</span>
+            </a>
+
+            <a class="btn" href="ajustar-cronograma.html">
+              <div class="btnLeft">
+                <div class="btnTitle">Ajustar Cronograma</div>
+                <div class="btnDesc">Atualizar planilha e PDF</div>
+              </div>
+              <span class="chip violet">Equipe</span>
+            </a>
+
+            <a class="btn" href="diaria.html">
+              <div class="btnLeft">
+                <div class="btnTitle">Calculadora de Diária</div>
+                <div class="btnDesc">Músicos + total copiável</div>
+              </div>
+              <span class="chip blue">R$</span>
+            </a>
+
+            <a class="btn" href="pix-admin.html">
+              <div class="btnLeft">
+                <div class="btnTitle">Pix Admin</div>
+                <div class="btnDesc">Gerenciar favorecidos</div>
+              </div>
+              <span class="chip green">PIX</span>
+            </a>
+          </div>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+            <button id="btnLock" class="mBtn ghost">Bloquear</button>
+            <button id="btnLogout" class="mBtn ghost">Sair (limpar senha)</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        Admin • WayCompanyGG • © Lalaiá Music
+      </div>
     </div>
   </div>
+
+  <!-- MODAL SENHA ADMIN -->
+  <div id="overlay" class="overlay">
+    <div class="modal">
+      <h2 class="mTitle">Acesso Admin</h2>
+      <p class="mSub">Digite a senha para liberar as ferramentas da equipe.</p>
+
+      <div class="mRow">
+        <div class="field">
+          <label>Senha</label>
+          <input id="adminPass" type="password" placeholder="Senha admin">
+        </div>
+      </div>
+
+      <div class="btnRow">
+        <button id="btnCancel" class="mBtn ghost">Cancelar</button>
+        <button id="btnEnter" class="mBtn blue">Entrar</button>
+      </div>
+
+      <div style="margin-top:10px; color:rgba(229,231,235,.55); font-size:12px;">
+        *Dica: você pode deixar a senha salva por 24h neste dispositivo.
+      </div>
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div id="loading" class="overlay">
+    <div class="modal" style="text-align:center">
+      <div class="ring"></div>
+      <div style="font-family:Rokiest; font-size:22px; letter-spacing:.6px;">Processando…</div>
+      <div style="margin-top:6px; color:rgba(229,231,235,.65); font-size:13px;">Aguarde</div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast">✅</div>
+
+  <script>
+    // ===== helpers
+    const $ = (id)=>document.getElementById(id);
+    function toast(msg){
+      const t=$("toast");
+      t.textContent=msg;
+      t.classList.add("show");
+      setTimeout(()=>t.classList.remove("show"), 1600);
+    }
+    function loading(on){ $("loading").style.display = on ? "flex":"none"; }
+    function modal(on){ $("overlay").style.display = on ? "flex":"none"; }
+
+    // ===== tabs
+    function setTab(tab){
+      $("tabUser").classList.toggle("active", tab==="user");
+      $("tabAdmin").classList.toggle("active", tab==="admin");
+      $("userArea").style.display = tab==="user" ? "block":"none";
+      $("adminArea").style.display = tab==="admin" ? "block":"none";
+    }
+
+    $("tabUser").onclick = ()=>setTab("user");
+    $("tabAdmin").onclick = ()=>setTab("admin");
+
+    // ===== admin lock state
+    const KEY = "lalaia_admin_session_v1";
+
+    function isUnlocked(){
+      try{
+        const raw = localStorage.getItem(KEY);
+        if(!raw) return false;
+        const obj = JSON.parse(raw);
+        return obj && obj.ok === true && Date.now() < obj.expiresAt;
+      }catch{ return false; }
+    }
+
+    function unlockSave(pass){
+      // Aqui você pode trocar por validação via API depois.
+      // Por enquanto, é “local” (não expõe suas páginas se o link for conhecido).
+      const ok = (String(pass||"").trim().length >= 4);
+      if(!ok) return false;
+
+      localStorage.setItem(KEY, JSON.stringify({
+        ok:true,
+        expiresAt: Date.now() + (24*60*60*1000) // 24h
+      }));
+      return true;
+    }
+
+    function lock(){
+      $("adminTools").style.display = "none";
+      $("adminLockedHint").style.display = "block";
+      toast("🔒 Bloqueado");
+    }
+
+    function showTools(){
+      $("adminTools").style.display = "block";
+      $("adminLockedHint").style.display = "none";
+    }
+
+    function refreshAdminUI(){
+      if(isUnlocked()) showTools();
+      else lock();
+    }
+
+    // ===== buttons
+    $("btnUnlock").onclick = ()=>{ modal(true); };
+    $("btnCancel").onclick = ()=>{ modal(false); };
+    $("btnEnter").onclick = ()=>{
+      const pass = $("adminPass").value || "";
+      loading(true);
+      setTimeout(()=>{
+        loading(false);
+        if(unlockSave(pass)){
+          modal(false);
+          $("adminPass").value = "";
+          toast("✅ Admin liberado");
+          showTools();
+        }else{
+          toast("❌ Senha inválida");
+        }
+      }, 550);
+    };
+
+    $("btnLock").onclick = ()=>{
+      lock();
+      toast("🔒 Bloqueado");
+    };
+    $("btnLogout").onclick = ()=>{
+      localStorage.removeItem(KEY);
+      lock();
+      toast("🧹 Sessão limpa");
+    };
+
+    // fechar modal clicando fora
+    $("overlay").onclick = (e)=>{ if(e.target && e.target.id==="overlay") modal(false); };
+
+    // init
+    refreshAdminUI();
+  </script>
 </body>
 </html>
