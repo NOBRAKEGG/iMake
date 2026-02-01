@@ -211,7 +211,15 @@
 
     <div id="debug" class="debugBox"></div>
 
-    <!-- Só aparece depois do login -->
+    <!-- estado vazio (SEM flood) -->
+    <div id="emptyState" class="card" style="display:none; margin-top:14px;">
+      <div style="font-weight:900;">Nenhum slot liberado</div>
+      <div style="margin-top:6px; color:rgba(229,231,235,.65); font-size:13px;">
+        Esse código está válido, mas ainda não tem slots criados para ele no VIP Admin.
+      </div>
+    </div>
+
+    <!-- grid -->
     <div id="grid" class="grid" style="margin-top:14px; display:none;"></div>
   </div>
 </div>
@@ -264,7 +272,10 @@
 <div id="toast" class="toast">✅</div>
 
 <script>
-  // ✅ COLE AQUI O SEU /exec CERTO
+  // ===============================
+  // CONFIG
+  // ===============================
+  // ✅ TROQUE PELO SEU LINK /exec
   const API_URL = "https://script.google.com/macros/s/AKfycbyyU0eLff_-CRNBi6G_BfjGZA9G3kEylVHuhM0N9HqNFD2vsR8A2NeF_g0jV921Q4MG/exec";
 
   let currentSlots = [];
@@ -277,7 +288,7 @@
     const t = $("toast");
     t.textContent = msg;
     t.classList.add("show");
-    setTimeout(()=>t.classList.remove("show"), 1800);
+    setTimeout(()=>t.classList.remove("show"), 1600);
   }
   function loading(on){ $("loading").style.display = on ? "flex":"none"; }
   function modal(on){ $("overlay").style.display = on ? "flex":"none"; }
@@ -311,7 +322,7 @@
 
       const text = await res.text();
       try { return JSON.parse(text); }
-      catch { return { ok:false, error:"API respondeu inválido: " + text.slice(0,120) }; }
+      catch { return { ok:false, error:"API inválida: " + text.slice(0,120) }; }
 
     }catch(err){
       return { ok:false, error:(err.name==="AbortError" ? "Timeout da API" : "Falha de conexão") };
@@ -320,27 +331,31 @@
     }
   }
 
-  function renderGrid(){
+  function renderGrid(meta){
     const grid = $("grid");
-    const dbg = $("debug");
+    const dbg  = $("debug");
+    const empty = $("emptyState");
 
-    if(!Array.isArray(currentSlots)){
-      currentSlots = [];
-    }
+    const list = Array.isArray(currentSlots) ? currentSlots : [];
+    const code = normalizeCode($("code").value || "");
 
-    // mostra debug, se existir
+    const total   = meta && meta.total   !== undefined ? meta.total   : "—";
+    const matched = meta && meta.matched !== undefined ? meta.matched : list.length;
+
     dbg.style.display = "block";
-    dbg.textContent = `Slots carregados: ${currentSlots.length}`;
+    dbg.textContent = `Código: ${code} | total VIP: ${total} | slots deste código: ${matched}`;
 
-    // se não tem slots, mostra msg
-    if(currentSlots.length === 0){
+    if(list.length === 0){
       grid.style.display = "none";
-      toast("⚠️ Nenhum slot liberado para este código");
+      grid.innerHTML = "";
+      empty.style.display = "block";
       return;
     }
 
+    empty.style.display = "none";
     grid.style.display = "grid";
-    grid.innerHTML = currentSlots.map(s=>{
+
+    grid.innerHTML = list.map(s=>{
       const status = String(s.status||"LIVRE").toUpperCase();
       const cls = status==="LIVRE" ? "bLivre" : (status==="BLOQUEADO" ? "bBloq" : "bOcup");
       const badge = status==="LIVRE" ? "Livre" : (status==="BLOQUEADO" ? "Bloqueado" : "Ocupado");
@@ -368,7 +383,7 @@
       const r = await api("vipPublicGet", { code });
       if(r && r.ok){
         currentSlots = Array.isArray(r.slots) ? r.slots : [];
-        renderGrid();
+        renderGrid(r.debug || null);
       }
     }, 4000);
   }
@@ -385,7 +400,7 @@
     if(!r.ok) return toast("❌ " + r.error);
 
     currentSlots = Array.isArray(r.slots) ? r.slots : [];
-    renderGrid();
+    renderGrid(r.debug || null);
     toast("✅ Acesso liberado");
     startPolling();
   }
@@ -434,12 +449,15 @@
     const g = await api("vipPublicGet", { code });
     if(g.ok){
       currentSlots = Array.isArray(g.slots) ? g.slots : [];
-      renderGrid();
+      renderGrid(g.debug || null);
     }
+
     toast("✅ Reservado!");
   }
 
-  // ============== BINDINGS (sem branco)
+  // ===============================
+  // EVENTS (sem bugs)
+  // ===============================
   document.addEventListener("DOMContentLoaded", ()=>{
     $("btnEntrar").addEventListener("click", entrar);
     $("btnCancel").addEventListener("click", ()=>modal(false));
@@ -447,7 +465,7 @@
 
     $("veiculo").addEventListener("change", toggleVeiculoUI);
 
-    // clique em slot por delegação
+    // click no slot por delegação
     $("grid").addEventListener("click", (e)=>{
       const el = e.target.closest(".slot");
       if(!el) return;
