@@ -102,7 +102,6 @@
     user-select:none;
   }
 
-  /* overlay modal (sem prompt do navegador) */
   .overlay{
     position:fixed; inset:0;
     display:none;
@@ -158,7 +157,6 @@
   }
   .toast.show{opacity:1}
 
-  /* responsivo */
   @media (max-width: 980px){ .grid{grid-template-columns: repeat(3, 1fr);} }
   @media (max-width: 560px){ .grid{grid-template-columns: repeat(2, 1fr);} }
 </style>
@@ -223,7 +221,7 @@
 
 <script>
   // ====== CONFIG ======
-  const API_URL = "https://script.google.com/macros/s/AKfycbyyEqjBItPdYc6WuwAliP6G9shJxtEPABUKCPHDsv-yhahM-QkY2ye7jl99kg9EuCNQ/exec"; // ex: https://script.google.com/macros/s/XXXX/exec
+  const API_URL = "https://script.google.com/macros/s/AKfycbyyEqjBItPdYc6WuwAliP6G9shJxtEPABUKCPHDsv-yhahM-QkY2ye7jl99kg9EuCNQ/exec";
 
   let currentSlots = [];
   let selectedSlot = null;
@@ -232,11 +230,15 @@
     const t = document.getElementById("toast");
     t.textContent = msg;
     t.classList.add("show");
-    setTimeout(()=>t.classList.remove("show"), 1200);
+    setTimeout(()=>t.classList.remove("show"), 1400);
   }
 
   function showOverlay(show){
     document.getElementById("overlay").style.display = show ? "flex" : "none";
+  }
+
+  function getCode(){
+    return (document.getElementById("code").value || "").trim().toUpperCase();
   }
 
   function toggleVeiculo(){
@@ -249,38 +251,38 @@
   }
 
   async function api(fn, payload){
-  const controller = new AbortController();
-  const timeout = setTimeout(()=>controller.abort(), 15000); // 15s
+    const controller = new AbortController();
+    const timeout = setTimeout(()=>controller.abort(), 15000);
 
-  try{
-    const res = await fetch(API_URL, {
-      method: "POST",
-      // ⚠️ NÃO coloque Content-Type application/json
-      // isso evita preflight (OPTIONS) e mata o CORS
-      body: JSON.stringify({ fn, payload }),
-      signal: controller.signal
-    });
+    try{
+      const res = await fetch(API_URL, {
+        method: "POST",
+        // ✅ evita preflight/CORS
+        headers: { "Content-Type":"text/plain;charset=utf-8" },
+        body: JSON.stringify({ fn, payload }),
+        signal: controller.signal
+      });
 
-    const text = await res.text();
-    try { return JSON.parse(text); }
-    catch { return { ok:false, error:"Resposta inválida: " + text.slice(0,160) }; }
+      const text = await res.text();
+      try { return JSON.parse(text); }
+      catch { return { ok:false, error:"Resposta inválida: " + text.slice(0,180) }; }
 
-  } catch (err){
-    return { ok:false, error:(err.name==="AbortError" ? "Timeout (15s). Confira o /exec." : String(err)) };
-  } finally {
-    clearTimeout(timeout);
+    } catch (err){
+      return { ok:false, error:(err.name==="AbortError" ? "Timeout. Confira o /exec e o deploy." : String(err)) };
+    } finally {
+      clearTimeout(timeout);
+    }
   }
-}
 
   async function entrar(){
-    const code = (document.getElementById("code").value||"").trim().toUpperCase();
+    const code = getCode();
     if(!code) return toast("Digite o código");
 
     toast("⏳ Carregando slots...");
     const r = await api("vipPublicGet", { code });
     if(!r.ok) return toast("❌ " + r.error);
 
-    currentSlots = r.slots;
+    currentSlots = r.slots || [];
     renderGrid();
     toast("✅ Acesso liberado");
   }
@@ -290,7 +292,10 @@
     grid.innerHTML = currentSlots.map(s=>{
       const cls = s.status==="LIVRE" ? "bLivre" : (s.status==="BLOQUEADO" ? "bBloq" : "bOcup");
       const badge = s.status==="LIVRE" ? "Livre" : (s.status==="BLOQUEADO" ? "Bloqueado" : "Ocupado");
-      const name = s.status==="OCUPADO" ? `<div class="name blurName">${s.nomeMasked||"Ocupado"}</div>` : `<div class="name">—</div>`;
+      const name = s.status==="OCUPADO"
+        ? `<div class="name blurName">${s.nomeMasked || "Ocupado"}</div>`
+        : `<div class="name">—</div>`;
+
       return `
         <div class="slot ${cls}" onclick="clickSlot('${s.slot}','${s.status}')">
           <div class="topRow">
@@ -307,19 +312,27 @@
     if(status !== "LIVRE"){
       return toast(status==="BLOQUEADO" ? "⛔ Slot bloqueado" : "⚠️ Slot ocupado");
     }
-    selectedSlot = slot;
-    document.getElementById("slotNum").textContent = "#" + slot;
+    selectedSlot = String(slot).trim();
+    document.getElementById("slotNum").textContent = "#" + selectedSlot;
     showOverlay(true);
+  }
+
+  function limparForm(){
+    ["nome","rg","cpf","placa","cor","modelo"].forEach(id => document.getElementById(id).value="");
+    document.getElementById("veiculo").value = "NAO";
+    toggleVeiculo();
   }
 
   function fechar(){
     showOverlay(false);
     selectedSlot = null;
+    limparForm();
   }
 
   async function confirmar(){
-    const code = (document.getElementById("code").value||"").trim().toUpperCase();
+    const code = getCode();
     if(!code) return toast("Código inválido");
+    if(!selectedSlot) return toast("Selecione um slot");
 
     const nome = (document.getElementById("nome").value||"").trim();
     const rg = (document.getElementById("rg").value||"").trim();
@@ -327,31 +340,30 @@
     if(!nome || !rg || !cpf) return toast("Preencha Nome, RG e CPF");
 
     const veiculo = document.getElementById("veiculo").value === "SIM";
+
     const payload = {
       code,
       slot: selectedSlot,
       nome, rg, cpf,
       veiculo,
-      placa: document.getElementById("placa").value||"",
-      cor: document.getElementById("cor").value||"",
-      modelo: document.getElementById("modelo").value||""
+      placa: (document.getElementById("placa").value||"").trim(),
+      cor: (document.getElementById("cor").value||"").trim(),
+      modelo: (document.getElementById("modelo").value||"").trim()
     };
 
     toast("⏳ Reservando...");
     const r = await api("vipReserve", payload);
     if(!r.ok) return toast("❌ " + r.error);
 
-    showOverlay(false);
-    selectedSlot = null;
+    fechar();
 
     // recarrega slots
     const g = await api("vipPublicGet", { code });
-    if(g.ok){ currentSlots = g.slots; renderGrid(); }
+    if(g.ok){ currentSlots = g.slots || []; renderGrid(); }
 
     toast("✅ Reservado!");
   }
 
-  // fechar overlay clicando fora
   document.getElementById("overlay").addEventListener("click", (e)=>{
     if(e.target.id==="overlay") fechar();
   });
