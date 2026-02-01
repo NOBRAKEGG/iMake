@@ -388,18 +388,25 @@
     }
   });
 
-  async function consultarCodigo(){
-    const code = (document.getElementById("codeQuery").value||"").trim().toUpperCase();
-    if(!code) return toast("Digite um código");
-    overlay(true);
-    const r = await api("vipAdminCodeInfo", { adminPass: adminPass(), code });
-    overlay(false);
-    if(!r.ok) return toast("❌ " + r.error);
+async function consultarCodigo(){
+  const code = (document.getElementById("codeQuery").value||"").trim().toUpperCase();
+  if(!code) return toast("Digite um código");
 
-    document.getElementById("codeInfo").value =
-      `${r.code} | Liberados: ${r.maxSlots} | Usados: ${r.usedSlots} | Restantes: ${r.remaining} | Expirado: ${r.expired ? "SIM" : "NÃO"}`;
-    toast("✅ Info carregada");
-  }
+  overlay(true);
+  const r = await api("vipAdminCodeInfo", { adminPass: adminPass(), code });
+  overlay(false);
+
+  if(!r.ok) return toast("❌ " + r.error);
+
+  document.getElementById("codeInfo").value =
+    `${r.code} | Liberados: ${r.maxSlots} | Usados: ${r.usedSlots} | Restantes: ${r.remaining} | Expirado: ${r.expired ? "SIM" : "NÃO"}`;
+
+  // ✅ filtra grid pelos slots vinculados ao código
+  rows = r.slots || [];
+  render();
+
+  toast("✅ Filtrado por código");
+}
 
   async function carregar(){
     overlay(true);
