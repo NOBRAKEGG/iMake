@@ -1,939 +1,855 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>VIP Admin | OFF Company</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>VIP Admin | OFF Company</title>
 
-  <style>
-    @font-face{
-      font-family:"Rokiest";
-      src:url("https://waycompanygg.github.io/roteiro/assets/fonts/Rokiest-Extrabold.otf") format("opentype");
-      font-weight:800;
-      font-display:swap;
-    }
+<style>
+  @font-face{
+    font-family:"Rokiest";
+    src:url("https://waycompanygg.github.io/roteiro/assets/fonts/Rokiest-Extrabold.otf") format("opentype");
+    font-weight:800; font-display:swap;
+  }
+  :root{
+    --bg1:#060812; --bg2:#0b1220;
+    --panel:rgba(10,16,28,.78);
+    --stroke:rgba(255,255,255,.10);
+    --text:#e5e7eb; --muted:rgba(229,231,235,.62);
+    --blue:#2563eb; --green:#22c55e; --red:#ef4444; --amber:#f59e0b; --cyan:#06b6d4; --purple:#8b5cf6;
+    --shadow:0 24px 80px rgba(0,0,0,.68);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; min-height:100vh;
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+    color:var(--text);
+    background:
+      radial-gradient(900px 520px at 14% 12%, rgba(139,92,246,.18), transparent 60%),
+      radial-gradient(900px 520px at 86% 18%, rgba(6,182,212,.14), transparent 60%),
+      radial-gradient(900px 520px at 70% 90%, rgba(34,197,94,.12), transparent 60%),
+      linear-gradient(135deg,var(--bg1),var(--bg2));
+    display:flex; justify-content:center;
+    padding:22px;
+  }
 
-    :root{
-      --bg1:#050611; --bg2:#0b1220;
-      --panel: rgba(10,16,28,.66);
-      --panel2: rgba(2,6,23,.35);
-      --stroke: rgba(255,255,255,.10);
-      --text:#e5e7eb;
-      --muted: rgba(229,231,235,.62);
-      --shadow: 0 26px 90px rgba(0,0,0,.72);
+  .home{
+    position:fixed; top:16px; left:16px;
+    background:rgba(17,24,39,.92);
+    border:1px solid rgba(255,255,255,.12);
+    color:#fff; text-decoration:none;
+    font-weight:900; font-size:14px;
+    padding:10px 12px;
+    border-radius:12px;
+    box-shadow:0 12px 30px rgba(0,0,0,.45);
+    transition:.15s;
+    z-index:10;
+  }
+  .home:hover{transform:translateY(-1px); opacity:.92}
 
-      --purple:#8b5cf6;
-      --cyan:#06b6d4;
-      --green:#22c55e;
-      --amber:#f59e0b;
-      --red:#ef4444;
+  .wrap{
+    width:min(1200px,100%);
+    background:var(--panel);
+    border:1px solid var(--stroke);
+    border-radius:24px;
+    box-shadow:var(--shadow);
+    padding:18px;
+    backdrop-filter:blur(10px);
+    animation: in .45s ease both;
+  }
+  @keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
-      --r: 22px;
-      --r2: 18px;
-    }
+  .topbar{
+    display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    align-items:flex-end;
+    padding:6px 6px 14px;
+  }
+  h1{font-family:"Rokiest"; margin:0; letter-spacing:.9px; font-size:34px}
+  .sub{margin:6px 0 0; color:var(--muted); font-size:13px}
+  .brand{
+    display:flex; flex-direction:column; align-items:flex-end;
+    gap:6px;
+  }
+  .pill{
+    display:inline-flex; gap:8px; align-items:center;
+    padding:8px 10px;
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:999px;
+    background:rgba(255,255,255,.04);
+    color:rgba(229,231,235,.72);
+    font-size:12px; font-weight:900;
+  }
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      color: var(--text);
-      background:
-        radial-gradient(900px 520px at 14% 12%, rgba(139,92,246,.18), transparent 60%),
-        radial-gradient(900px 520px at 86% 18%, rgba(6,182,212,.14), transparent 60%),
-        radial-gradient(900px 520px at 70% 90%, rgba(34,197,94,.10), transparent 60%),
-        linear-gradient(135deg,var(--bg1),var(--bg2));
-      overflow-x:hidden;
-    }
+  .grid2{
+    display:grid;
+    grid-template-columns: 1.05fr .95fr;
+    gap:12px;
+  }
+  @media(max-width:980px){ .grid2{grid-template-columns:1fr} }
 
-    .noise{
-      pointer-events:none;
-      position:fixed; inset:0;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
-      opacity:.18;
-      mix-blend-mode: overlay;
-    }
+  .card{
+    background:rgba(255,255,255,.04);
+    border:1px solid var(--stroke);
+    border-radius:18px;
+    padding:14px;
+  }
+  .cardTitle{
+    font-family:"Rokiest";
+    letter-spacing:.6px;
+    font-size:18px;
+    margin:0 0 10px;
+  }
 
-    .shell{
-      display:flex;
-      min-height:100vh;
-      gap:18px;
-      padding:18px;
-    }
+  .row{display:flex; gap:10px; flex-wrap:wrap; align-items:end}
+  .field{display:flex; flex-direction:column; gap:6px; flex:1 1 220px}
+  label{font-size:12px; color:rgba(229,231,235,.72)}
+  input, select{
+    height:44px; border-radius:12px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(2,6,23,.55);
+    color:var(--text);
+    padding:10px 12px;
+    outline:none;
+    transition:.15s;
+  }
+  input:focus, select:focus{
+    border-color: rgba(139,92,246,.55);
+    box-shadow: 0 0 0 4px rgba(139,92,246,.18);
+  }
 
-    /* ===== sidebar ===== */
-    .side{
-      width:84px; flex:0 0 84px;
-      position:sticky; top:18px; align-self:flex-start;
-      height: calc(100vh - 36px);
-      border-radius: 26px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(10,16,28,.42);
-      backdrop-filter: blur(14px);
-      box-shadow: 0 18px 70px rgba(0,0,0,.55);
-      padding:10px;
-      display:flex; flex-direction:column; align-items:center; gap:10px;
-      overflow:hidden;
-    }
+  button{
+    height:44px; border-radius:12px; border:0;
+    padding:0 14px; font-weight:900;
+    cursor:pointer; color:#fff;
+    transition:.15s;
+    white-space:nowrap;
+  }
+  button:hover{transform:translateY(-1px); opacity:.95}
+  button:active{transform:translateY(0); opacity:.9}
+  .b{background:linear-gradient(135deg, rgba(139,92,246,.95), rgba(6,182,212,.65)); box-shadow:0 10px 26px rgba(139,92,246,.20)}
+  .g{background:rgba(34,197,94,.22); border:1px solid rgba(34,197,94,.35)}
+  .a{background:rgba(245,158,11,.25); border:1px solid rgba(245,158,11,.35); color:#111827}
+  .ghost{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.10)}
+  .danger{background:rgba(239,68,68,.18); border:1px solid rgba(239,68,68,.35)}
 
-    .brandMark{
-      width:58px; height:58px;
-      border-radius: 18px;
-      display:grid; place-items:center;
-      font-family:"Rokiest";
-      letter-spacing:.9px;
-      background:
-        radial-gradient(90px 90px at 30% 25%, rgba(139,92,246,.75), transparent 60%),
-        radial-gradient(90px 90px at 78% 70%, rgba(6,182,212,.55), transparent 65%),
-        rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow: 0 14px 40px rgba(0,0,0,.55);
-      user-select:none;
-    }
+  .divider{height:1px; background:rgba(255,255,255,.08); margin:12px 0}
 
-    .nav{
-      width:100%;
-      display:flex; flex-direction:column; gap:10px;
-      align-items:center;
-      margin-top:2px;
-    }
-    .nav a{
-      width:58px; height:58px;
-      border-radius: 20px;
-      display:grid; place-items:center;
-      text-decoration:none;
-      color: rgba(229,231,235,.88);
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      transition: .18s;
-      position:relative;
-      overflow:hidden;
-    }
-    .nav a:hover{
-      transform: translateY(-1px);
-      border-color: rgba(139,92,246,.25);
-      background: rgba(139,92,246,.10);
-    }
-    .nav a.active{
-      border-color: rgba(139,92,246,.35);
-      background:
-        radial-gradient(120px 120px at 30% 25%, rgba(139,92,246,.28), transparent 60%),
-        radial-gradient(120px 120px at 80% 70%, rgba(6,182,212,.14), transparent 65%),
-        rgba(255,255,255,.05);
-      box-shadow: 0 18px 60px rgba(139,92,246,.14);
-    }
+  .kpis{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap:10px;
+    margin-top:10px;
+  }
+  .kpi{
+    border:1px solid rgba(255,255,255,.10);
+    background: rgba(2,6,23,.35);
+    border-radius:16px;
+    padding:12px;
+  }
+  .kpi .t{font-size:12px; color:rgba(229,231,235,.65); font-weight:900}
+  .kpi .v{font-size:22px; font-weight:900; margin-top:6px}
+  @media(max-width:980px){ .kpis{grid-template-columns:1fr 1fr} }
+  @media(max-width:560px){ .kpis{grid-template-columns:1fr} }
 
-    /* ===== main ===== */
-    .main{
-      flex:1 1 auto;
-      min-width:0;
-      border-radius: 26px;
-      border:1px solid rgba(255,255,255,.10);
-      background: var(--panel);
-      backdrop-filter: blur(14px);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      animation: in .45s ease both;
-    }
-    @keyframes in{
-      from{opacity:0; transform: translateY(10px)}
-      to{opacity:1; transform: translateY(0)}
-    }
+  .slotsHeader{
+    display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    align-items:center;
+    margin-top:12px;
+  }
+  .slotsHeader .hint{color:rgba(229,231,235,.62); font-size:12px}
 
-    .topbar{
-      padding:16px 16px 12px;
-      display:flex;
-      justify-content:space-between;
-      gap:14px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
-    .titleWrap{display:flex; flex-direction:column; gap:6px}
-    .titleWrap h1{
-      margin:0;
-      font-family:"Rokiest";
-      letter-spacing:.9px;
-      font-size:42px;
-      line-height:1;
-    }
-    .subtitle{color:var(--muted); font-size:13px}
+  .slotsGrid{
+    display:grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap:10px;
+    margin-top:12px;
+  }
+  @media(max-width:980px){ .slotsGrid{grid-template-columns: repeat(3, 1fr);} }
+  @media(max-width:560px){ .slotsGrid{grid-template-columns: repeat(2, 1fr);} }
 
-    .topRight{display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end}
-    .pill{
-      display:inline-flex; gap:8px; align-items:center;
-      padding:10px 12px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.05);
-      color:rgba(229,231,235,.82);
-      font-weight:900;
-      font-size:12px;
-      user-select:none;
-    }
+  .slot{
+    border:1px solid rgba(255,255,255,.10);
+    background: rgba(2,6,23,.45);
+    border-radius:16px;
+    padding:12px;
+    transition:.15s;
+    min-height: 150px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+  }
+  .slot:hover{transform:translateY(-1px); opacity:.98}
+  .topRow{display:flex; justify-content:space-between; align-items:center; gap:8px}
+  .num{font-weight:900; color:rgba(229,231,235,.92)}
+  .badge{
+    font-size:12px; font-weight:900;
+    padding:6px 10px; border-radius:999px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.04);
+  }
+  .bLivre{ border-color: rgba(34,197,94,.25); background: rgba(34,197,94,.08); }
+  .bOcup{ border-color: rgba(245,158,11,.22); background: rgba(245,158,11,.08); }
+  .bBloq{ border-color: rgba(239,68,68,.25); background: rgba(239,68,68,.08); }
+  .bConf{ border-color: rgba(34,197,94,.35); background: rgba(34,197,94,.16); }
 
-    .content{padding: 0 16px 16px}
+  .info{ margin-top:8px; font-size:12px; color: rgba(229,231,235,.78); line-height:1.25; }
+  .muted{color: rgba(229,231,235,.55)}
 
-    /* cards / layout */
-    .grid2{
-      display:grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap:12px;
-    }
-    @media(max-width:980px){ .grid2{grid-template-columns:1fr} }
+  .miniActions{display:flex; gap:8px; margin-top:10px;}
+  .miniBtn{
+    flex:1 1 auto;
+    height:34px;
+    border-radius:10px;
+    padding:0;
+    font-weight:900;
+    font-size:13px;
+  }
+  .miniBlue{ background:rgba(37,99,235,.22); border:1px solid rgba(37,99,235,.35); }
+  .miniGreen{ background:rgba(34,197,94,.20); border:1px solid rgba(34,197,94,.38); }
+  .miniRed{ background:rgba(239,68,68,.18); border:1px solid rgba(239,68,68,.35); }
 
-    .card{
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(2,6,23,.28);
-      border-radius: var(--r);
-      padding:14px;
-      position:relative;
-      overflow:hidden;
-    }
-    .card:before{
-      content:"";
-      position:absolute; inset:-2px;
-      background:
-        radial-gradient(420px 200px at 10% 0%, rgba(139,92,246,.10), transparent 60%),
-        radial-gradient(420px 200px at 90% 10%, rgba(6,182,212,.08), transparent 62%);
-      pointer-events:none;
-    }
-    .card > *{position:relative}
+  .overlay{
+    position:fixed; inset:0;
+    display:none;
+    align-items:center; justify-content:center;
+    background:rgba(0,0,0,.55);
+    backdrop-filter:blur(10px);
+    z-index:99999;
+    padding:18px;
+  }
+  .modal{
+    width:min(820px, 96vw);
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,.14);
+    background:rgba(11,18,32,.92);
+    box-shadow:0 20px 70px rgba(0,0,0,.70);
+    padding:14px;
+    animation: pop .22s ease both;
+  }
+  @keyframes pop{from{opacity:0;transform:scale(.98)}to{opacity:1;transform:scale(1)}}
+  .ring{
+    width:56px; height:56px;
+    border-radius:999px;
+    border:3px solid rgba(255,255,255,.18);
+    border-top-color:rgba(139,92,246,.95);
+    margin:10px auto 12px;
+    animation:spin .9s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
 
-    .cardHead{
-      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:center;
-      margin-bottom:10px;
-    }
-    .cardHead h2{margin:0; font-size:16px}
-    .hint{color:rgba(229,231,235,.55); font-size:12px}
+  .toast{
+    position:fixed; bottom:18px; left:50%;
+    transform:translateX(-50%);
+    background:rgba(17,24,39,.95);
+    border:1px solid rgba(255,255,255,.12);
+    padding:10px 12px;
+    border-radius:12px;
+    font-weight:900;
+    opacity:0; pointer-events:none;
+    transition:.2s;
+    z-index: 999999;
+    box-shadow:0 12px 30px rgba(0,0,0,.45);
+    max-width:min(92vw, 860px);
+    text-align:center;
+  }
+  .toast.show{opacity:1}
 
-    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:end}
-    .field{display:flex; flex-direction:column; gap:6px; flex:1 1 240px}
-    label{font-size:12px; color:rgba(229,231,235,.72)}
-    input, select{
-      height:46px; width:100%;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(2,6,23,.55);
-      color: var(--text);
-      padding: 10px 12px;
-      outline:none;
-      transition:.15s;
-    }
-    input:focus, select:focus{
-      border-color: rgba(139,92,246,.55);
-      box-shadow: 0 0 0 4px rgba(139,92,246,.18);
-    }
-
-    .btn{
-      height:46px;
-      border-radius:14px;
-      border:0;
-      padding:0 14px;
-      font-weight:900;
-      cursor:pointer;
-      color:#fff;
-      transition:.18s;
-      white-space:nowrap;
-    }
-    .btn:hover{transform:translateY(-1px); opacity:.95}
-    .btn:active{transform:translateY(0); opacity:.92}
-
-    .btnPurple{
-      background: linear-gradient(135deg, rgba(139,92,246,.95), rgba(6,182,212,.65));
-      box-shadow: 0 16px 50px rgba(139,92,246,.18);
-    }
-    .btnGreen{
-      background: rgba(34,197,94,.22);
-      border: 1px solid rgba(34,197,94,.35);
-    }
-    .btnAmber{
-      background: rgba(245,158,11,.22);
-      border: 1px solid rgba(245,158,11,.35);
-      color:#111827;
-    }
-    .btnRed{
-      background: rgba(239,68,68,.18);
-      border: 1px solid rgba(239,68,68,.35);
-    }
-    .btnGhost{
-      background: rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.10);
-      color:rgba(229,231,235,.90);
-    }
-
-    .divider{height:1px; background:rgba(255,255,255,.08); margin:12px 0}
-
-    /* KPIs */
-    .kpis{
-      display:grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap:10px;
-      margin-top:10px;
-    }
-    @media(max-width:980px){ .kpis{grid-template-columns:1fr 1fr} }
-    @media(max-width:560px){ .kpis{grid-template-columns:1fr} }
-
-    .kpi{
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(2,6,23,.30);
-      border-radius: 18px;
-      padding:12px;
-      overflow:hidden;
-      position:relative;
-    }
-    .kpi:before{
-      content:"";
-      position:absolute; inset:-2px;
-      background:
-        radial-gradient(220px 140px at 10% 10%, rgba(139,92,246,.12), transparent 60%),
-        radial-gradient(220px 140px at 90% 80%, rgba(6,182,212,.10), transparent 62%);
-      pointer-events:none;
-    }
-    .kpi > *{position:relative}
-    .kpi .t{font-size:12px; color:rgba(229,231,235,.65); font-weight:900}
-    .kpi .v{font-size:22px; font-weight:900; margin-top:6px}
-
-    /* slots grid */
-    .slotsHeader{
-      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
-      align-items:center;
-      margin-top:12px;
-    }
-
-    .slotsGrid{
-      display:grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap:10px;
-      margin-top:12px;
-    }
-    @media(max-width:980px){ .slotsGrid{grid-template-columns: repeat(3, 1fr);} }
-    @media(max-width:560px){ .slotsGrid{grid-template-columns: repeat(2, 1fr);} }
-
-    .slot{
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(2,6,23,.45);
-      border-radius: 18px;
-      padding:12px;
-      min-height: 160px;
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-      position:relative;
-      overflow:hidden;
-      transition:.18s;
-    }
-    .slot:hover{transform:translateY(-2px); border-color: rgba(139,92,246,.22)}
-    .slot:before{
-      content:"";
-      position:absolute; inset:-2px;
-      background:
-        radial-gradient(240px 160px at 20% 10%, rgba(139,92,246,.14), transparent 60%),
-        radial-gradient(240px 160px at 90% 70%, rgba(6,182,212,.10), transparent 62%);
-      opacity:.9;
-      pointer-events:none;
-    }
-    .slot > *{position:relative}
-
-    .topRow{display:flex; justify-content:space-between; align-items:center; gap:8px}
-    .num{font-weight:900; color:rgba(229,231,235,.92)}
-    .badge{
-      font-size:12px; font-weight:900;
-      padding:6px 10px; border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.04);
-      white-space:nowrap;
-    }
-    .bLivre{ border-color: rgba(34,197,94,.25); background: rgba(34,197,94,.08); }
-    .bOcup{ border-color: rgba(245,158,11,.22); background: rgba(245,158,11,.08); }
-    .bBloq{ border-color: rgba(239,68,68,.25); background: rgba(239,68,68,.08); }
-    .bConf{ border-color: rgba(34,197,94,.35); background: rgba(34,197,94,.16); }
-
-    .info{ margin-top:8px; font-size:12px; color: rgba(229,231,235,.78); line-height:1.25; }
-    .muted{color: rgba(229,231,235,.55)}
-
-    .miniActions{display:flex; gap:8px; margin-top:10px;}
-    .miniBtn{
-      flex:1 1 auto;
-      height:36px;
-      border-radius:12px;
-      padding:0;
-      font-weight:900;
-      font-size:13px;
-      cursor:pointer;
-      color:rgba(229,231,235,.92);
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      transition:.15s;
-    }
-    .miniBtn:hover{transform:translateY(-1px); opacity:.95}
-    .miniRed{ border-color: rgba(239,68,68,.30); background: rgba(239,68,68,.14); }
-    .miniBlue{ border-color: rgba(139,92,246,.26); background: rgba(139,92,246,.14); }
-    .miniGreen{ border-color: rgba(34,197,94,.30); background: rgba(34,197,94,.14); }
-
-    /* overlays */
-    .overlay{
-      position:fixed; inset:0;
-      display:none;
-      align-items:center; justify-content:center;
-      background: rgba(0,0,0,.55);
-      backdrop-filter: blur(10px);
-      z-index: 99999;
-      padding: 18px;
-    }
-    .modal{
-      width: min(560px, 96vw);
-      border-radius: 22px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(11,18,32,.92);
-      box-shadow: 0 20px 70px rgba(0,0,0,.70);
-      padding: 16px;
-      animation: pop .22s ease both;
-      position:relative;
-      overflow:hidden;
-    }
-    .modal:before{
-      content:"";
-      position:absolute; inset:-2px;
-      background:
-        radial-gradient(420px 220px at 10% 0%, rgba(139,92,246,.14), transparent 60%),
-        radial-gradient(420px 220px at 90% 10%, rgba(6,182,212,.10), transparent 62%);
-      pointer-events:none;
-    }
-    .modal > *{position:relative}
-    @keyframes pop{from{opacity:0;transform:scale(.98)}to{opacity:1;transform:scale(1)}}
-
-    .ring{
-      width:56px; height:56px;
-      border-radius:999px;
-      border:3px solid rgba(255,255,255,.18);
-      border-top-color:rgba(139,92,246,.95);
-      margin:10px auto 12px;
-      animation:spin .9s linear infinite;
-    }
-    @keyframes spin{to{transform:rotate(360deg)}}
-
-    .toast{
-      position:fixed; bottom:18px; left:50%;
-      transform:translateX(-50%);
-      background: rgba(17,24,39,.95);
-      border:1px solid rgba(255,255,255,.12);
-      padding:10px 12px;
-      border-radius:12px;
-      font-weight:900;
-      opacity:0; pointer-events:none;
-      transition:.2s;
-      z-index: 100000;
-      box-shadow: 0 12px 30px rgba(0,0,0,.45);
-      max-width: min(92vw, 760px);
-      text-align:center;
-    }
-    .toast.show{opacity:1}
-
-    .footer{
-      padding:14px 16px 16px;
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-      color:rgba(229,231,235,.55);
-      font-size:12px;
-      border-top:1px solid rgba(255,255,255,.06);
-      background: rgba(2,6,23,.12);
-    }
-
-    .empty{
-      grid-column: 1 / -1;
-      border-radius: 18px;
-      border:1px dashed rgba(255,255,255,.16);
-      background: rgba(2,6,23,.22);
-      padding:14px;
-      color:rgba(229,231,235,.72);
-    }
-    .empty b{color:rgba(229,231,235,.92)}
-  </style>
+  .table{
+    width:100%;
+    border-collapse:separate;
+    border-spacing:0;
+    overflow:hidden;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.10);
+    background: rgba(2,6,23,.35);
+  }
+  .table th,.table td{
+    padding:10px 10px;
+    font-size:12px;
+    border-bottom:1px solid rgba(255,255,255,.06);
+    color: rgba(229,231,235,.85);
+    text-align:left;
+  }
+  .table th{
+    font-size:12px;
+    color: rgba(229,231,235,.65);
+    font-weight:900;
+    background: rgba(255,255,255,.03);
+  }
+  .chip{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:6px 10px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.04);
+    font-weight:900;
+    font-size:12px;
+    white-space:nowrap;
+  }
+  .chipPurple{ border-color: rgba(139,92,246,.30); background: rgba(139,92,246,.12); }
+  .footer{
+    margin-top:14px;
+    padding:10px 6px 0;
+    color:rgba(229,231,235,.55);
+    font-size:12px;
+    display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+  }
+</style>
 </head>
 
 <body>
-  <div class="noise"></div>
+<a class="home" href="index.html">🏠 Home</a>
 
-  <div class="shell">
-    <aside class="side">
-      <div class="brandMark">OFF</div>
-
-      <nav class="nav">
-        <a href="index.html" title="Home">🏠</a>
-        <a href="vip.html" title="Lista VIP">🎟️</a>
-        <a class="active" href="vip-admin.html" title="VIP Admin">🧠</a>
-        <a href="pix.html" title="PIX">💸</a>
-        <a href="pix-admin.html" title="PIX Admin">🛡️</a>
-        <a href="pix-cadastro.html" title="Cadastro PIX">➕</a>
-        <a href="ajustar-cronograma.html" title="Cronograma">🗓️</a>
-        <a href="diaria.html" title="Diária">📒</a>
-        <a href="van.html" title="Van">🚐</a>
-      </nav>
-    </aside>
-
-    <main class="main">
-      <div class="topbar">
-        <div class="titleWrap">
-          <h1>VIP Admin</h1>
-          <div class="subtitle">OFF Company • Pool + Códigos + Slots (sem blur)</div>
-        </div>
-
-        <div class="topRight">
-          <div class="pill">🔒 Área restrita</div>
-          <div class="pill" id="pillStatus">🟡 Pronto</div>
-        </div>
-      </div>
-
-      <div class="content">
-        <div class="grid2">
-          <!-- POOL -->
-          <section class="card">
-            <div class="cardHead">
-              <h2>Pool (Slots gerais)</h2>
-              <div class="hint">Define capacidade total disponível (slots sem código).</div>
-            </div>
-
-            <div class="row">
-              <div class="field">
-                <label>Senha Admin</label>
-                <input id="adminPass" type="password" placeholder="Sua senha admin">
-              </div>
-              <div class="field" style="flex:0 0 240px;">
-                <label>Total de slots no Pool</label>
-                <input id="poolTotal" type="number" min="0" value="50">
-              </div>
-              <button class="btn btnPurple" onclick="setPool()">Aplicar Pool</button>
-              <button class="btn btnGhost" onclick="loadAll()">Atualizar Tudo</button>
-            </div>
-
-            <div class="divider"></div>
-
-            <div class="kpis">
-              <div class="kpi"><div class="t">Códigos criados</div><div class="v" id="kCodes">0</div></div>
-              <div class="kpi"><div class="t">Σ slotsAllowed</div><div class="v" id="kAllowed">0</div></div>
-              <div class="kpi"><div class="t">Σ slotsAssigned</div><div class="v" id="kAssigned">0</div></div>
-              <div class="kpi"><div class="t">Pool (sem código)</div><div class="v" id="kPool">0</div></div>
-            </div>
-
-            <div class="divider"></div>
-            <div class="row">
-              <button class="btn btnGhost" onclick="refreshCodes()">Atualizar códigos</button>
-              <button class="btn btnGhost" onclick="refreshPoolInfo()">Recarregar pool</button>
-            </div>
-          </section>
-
-          <!-- CÓDIGOS -->
-          <section class="card">
-            <div class="cardHead">
-              <h2>Códigos</h2>
-              <div class="hint">Crie código e atribua slots do pool a ele.</div>
-            </div>
-
-            <div class="row">
-              <div class="field" style="flex:0 0 200px;">
-                <label>Minutos do código</label>
-                <input id="mins" type="number" min="1" value="60">
-              </div>
-              <div class="field" style="flex:0 0 240px;">
-                <label>slotsAllowed</label>
-                <input id="slotsAllowed" type="number" min="1" value="3">
-              </div>
-              <button class="btn btnAmber" onclick="createCode()">Criar código</button>
-            </div>
-
-            <div class="row" style="margin-top:10px;">
-              <div class="field">
-                <label>Código gerado (clique para copiar)</label>
-                <input id="codeOut" readonly placeholder="(vai aparecer aqui)">
-              </div>
-            </div>
-
-            <div class="divider"></div>
-
-            <div class="row">
-              <div class="field" style="flex:1 1 320px;">
-                <label>Selecionar código</label>
-                <select id="codeSelect"></select>
-              </div>
-              <button class="btn btnGreen" onclick="loadSlots()">Ver slots do código</button>
-            </div>
-
-            <div class="row" style="margin-top:10px;">
-              <button class="btn btnPurple" onclick="assignSlots()">Atribuir slots do Pool ➜ Código</button>
-
-              <div class="field" style="flex:0 0 200px;">
-                <label>Devolver pro Pool (livres)</label>
-                <input id="removeCount" type="number" min="1" value="1">
-              </div>
-              <button class="btn btnRed" onclick="unassignSlots()">Devolver</button>
-            </div>
-          </section>
-        </div>
-
-        <div class="slotsHeader">
-          <div>
-            <div style="font-family:Rokiest; letter-spacing:.6px; font-size:18px;">Slots do Código</div>
-            <div class="hint">Ações: limpar / confirmar / excluir</div>
-          </div>
-          <div class="row" style="gap:8px;">
-            <button class="btn btnGhost" onclick="loadSlots()">Atualizar slots</button>
-            <button class="btn btnGhost" onclick="loadAllSlotsPool()">Ver Pool (sem código)</button>
-          </div>
-        </div>
-
-        <div id="slotsGrid" class="slotsGrid"></div>
-      </div>
-
-      <div class="footer">
-        <div>© OFF Company</div>
-        <div>Desenvolvido por Lucas Santos</div>
-      </div>
-    </main>
+<!-- LOADER -->
+<div id="overlay" class="overlay">
+  <div class="modal" style="width:min(520px,96vw); text-align:center">
+    <div class="ring"></div>
+    <div style="font-family:Rokiest;letter-spacing:.6px;font-size:22px;">Processando…</div>
+    <div style="margin-top:6px;color:rgba(229,231,235,.7);font-size:13px;">Aguarde</div>
   </div>
+</div>
 
-  <!-- LOADER -->
-  <div id="overlay" class="overlay">
-    <div class="modal" style="text-align:center">
-      <div class="ring"></div>
-      <div style="font-family:Rokiest; font-size:22px; letter-spacing:.6px;">Processando…</div>
-      <div style="margin-top:6px; color:rgba(229,231,235,.65); font-size:13px;">Aguarde</div>
+<!-- MODAL RESUMO -->
+<div id="summaryModal" class="overlay">
+  <div class="modal">
+    <div style="display:flex; justify-content:space-between; gap:10px; align-items:center; flex-wrap:wrap;">
+      <div style="font-family:Rokiest; letter-spacing:.6px; font-size:18px;">Resumo de Slots (Ocupados / Livres)</div>
+      <button class="ghost" style="height:40px" onclick="closeSummary()">✕</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="kpis">
+      <div class="kpi"><div class="t">Total</div><div class="v" id="mTotal">0</div><div class="sub" style="margin:2px 0 0">geral</div></div>
+      <div class="kpi"><div class="t">Livres</div><div class="v" id="mFree">0</div><div class="sub" style="margin:2px 0 0">disponíveis</div></div>
+      <div class="kpi"><div class="t">Ocupados</div><div class="v" id="mTaken">0</div><div class="sub" style="margin:2px 0 0">reservados</div></div>
+      <div class="kpi"><div class="t">Confirmados</div><div class="v" id="mConf">0</div><div class="sub" style="margin:2px 0 0">VIP ok</div></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>#Slot</th>
+          <th>Status</th>
+          <th>Nome</th>
+          <th>Código</th>
+        </tr>
+      </thead>
+      <tbody id="mRows"></tbody>
+    </table>
+
+    <div class="sub" style="margin-top:10px">Mostra apenas ocupados/confirmados com o código vinculado.</div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="topbar">
+    <div>
+      <h1>VIP Admin</h1>
+      <div class="sub">OFF Company • Pool + Códigos + Slots</div>
+    </div>
+    <div class="brand">
+      <div class="pill">🔒 Área restrita • Admin</div>
+      <div class="pill">⚙️ Desenvolvido por Lucas Santos</div>
     </div>
   </div>
 
-  <div id="toast" class="toast">✅</div>
+  <div class="grid2">
+    <!-- POOL -->
+    <div class="card">
+      <div class="cardTitle">Pool (Slots gerais)</div>
+      <div class="sub">Crie/ajuste a capacidade total e já mostre os slots automaticamente.</div>
 
-  <script>
-    // ========= SUA URL /exec =========
-    const API_URL = "https://script.google.com/macros/s/AKfycbyyU0eLff_-CRNBi6G_BfjGZA9G3kEylVHuhM0N9HqNFD2vsR8A2NeF_g0jV921Q4MG/exec";
+      <div class="row" style="margin-top:10px;">
+        <div class="field">
+          <label>Senha Admin</label>
+          <input id="adminPass" type="password" placeholder="Sua senha admin">
+        </div>
+        <div class="field" style="flex:0 0 220px;">
+          <label>Total de slots no Pool</label>
+          <input id="poolTotal" type="number" min="0" value="50">
+        </div>
+        <button class="b" onclick="setPool()">Aplicar Pool</button>
+      </div>
 
-    let slots = [];
-    let currentView = "CODE"; // CODE | POOL
+      <div class="divider"></div>
 
-    function overlay(on){
-      const el = document.getElementById("overlay");
-      if(el) el.style.display = on ? "flex" : "none";
+      <div class="kpis">
+        <div class="kpi"><div class="t">Códigos criados</div><div class="v" id="kCodes">0</div></div>
+        <div class="kpi"><div class="t">Slots liberados (Σ slotsAllowed)</div><div class="v" id="kAllowed">0</div></div>
+        <div class="kpi"><div class="t">Slots atribuídos (Σ slotsAssigned)</div><div class="v" id="kAssigned">0</div></div>
+        <div class="kpi"><div class="t">Pool (livres sem código)</div><div class="v" id="kPoolFree">—</div></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="row">
+        <button class="ghost" onclick="refreshAll()">Atualizar tudo</button>
+        <button class="g" onclick="openSummary()">Ver Resumo</button>
+      </div>
+    </div>
+
+    <!-- CÓDIGOS -->
+    <div class="card">
+      <div class="cardTitle">Códigos</div>
+      <div class="sub">Crie códigos e selecione no dropdown para ver/gerir slots vinculados.</div>
+
+      <div class="row" style="margin-top:10px;">
+        <div class="field" style="flex:0 0 180px;">
+          <label>Minutos do código</label>
+          <input id="mins" type="number" min="1" value="60">
+        </div>
+        <div class="field" style="flex:0 0 220px;">
+          <label>slotsAllowed</label>
+          <input id="slotsAllowed" type="number" min="0" value="3">
+        </div>
+        <button class="a" onclick="createCode()">Criar código</button>
+      </div>
+
+      <div class="row" style="margin-top:10px;">
+        <div class="field">
+          <label>Código gerado (clique para copiar)</label>
+          <input id="codeOut" readonly placeholder="(vai aparecer aqui)">
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="row">
+        <div class="field" style="flex:1 1 280px;">
+          <label>Selecionar código (dropdown)</label>
+          <select id="codeSelect">
+            <option value="">(carregando...)</option>
+          </select>
+        </div>
+        <button class="g" onclick="loadSlots()">Ver slots do código</button>
+      </div>
+
+      <div class="sub" style="margin-top:10px;">
+        Se o dropdown ficar vazio, clique em “Atualizar tudo” (senha precisa estar correta).
+      </div>
+    </div>
+  </div>
+
+  <div class="slotsHeader">
+    <div>
+      <div class="cardTitle" style="margin:0;">Slots</div>
+      <div class="hint">Após aplicar o Pool, os slots aparecem aqui automaticamente.</div>
+    </div>
+    <div class="row" style="margin:0;">
+      <button class="ghost" onclick="loadSlots()">Atualizar (Código)</button>
+      <button class="ghost" onclick="loadAllSlots()">Atualizar (Todos)</button>
+    </div>
+  </div>
+
+  <div id="slotsGrid" class="slotsGrid"></div>
+
+  <div class="footer">
+    <div>© OFF Company</div>
+    <div>Desenvolvido por Lucas Santos</div>
+  </div>
+</div>
+
+<div id="toast" class="toast">✅</div>
+
+<script>
+  // ========= COLE SUA URL /exec AQUI =========
+  const API_URL = "https://script.google.com/macros/s/AKfycbyyU0eLff_-CRNBi6G_BfjGZA9G3kEylVHuhM0N9HqNFD2vsR8A2NeF_g0jV921Q4MG/exec";
+
+  let slots = [];
+  let allSlotsCache = [];
+
+  function toast(msg){
+    const t=document.getElementById("toast");
+    t.textContent=msg;
+    t.classList.add("show");
+    setTimeout(()=>t.classList.remove("show"), 1700);
+  }
+  function overlay(on){
+    document.getElementById("overlay").style.display = on ? "flex" : "none";
+  }
+  function adminPass(){ return document.getElementById("adminPass").value || ""; }
+
+  function normalizeCode(s){
+    s = String(s||"").trim().toUpperCase();
+    const m = s.match(/[A-Z0-9]{4,12}/);
+    return m ? m[0] : "";
+  }
+
+  function currentCode(){
+    return normalizeCode(document.getElementById("codeSelect").value || "");
+  }
+
+  async function api(fn, payload){
+    const controller = new AbortController();
+    const timeout = setTimeout(()=>controller.abort(), 20000);
+    try{
+      const res = await fetch(API_URL, {
+        method:"POST",
+        cache:"no-store",
+        body: JSON.stringify({ fn, payload }),
+        signal: controller.signal
+      });
+      const text = await res.text();
+      try { return JSON.parse(text); }
+      catch { return { ok:false, error:"Resposta inválida: " + text.slice(0,160) }; }
+    }catch(err){
+      return { ok:false, error:(err.name==="AbortError" ? "Timeout (20s)" : String(err)) };
+    }finally{
+      clearTimeout(timeout);
+    }
+  }
+
+  // ========= DROPDOWN + KPIs =========
+  async function refreshCodes(){
+    const pass = adminPass();
+    if(!pass){
+      // não bloqueia a UI, mas avisa
+      fillCodes([]);
+      setKpis({totalCodes:0,totalAllowed:0,totalAssigned:0,pool:null});
+      return;
     }
 
-    function toast(msg){
-      const t=document.getElementById("toast");
-      if(!t){ alert(msg); return; }
-      t.textContent=msg;
-      t.classList.add("show");
-      setTimeout(()=>t.classList.remove("show"), 1600);
+    const r = await api("vipAdminListCodes", { adminPass: pass });
+    if(!r.ok){
+      fillCodes([]);
+      toast("❌ " + r.error);
+      return;
     }
 
-    function setPill(text){
-      const el = document.getElementById("pillStatus");
-      if(el) el.textContent = text;
-    }
+    const rows = r.rows || [];
+    fillCodes(rows);
 
-    function adminPass(){ return document.getElementById("adminPass").value || ""; }
-
-    function normalizeCode(s){
-      s = String(s||"").trim().toUpperCase();
-      const m = s.match(/[A-Z0-9]{4,12}/);
-      return m ? m[0] : "";
-    }
-
-    function currentCode(){
-      const sel = document.getElementById("codeSelect");
-      return normalizeCode(sel ? sel.value : "");
-    }
-
-    async function api(fn, payload){
-      const controller = new AbortController();
-      const timeout = setTimeout(()=>controller.abort(), 20000);
-      try{
-        const res = await fetch(API_URL, {
-          method:"POST",
-          cache:"no-store",
-          body: JSON.stringify({ fn, payload }),
-          signal: controller.signal
-        });
-        const text = await res.text();
-        try { return JSON.parse(text); }
-        catch { return { ok:false, error:"Resposta inválida: " + text.slice(0,160) }; }
-      }catch(err){
-        return { ok:false, error:(err.name==="AbortError" ? "Timeout (20s)" : String(err)) };
-      }finally{
-        clearTimeout(timeout);
-      }
-    }
-
-    // ========= LOADERS =========
-    async function refreshPoolInfo(){
-      overlay(true);
-      setPill("🟡 Carregando pool…");
-      const r = await api("vipAdminPoolInfo", { adminPass: adminPass() });
-      overlay(false);
-
-      if(!r.ok){ setPill("🔴 Erro"); return toast("❌ " + r.error); }
-      document.getElementById("kPool").textContent = String(r.pool ?? 0);
-      setPill("🟢 Pool ok");
-    }
-
-    async function refreshCodes(){
-      overlay(true);
-      setPill("🟡 Carregando códigos…");
-      const r = await api("vipAdminListCodes", { adminPass: adminPass() });
-      overlay(false);
-
-      if(!r.ok){ setPill("🔴 Erro"); return toast("❌ " + r.error); }
-
-      const rows = r.rows || [];
-      const sel = document.getElementById("codeSelect");
-      const keep = sel.value;
-
-      sel.innerHTML = rows.length
-        ? rows.map(x => {
-            const exp = x.expired ? " • EXPIRADO" : "";
-            const active = x.isActive===false ? " • OFF" : "";
-            return `<option value="${escapeHtml(x.code)}">${escapeHtml(x.code)} • allowed:${x.slotsAllowed} • assigned:${x.slotsAssigned}${exp}${active}</option>`;
-          }).join("")
-        : `<option value="">(nenhum código)</option>`;
-
-      if(keep) sel.value = keep;
-
-      document.getElementById("kCodes").textContent = String(rows.length);
-      document.getElementById("kAllowed").textContent = String(r.totalAllowed ?? 0);
-      document.getElementById("kAssigned").textContent = String(r.totalAssigned ?? 0);
-
-      setPill("🟢 Códigos ok");
-    }
-
-    async function loadAll(){
-      await refreshCodes();
-      await refreshPoolInfo();
-      // Se já tiver um código selecionado, carrega slots dele
-      const code = currentCode();
-      if(code) await loadSlots();
-    }
-
-    // ========= POOL =========
-    async function setPool(){
-      const total = Number(document.getElementById("poolTotal").value||0);
-
-      overlay(true);
-      setPill("🟡 Aplicando pool…");
-      const r = await api("vipAdminSetGlobalSlotCount", { adminPass: adminPass(), total });
-      overlay(false);
-
-      if(!r.ok){ setPill("🔴 Erro"); return toast("❌ " + r.error); }
-
-      toast(`✅ Pool aplicado (${r.action || "ok"})`);
-      await refreshPoolInfo();
-    }
-
-    // ========= CÓDIGO =========
-    async function createCode(){
-      const minutes = Number(document.getElementById("mins").value||60);
-      const slotsAllowed = Number(document.getElementById("slotsAllowed").value||1);
-
-      overlay(true);
-      setPill("🟡 Criando código…");
-      const r = await api("vipAdminCreateTempCode", { adminPass: adminPass(), minutes, slotsAllowed });
-      overlay(false);
-
-      if(!r.ok){ setPill("🔴 Erro"); return toast("❌ " + r.error); }
-
-      const out = document.getElementById("codeOut");
-      out.value = `${r.code} (allowed ${r.slotsAllowed}, assigned ${r.slotsAssigned}, expira ${new Date(r.expiresAt).toLocaleString("pt-BR")})`;
-
-      toast("✅ Código criado");
-      setPill("🟢 Pronto");
-      await refreshCodes();
-      await refreshPoolInfo();
-    }
-
-    document.getElementById("codeOut").addEventListener("click", async ()=>{
-      const v = document.getElementById("codeOut").value || "";
-      const code = normalizeCode(v);
-      if(!code) return;
-      try{
-        await navigator.clipboard.writeText(code);
-        toast("📋 Copiado: " + code);
-      }catch{
-        toast("❌ Não deu pra copiar");
-      }
+    // KPIs de códigos
+    setKpis({
+      totalCodes: rows.length,
+      totalAllowed: r.totalAllowed ?? rows.reduce((a,x)=>a+(Number(x.slotsAllowed)||0),0),
+      totalAssigned: r.totalAssigned ?? rows.reduce((a,x)=>a+(Number(x.slotsAssigned)||0),0),
     });
+  }
 
-    // ========= SLOTS =========
-    async function loadSlots(){
-      const code = currentCode();
-      if(!code) return toast("Selecione um código");
+  function fillCodes(rows){
+    const sel = document.getElementById("codeSelect");
+    const keep = sel.value;
 
-      currentView = "CODE";
-
-      overlay(true);
-      setPill("🟡 Carregando slots…");
-      const r = await api("vipAdminCodeInfo", { adminPass: adminPass(), code });
-      overlay(false);
-
-      if(!r.ok){ setPill("🔴 Erro"); return toast("❌ " + r.error); }
-
-      slots = r.slots || [];
-      renderSlots({ title: `Slots do código #${code}`, showCode: true });
-
-      setPill("🟢 Slots ok");
-      toast("✅ Slots carregados");
+    if(!rows || !rows.length){
+      sel.innerHTML = `<option value="">(nenhum código)</option>`;
+      return;
     }
 
-    // Mostra pool = slots sem código (apenas LIVRE ou todos sem código)
-    async function loadAllSlotsPool(){
-      currentView = "POOL";
+    sel.innerHTML = rows.map(x=>{
+      const code = String(x.code||"").trim();
+      const allowed = Number(x.slotsAllowed||0);
+      const assigned = Number(x.slotsAssigned||0);
+      const expired = !!x.expired;
+      const active = (x.isActive !== false);
+      return `<option value="${code}">${code} • allowed:${allowed} • assigned:${assigned}${expired?" • EXPIRADO":""}${!active?" • OFF":""}</option>`;
+    }).join("");
 
-      overlay(true);
-      setPill("🟡 Carregando pool…");
-      const r = await api("vipAdminGet", { adminPass: adminPass() });
-      overlay(false);
+    if(keep) sel.value = keep;
+  }
 
-      if(!r.ok){ setPill("🔴 Erro"); return toast("❌ " + r.error); }
+  function setKpis({totalCodes, totalAllowed, totalAssigned, pool}){
+    document.getElementById("kCodes").textContent = String(totalCodes ?? 0);
+    document.getElementById("kAllowed").textContent = String(totalAllowed ?? 0);
+    document.getElementById("kAssigned").textContent = String(totalAssigned ?? 0);
+    document.getElementById("kPoolFree").textContent = (pool==null ? "—" : String(pool));
+  }
 
-      const all = r.rows || [];
-      slots = all.filter(x => !String(x.code||"").trim()); // sem código
-      renderSlots({ title: `Pool (slots sem código) • ${slots.length}`, showCode: false });
+  // ========= POOL =========
+  async function setPool(){
+    const pass = adminPass();
+    if(!pass) return toast("Digite a senha admin");
 
-      setPill("🟢 Pool ok");
-      toast("✅ Pool carregado");
+    const total = Number(document.getElementById("poolTotal").value||0);
+
+    overlay(true);
+    const r = await api("vipAdminSetGlobalSlotCount", { adminPass: pass, total });
+    overlay(false);
+
+    if(!r.ok) return toast("❌ " + r.error);
+
+    toast("✅ Pool aplicado");
+
+    // ✅ após criar pool: atualizar tudo + mostrar slots embaixo
+    await refreshAll();
+    await loadAllSlots(); // mostra geral automaticamente
+  }
+
+  // ========= CRIAR CÓDIGO =========
+  async function createCode(){
+    const pass = adminPass();
+    if(!pass) return toast("Digite a senha admin");
+
+    const minutes = Number(document.getElementById("mins").value||60);
+    const slotsAllowed = Number(document.getElementById("slotsAllowed").value||0);
+
+    overlay(true);
+    const r = await api("vipAdminCreateTempCode", { adminPass: pass, minutes, slotsAllowed });
+    overlay(false);
+
+    if(!r.ok) return toast("❌ " + r.error);
+
+    const out = document.getElementById("codeOut");
+    out.value = `${r.code} (allowed ${r.slotsAllowed}, expira ${new Date(r.expiresAt).toLocaleString("pt-BR")})`;
+    toast("✅ Código criado");
+
+    await refreshCodes();
+
+    // seleciona o novo código no dropdown (se existir)
+    const sel = document.getElementById("codeSelect");
+    if(sel){
+      sel.value = r.code;
+    }
+    // e carrega os slots vinculados (se tiver)
+    await loadSlots(true);
+  }
+
+  document.getElementById("codeOut").addEventListener("click", async ()=>{
+    const v = document.getElementById("codeOut").value || "";
+    const code = normalizeCode(v);
+    if(!code) return;
+    try{
+      await navigator.clipboard.writeText(code);
+      toast("📋 Copiado: " + code);
+    }catch{ toast("❌ Não deu pra copiar"); }
+  });
+
+  // ========= LOAD SLOTS =========
+  async function loadSlots(silent=false){
+    const pass = adminPass();
+    if(!pass) return toast("Digite a senha admin");
+
+    const code = currentCode();
+    if(!code){
+      if(!silent) toast("Selecione um código");
+      return;
     }
 
-    async function assignSlots(){
-      // Seu backend atual faz "CreateTempCode" já vinculando do pool automaticamente.
-      // Aqui, como você pediu "atribuir slots ao código que eu quiser",
-      // isso exige endpoint dedicado (não estava no seu GS atual).
-      // Então deixei um aviso claro:
-      toast("⚠️ Ainda falta endpoint de 'atribuir manual'. No GS atual, só vincula ao criar código.", true);
+    overlay(true);
+    const r = await api("vipAdminCodeInfo", { adminPass: pass, code });
+    overlay(false);
+
+    if(!r.ok) return toast("❌ " + r.error);
+
+    slots = r.slots || [];
+    renderSlots(slots, { title: `Slots do código ${code}`, codeMode:true });
+
+    if(!silent) toast("✅ Slots do código carregados");
+  }
+
+  async function loadAllSlots(){
+    const pass = adminPass();
+    if(!pass) return toast("Digite a senha admin");
+
+    overlay(true);
+    const r = await api("vipAdminGet", { adminPass: pass });
+    overlay(false);
+
+    if(!r.ok) return toast("❌ " + r.error);
+
+    allSlotsCache = r.rows || [];
+    renderSlots(allSlotsCache, { title:"Todos os slots", codeMode:false });
+
+    // pool info (livres sem código)
+    const poolFree = allSlotsCache.filter(x => !String(x.code||"").trim() && String(x.status||"").toUpperCase()==="LIVRE").length;
+    // mantém KPIs e atualiza pool livre
+    const kCodes = Number(document.getElementById("kCodes").textContent||0);
+    const kAllowed = Number(document.getElementById("kAllowed").textContent||0);
+    const kAssigned = Number(document.getElementById("kAssigned").textContent||0);
+    setKpis({ totalCodes:kCodes, totalAllowed:kAllowed, totalAssigned:kAssigned, pool: poolFree });
+
+    toast("✅ Slots (geral) atualizados");
+  }
+
+  async function refreshAll(){
+    await refreshCodes();
+    // também tenta atualizar pool info + slots geral (se a senha existir)
+    if(adminPass()) await loadAllSlots();
+  }
+
+  // ========= RESUMO (MODAL) =========
+  function openSummary(){
+    if(!allSlotsCache || !allSlotsCache.length){
+      // tenta carregar geral antes
+      loadAllSlots().then(()=>openSummary());
+      return;
     }
 
-    async function unassignSlots(){
-      toast("⚠️ Ainda falta endpoint de 'devolver pro pool'.", true);
-    }
+    const total = allSlotsCache.length;
+    const free = allSlotsCache.filter(x => String(x.status||"").toUpperCase()==="LIVRE").length;
+    const conf = allSlotsCache.filter(x => String(x.status||"").toUpperCase()==="CONFIRMADO" || x.confirmed===true).length;
+    const taken = allSlotsCache.filter(x => {
+      const st = String(x.status||"").toUpperCase();
+      return st==="OCUPADO" || st==="CONFIRMADO" || x.confirmed===true;
+    }).length;
 
-    async function clearSlot(slotId){
-      overlay(true);
-      const r = await api("vipAdminClearSlot", { adminPass: adminPass(), slotId });
-      overlay(false);
-      if(!r.ok) return toast("❌ " + r.error);
+    document.getElementById("mTotal").textContent = String(total);
+    document.getElementById("mFree").textContent = String(free);
+    document.getElementById("mTaken").textContent = String(taken);
+    document.getElementById("mConf").textContent = String(conf);
 
-      toast("✅ Slot limpo");
-      // recarrega view atual
-      if(currentView === "POOL") loadAllSlotsPool();
-      else loadSlots();
-    }
+    const rows = allSlotsCache
+      .filter(x => {
+        const st = String(x.status||"").toUpperCase();
+        return st==="OCUPADO" || st==="CONFIRMADO" || x.confirmed===true;
+      })
+      .slice(0, 200); // segurança
 
-    async function confirmSlot(slotId){
-      overlay(true);
-      const r = await api("vipAdminConfirmSlot", { adminPass: adminPass(), slotId });
-      overlay(false);
-      if(!r.ok) return toast("❌ " + r.error);
+    const tbody = document.getElementById("mRows");
+    tbody.innerHTML = rows.length ? rows.map(x=>{
+      const st = String(x.status||"").toUpperCase();
+      const statusTxt = (st==="CONFIRMADO" || x.confirmed===true) ? "✅ CONFIRMADO" : "⚠️ OCUPADO";
+      const code = String(x.code||"").trim();
+      return `
+        <tr>
+          <td><b>#${esc(x.slot)}</b></td>
+          <td>${esc(statusTxt)}</td>
+          <td>${esc(x.nome||"—")}</td>
+          <td>${code ? `<span class="chip chipPurple">#${esc(code)}</span>` : "—"}</td>
+        </tr>
+      `;
+    }).join("") : `<tr><td colspan="4" style="color:rgba(229,231,235,.6)">Nenhum slot ocupado.</td></tr>`;
 
-      toast("✅ Confirmado (toggle)");
-      if(currentView === "POOL") loadAllSlotsPool();
-      else loadSlots();
-    }
+    document.getElementById("summaryModal").style.display="flex";
+  }
 
-    async function blockSlot(slotId){
-      overlay(true);
-      const r = await api("vipAdminToggleBlock", { adminPass: adminPass(), slotId });
-      overlay(false);
-      if(!r.ok) return toast("❌ " + r.error);
+  function closeSummary(){
+    document.getElementById("summaryModal").style.display="none";
+  }
 
-      toast("✅ Bloqueio alternado");
-      if(currentView === "POOL") loadAllSlotsPool();
-      else loadSlots();
-    }
+  // ========= RENDER =========
+  function renderSlots(list, {title, codeMode}){
+    const grid = document.getElementById("slotsGrid");
 
-    function renderSlots({ title, showCode }){
-      const grid = document.getElementById("slotsGrid");
-      if(!grid) return;
-
-      if(!slots.length){
-        grid.innerHTML = `<div class="empty">
-          <b>Nenhum slot encontrado.</b>
-          <div style="margin-top:6px; font-size:12px; color:rgba(229,231,235,.62)">
-            Tente atualizar ou selecionar outro código.
-          </div>
+    if(!list || !list.length){
+      grid.innerHTML = `
+        <div class="card" style="grid-column:1/-1">
+          <b>${esc(title || "Slots")}: vazio.</b>
+          <div class="sub" style="margin-top:6px">Crie o Pool e/ou selecione um código.</div>
         </div>`;
-        return;
-      }
+      return;
+    }
 
-      grid.innerHTML = slots.map(s=>{
-        const rawStatus = String(s.status||"LIVRE").toUpperCase();
-        const confirmed = !!s.confirmed || String(s.confirmed||"").toUpperCase()==="TRUE";
-        const status = confirmed ? "CONFIRMADO" : rawStatus;
+    grid.innerHTML = list.map(s=>{
+      const rawStatus = String(s.status||"LIVRE").toUpperCase();
+      const confirmed = (rawStatus==="CONFIRMADO") || (s.confirmed===true) || (String(s.confirmed||"").toUpperCase()==="TRUE");
+      const status = confirmed ? "CONFIRMADO" : rawStatus;
 
-        const cls =
-          status==="LIVRE" ? "bLivre" :
-          status==="BLOQUEADO" ? "bBloq" :
-          status==="CONFIRMADO" ? "bConf" : "bOcup";
+      const cls =
+        status==="LIVRE" ? "bLivre" :
+        status==="BLOQUEADO" ? "bBloq" :
+        status==="CONFIRMADO" ? "bConf" : "bOcup";
 
-        const badge =
-          status==="LIVRE" ? "Livre" :
-          status==="BLOQUEADO" ? "Bloqueado" :
-          status==="CONFIRMADO" ? "Confirmado" : "Ocupado";
+      const badge =
+        status==="LIVRE" ? "Livre" :
+        status==="BLOQUEADO" ? "Bloqueado" :
+        status==="CONFIRMADO" ? "Confirmado" : "Ocupado";
 
-        const line1 = (status==="LIVRE" || status==="BLOQUEADO")
-          ? `<div class="info muted">—</div>`
-          : `<div class="info"><b>${escapeHtml(s.nome||"")}</b><br><span class="muted">RG:</span> ${escapeHtml(s.rg||"")} <span class="muted">CPF:</span> ${escapeHtml(s.cpf||"")}</div>`;
+      const line1 = (status==="LIVRE" || status==="BLOQUEADO")
+        ? `<div class="info muted">—</div>`
+        : `<div class="info"><b>${esc(s.nome||"")}</b><br><span class="muted">RG:</span> ${esc(s.rg||"")} <span class="muted">CPF:</span> ${esc(s.cpf||"")}</div>`;
 
-        const line2 = (status==="LIVRE" || status==="BLOQUEADO") ? "" :
-          `<div class="info muted">Veículo: ${escapeHtml(s.veiculo||"NAO")} • Placa: ${escapeHtml(s.placa||"")} • ${escapeHtml(s.cor||"")} • ${escapeHtml(s.modelo||"")}</div>`;
+      const line2 = (status==="LIVRE" || status==="BLOQUEADO") ? "" :
+        `<div class="info muted">Veículo: ${esc(s.veiculo||"NAO")} • Placa: ${esc(s.placa||"")} • ${esc(s.cor||"")} • ${esc(s.modelo||"")}</div>`;
 
-        const codeTag = (showCode && s.code)
-          ? `<div class="info muted">Código: <b>#${escapeHtml(s.code)}</b></div>`
-          : "";
+      const codeTag = (String(s.code||"").trim())
+        ? `<div class="info muted">Código: <b>#${esc(s.code)}</b></div>`
+        : `<div class="info muted">Código: <span class="muted">— (Pool)</span></div>`;
 
-        return `
-          <div class="slot ${cls}">
-            <div>
-              <div class="topRow">
-                <div class="num">#${escapeHtml(s.slot)}</div>
-                <div class="badge">${badge}</div>
-              </div>
-              ${line1}
-              ${line2}
-              ${codeTag}
+      const showActions = (status!=="BLOQUEADO"); // simples
+
+      return `
+        <div class="slot ${cls}">
+          <div>
+            <div class="topRow">
+              <div class="num">#${esc(s.slot)}</div>
+              <div class="badge">${badge}</div>
             </div>
-            <div class="miniActions">
-              <button class="miniBtn miniBlue" onclick="blockSlot('${escapeJs(s.slot)}')" title="Bloquear/Desbloquear">⛔</button>
-              <button class="miniBtn miniGreen" onclick="confirmSlot('${escapeJs(s.slot)}')" title="Confirmar">✅</button>
-              <button class="miniBtn miniRed" onclick="clearSlot('${escapeJs(s.slot)}')" title="Limpar">🧹</button>
-            </div>
+            ${line1}
+            ${line2}
+            ${codeTag}
           </div>
-        `;
-      }).join("");
-    }
 
-    // helpers
-    function escapeHtml(s){
-      return String(s??"").replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m]));
-    }
-    function escapeJs(s){
-      return String(s??"").replace(/['\\]/g, "\\$&");
-    }
+          <div class="miniActions">
+            ${showActions ? `
+              <button class="miniBtn miniBlue" onclick="clearSlot('${escJS(s.slot)}')">🧹</button>
+              <button class="miniBtn miniGreen" onclick="confirmSlot('${escJS(s.slot)}')">✅</button>
+              <button class="miniBtn miniRed" onclick="blockToggle('${escJS(s.slot)}')">⛔</button>
+            ` : `
+              <button class="miniBtn miniBlue" onclick="blockToggle('${escJS(s.slot)}')">🔓</button>
+              <button class="miniBtn miniRed" onclick="clearSlot('${escJS(s.slot)}')">🧹</button>
+              <button class="miniBtn miniGreen" onclick="confirmSlot('${escJS(s.slot)}')">✅</button>
+            `}
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
 
-    // expose
-    window.setPool = setPool;
-    window.loadAll = loadAll;
-    window.refreshCodes = refreshCodes;
-    window.refreshPoolInfo = refreshPoolInfo;
-    window.createCode = createCode;
-    window.loadSlots = loadSlots;
-    window.loadAllSlotsPool = loadAllSlotsPool;
-    window.assignSlots = assignSlots;
-    window.unassignSlots = unassignSlots;
+  // ========= ACTIONS =========
+  async function clearSlot(slotId){
+    const pass = adminPass();
+    if(!pass) return toast("Digite a senha admin");
+    overlay(true);
+    const r = await api("vipAdminClearSlot", { adminPass: pass, slotId });
+    overlay(false);
+    if(!r.ok) return toast("❌ " + r.error);
+    toast("✅ Slot limpo");
+    await loadAllSlots();
+  }
 
-    window.clearSlot = clearSlot;
-    window.confirmSlot = confirmSlot;
-    window.blockSlot = blockSlot;
+  async function confirmSlot(slotId){
+    const pass = adminPass();
+    if(!pass) return toast("Digite a senha admin");
+    overlay(true);
+    const r = await api("vipAdminConfirmSlot", { adminPass: pass, slotId });
+    overlay(false);
+    if(!r.ok) return toast("❌ " + r.error);
+    toast("✅ Confirmado (toggle)");
+    await loadAllSlots();
+  }
 
-    window.addEventListener("DOMContentLoaded", ()=>{
-      // carrega lista de códigos/pool quando abrir
-      refreshCodes();
-      refreshPoolInfo();
+  async function blockToggle(slotId){
+    const pass = adminPass();
+    if(!pass) return toast("Digite a senha admin");
+    overlay(true);
+    const r = await api("vipAdminToggleBlock", { adminPass: pass, slotId });
+    overlay(false);
+    if(!r.ok) return toast("❌ " + r.error);
+    toast("✅ Alterado");
+    await loadAllSlots();
+  }
+
+  // ========= UTIL =========
+  function esc(s){
+    return String(s??"").replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m]));
+  }
+  function escJS(s){
+    return String(s??"").replace(/['\\]/g, "\\$&");
+  }
+
+  // fecha resumo clicando fora
+  document.getElementById("summaryModal").addEventListener("click", (e)=>{
+    if(e.target && e.target.id==="summaryModal") closeSummary();
+  });
+
+  // ✅ auto-carregar dropdown (quando abre)
+  window.addEventListener("DOMContentLoaded", ()=>{
+    // não tenta chamar API sem senha, mas deixa pronto:
+    fillCodes([]);
+    setKpis({totalCodes:0,totalAllowed:0,totalAssigned:0,pool:null});
+
+    // melhoria: quando o admin digita a senha, já atualiza dropdown + slots
+    const passEl = document.getElementById("adminPass");
+    let t=null;
+    passEl.addEventListener("input", ()=>{
+      clearTimeout(t);
+      t=setTimeout(()=> refreshAll(), 450);
     });
-  </script>
+  });
+</script>
 </body>
 </html>
