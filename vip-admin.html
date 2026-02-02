@@ -56,6 +56,33 @@
     padding:18px;
     backdrop-filter:blur(10px);
     animation: in .45s ease both;
+
+    <div class="card" style="margin-top:12px; border-color: rgba(239,68,68,.28); background: rgba(239,68,68,.06);">
+  <div class="cardTitle" style="display:flex; align-items:center; gap:10px;">
+    <span style="filter:drop-shadow(0 10px 22px rgba(239,68,68,.22));">⚠️</span>
+    Zona perigosa
+  </div>
+  <div class="sub" style="margin-top:6px;">
+    Isso apaga <b>TODOS</b> os códigos e <b>TODOS</b> os slots da planilha (VIP e CODES). Não tem desfazer.
+  </div>
+
+  <div class="row" style="margin-top:10px;">
+    <div class="field" style="flex:0 0 260px;">
+      <label>Recriar Pool após apagar (0 = não)</label>
+      <input id="wipePool" type="number" min="0" value="50">
+    </div>
+
+    <button class="danger" onclick="wipeAll()" style="flex:0 0 220px;">
+      🧨 APAGAR TUDO
+    </button>
+  </div>
+
+  <div class="sub" style="margin-top:10px; opacity:.85">
+    Dica: se quiser só “zerar” um código específico, use as ações normais. Esse botão é reset total.
+  </div>
+</div>
+
+    
   }
   @keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
@@ -511,6 +538,37 @@
       setKpis({totalCodes:0,totalAllowed:0,totalAssigned:0,pool:null});
       return;
     }
+
+    async function wipeAll(){
+  const pass = adminPass();
+  if(!pass) return toast("Digite a senha admin");
+
+  const poolTotal = Number(document.getElementById("wipePool").value || 0);
+
+  // confirmação dupla (evita clique acidental)
+  const first = prompt("DIGITE: APAGAR TUDO\n(irá apagar VIP e CODES da planilha)");
+  if(String(first||"").trim().toUpperCase() !== "APAGAR TUDO"){
+    return toast("Cancelado");
+  }
+  const second = prompt("Confirma novamente? Digite: CONFIRMO");
+  if(String(second||"").trim().toUpperCase() !== "CONFIRMO"){
+    return toast("Cancelado");
+  }
+
+  overlay(true);
+  const r = await api("vipAdminWipeAll", { adminPass: pass, poolTotal });
+  overlay(false);
+
+  if(!r.ok) return toast("❌ " + r.error);
+
+  toast("✅ Reset total feito");
+  // atualiza UI
+  await refreshCodes();
+  // se você tem função loadSlots(), tenta atualizar a grade
+  if(typeof loadSlots === "function"){
+    try{ await loadSlots(); }catch(e){}
+  }
+}
 
     const r = await api("vipAdminListCodes", { adminPass: pass });
     if(!r.ok){
