@@ -56,33 +56,6 @@
     padding:18px;
     backdrop-filter:blur(10px);
     animation: in .45s ease both;
-
-    <div class="card" style="margin-top:12px; border-color: rgba(239,68,68,.28); background: rgba(239,68,68,.06);">
-  <div class="cardTitle" style="display:flex; align-items:center; gap:10px;">
-    <span style="filter:drop-shadow(0 10px 22px rgba(239,68,68,.22));">⚠️</span>
-    Zona perigosa
-  </div>
-  <div class="sub" style="margin-top:6px;">
-    Isso apaga <b>TODOS</b> os códigos e <b>TODOS</b> os slots da planilha (VIP e CODES). Não tem desfazer.
-  </div>
-
-  <div class="row" style="margin-top:10px;">
-    <div class="field" style="flex:0 0 260px;">
-      <label>Recriar Pool após apagar (0 = não)</label>
-      <input id="wipePool" type="number" min="0" value="50">
-    </div>
-
-    <button class="danger" onclick="wipeAll()" style="flex:0 0 220px;">
-      🧨 APAGAR TUDO
-    </button>
-  </div>
-
-  <div class="sub" style="margin-top:10px; opacity:.85">
-    Dica: se quiser só “zerar” um código específico, use as ações normais. Esse botão é reset total.
-  </div>
-</div>
-
-    
   }
   @keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
@@ -314,12 +287,50 @@
     white-space:nowrap;
   }
   .chipPurple{ border-color: rgba(139,92,246,.30); background: rgba(139,92,246,.12); }
+
   .footer{
     margin-top:14px;
     padding:10px 6px 0;
     color:rgba(229,231,235,.55);
     font-size:12px;
     display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+  }
+
+  /* ===== Modal Wipe (bonito) ===== */
+  .wipeGrid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:10px;
+    margin-top:10px;
+  }
+  @media(max-width:720px){ .wipeGrid{grid-template-columns:1fr} }
+  .wipeTitle{
+    font-family:Rokiest;
+    letter-spacing:.6px;
+    font-size:18px;
+    margin:0;
+  }
+  .wipeWarn{
+    border:1px solid rgba(239,68,68,.22);
+    background: rgba(239,68,68,.08);
+    border-radius:14px;
+    padding:10px;
+    color: rgba(229,231,235,.88);
+    font-size:12px;
+    line-height:1.3;
+  }
+  .wipeActions{
+    display:flex; gap:10px; margin-top:12px; flex-wrap:wrap;
+  }
+  .shake{
+    animation: shake .22s ease 2;
+  }
+  @keyframes shake{
+    0%{transform:translateX(0)}
+    25%{transform:translateX(-6px)}
+    50%{transform:translateX(6px)}
+    75%{transform:translateX(-6px)}
+    100%{transform:translateX(0)}
   }
 </style>
 </head>
@@ -371,6 +382,46 @@
   </div>
 </div>
 
+<!-- MODAL WIPE (sem prompt) -->
+<div id="wipeModal" class="overlay">
+  <div class="modal" style="width:min(760px,96vw)">
+    <div style="display:flex; justify-content:space-between; gap:10px; align-items:center; flex-wrap:wrap;">
+      <div class="wipeTitle">🧨 Reset total (VIP + CODES)</div>
+      <button class="ghost" style="height:40px" onclick="closeWipe()">✕</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="wipeGrid">
+      <div class="wipeWarn">
+        <b>ATENÇÃO:</b> isso apaga <b>todos os códigos</b> e <b>todos os slots</b> da planilha.<br>
+        Não tem desfazer. Use apenas quando quiser “zerar” tudo.
+      </div>
+
+      <div>
+        <div class="field" style="margin:0">
+          <label>Recriar pool após apagar (0 = não)</label>
+          <input id="wipePool" type="number" min="0" value="50">
+        </div>
+
+        <div class="field" style="margin-top:10px">
+          <label>Digite <b>APAGAR</b> para liberar o botão</label>
+          <input id="wipeType" placeholder="APAGAR">
+        </div>
+      </div>
+    </div>
+
+    <div class="wipeActions">
+      <button class="ghost" onclick="closeWipe()" style="flex:1 1 220px">Cancelar</button>
+      <button class="danger" onclick="confirmWipe()" style="flex:1 1 220px">APAGAR TUDO AGORA</button>
+    </div>
+
+    <div class="sub" style="margin-top:10px; opacity:.9">
+      Dica: se você só quer limpar um slot, use o botão 🧹 em vez desse reset total.
+    </div>
+  </div>
+</div>
+
 <div class="wrap">
   <div class="topbar">
     <div>
@@ -415,6 +466,7 @@
       <div class="row">
         <button class="ghost" onclick="refreshAll()">Atualizar tudo</button>
         <button class="g" onclick="openSummary()">Ver Resumo</button>
+        <button class="danger" onclick="openWipe()">🧨 Reset total</button>
       </div>
     </div>
 
@@ -455,7 +507,7 @@
       </div>
 
       <div class="sub" style="margin-top:10px;">
-        Se o dropdown ficar vazio, clique em “Atualizar tudo” (senha precisa estar correta).
+        Se o dropdown ficar vazio, digite a senha e aguarde 1s (auto refresh).
       </div>
     </div>
   </div>
@@ -482,7 +534,6 @@
 <div id="toast" class="toast">✅</div>
 
 <script>
-  // ========= COLE SUA URL /exec AQUI =========
   const API_URL = "https://script.google.com/macros/s/AKfycbyyU0eLff_-CRNBi6G_BfjGZA9G3kEylVHuhM0N9HqNFD2vsR8A2NeF_g0jV921Q4MG/exec";
 
   let slots = [];
@@ -504,7 +555,6 @@
     const m = s.match(/[A-Z0-9]{4,12}/);
     return m ? m[0] : "";
   }
-
   function currentCode(){
     return normalizeCode(document.getElementById("codeSelect").value || "");
   }
@@ -529,46 +579,14 @@
     }
   }
 
-  // ========= DROPDOWN + KPIs =========
+  // ===== DROPDOWN + KPIs =====
   async function refreshCodes(){
     const pass = adminPass();
     if(!pass){
-      // não bloqueia a UI, mas avisa
       fillCodes([]);
       setKpis({totalCodes:0,totalAllowed:0,totalAssigned:0,pool:null});
       return;
     }
-
-    async function wipeAll(){
-  const pass = adminPass();
-  if(!pass) return toast("Digite a senha admin");
-
-  const poolTotal = Number(document.getElementById("wipePool").value || 0);
-
-  // confirmação dupla (evita clique acidental)
-  const first = prompt("DIGITE: APAGAR TUDO\n(irá apagar VIP e CODES da planilha)");
-  if(String(first||"").trim().toUpperCase() !== "APAGAR TUDO"){
-    return toast("Cancelado");
-  }
-  const second = prompt("Confirma novamente? Digite: CONFIRMO");
-  if(String(second||"").trim().toUpperCase() !== "CONFIRMO"){
-    return toast("Cancelado");
-  }
-
-  overlay(true);
-  const r = await api("vipAdminWipeAll", { adminPass: pass, poolTotal });
-  overlay(false);
-
-  if(!r.ok) return toast("❌ " + r.error);
-
-  toast("✅ Reset total feito");
-  // atualiza UI
-  await refreshCodes();
-  // se você tem função loadSlots(), tenta atualizar a grade
-  if(typeof loadSlots === "function"){
-    try{ await loadSlots(); }catch(e){}
-  }
-}
 
     const r = await api("vipAdminListCodes", { adminPass: pass });
     if(!r.ok){
@@ -580,7 +598,6 @@
     const rows = r.rows || [];
     fillCodes(rows);
 
-    // KPIs de códigos
     setKpis({
       totalCodes: rows.length,
       totalAllowed: r.totalAllowed ?? rows.reduce((a,x)=>a+(Number(x.slotsAllowed)||0),0),
@@ -616,7 +633,7 @@
     document.getElementById("kPoolFree").textContent = (pool==null ? "—" : String(pool));
   }
 
-  // ========= POOL =========
+  // ===== POOL =====
   async function setPool(){
     const pass = adminPass();
     if(!pass) return toast("Digite a senha admin");
@@ -630,13 +647,11 @@
     if(!r.ok) return toast("❌ " + r.error);
 
     toast("✅ Pool aplicado");
-
-    // ✅ após criar pool: atualizar tudo + mostrar slots embaixo
     await refreshAll();
     await loadAllSlots(); // mostra geral automaticamente
   }
 
-  // ========= CRIAR CÓDIGO =========
+  // ===== CRIAR CÓDIGO =====
   async function createCode(){
     const pass = adminPass();
     if(!pass) return toast("Digite a senha admin");
@@ -656,12 +671,9 @@
 
     await refreshCodes();
 
-    // seleciona o novo código no dropdown (se existir)
     const sel = document.getElementById("codeSelect");
-    if(sel){
-      sel.value = r.code;
-    }
-    // e carrega os slots vinculados (se tiver)
+    if(sel) sel.value = r.code;
+
     await loadSlots(true);
   }
 
@@ -675,7 +687,7 @@
     }catch{ toast("❌ Não deu pra copiar"); }
   });
 
-  // ========= LOAD SLOTS =========
+  // ===== LOAD SLOTS =====
   async function loadSlots(silent=false){
     const pass = adminPass();
     if(!pass) return toast("Digite a senha admin");
@@ -693,7 +705,7 @@
     if(!r.ok) return toast("❌ " + r.error);
 
     slots = r.slots || [];
-    renderSlots(slots, { title: `Slots do código ${code}`, codeMode:true });
+    renderSlots(slots);
 
     if(!silent) toast("✅ Slots do código carregados");
   }
@@ -709,29 +721,24 @@
     if(!r.ok) return toast("❌ " + r.error);
 
     allSlotsCache = r.rows || [];
-    renderSlots(allSlotsCache, { title:"Todos os slots", codeMode:false });
+    renderSlots(allSlotsCache);
 
-    // pool info (livres sem código)
     const poolFree = allSlotsCache.filter(x => !String(x.code||"").trim() && String(x.status||"").toUpperCase()==="LIVRE").length;
-    // mantém KPIs e atualiza pool livre
+
     const kCodes = Number(document.getElementById("kCodes").textContent||0);
     const kAllowed = Number(document.getElementById("kAllowed").textContent||0);
     const kAssigned = Number(document.getElementById("kAssigned").textContent||0);
     setKpis({ totalCodes:kCodes, totalAllowed:kAllowed, totalAssigned:kAssigned, pool: poolFree });
-
-    toast("✅ Slots (geral) atualizados");
   }
 
   async function refreshAll(){
     await refreshCodes();
-    // também tenta atualizar pool info + slots geral (se a senha existir)
     if(adminPass()) await loadAllSlots();
   }
 
-  // ========= RESUMO (MODAL) =========
+  // ===== RESUMO =====
   function openSummary(){
     if(!allSlotsCache || !allSlotsCache.length){
-      // tenta carregar geral antes
       loadAllSlots().then(()=>openSummary());
       return;
     }
@@ -754,7 +761,7 @@
         const st = String(x.status||"").toUpperCase();
         return st==="OCUPADO" || st==="CONFIRMADO" || x.confirmed===true;
       })
-      .slice(0, 200); // segurança
+      .slice(0, 200);
 
     const tbody = document.getElementById("mRows");
     tbody.innerHTML = rows.length ? rows.map(x=>{
@@ -778,14 +785,49 @@
     document.getElementById("summaryModal").style.display="none";
   }
 
-  // ========= RENDER =========
-  function renderSlots(list, {title, codeMode}){
+  // ===== WIPE (Modal bonito) =====
+  function openWipe(){
+    document.getElementById("wipeType").value = "";
+    document.getElementById("wipeModal").style.display = "flex";
+  }
+  function closeWipe(){
+    document.getElementById("wipeModal").style.display = "none";
+  }
+
+  async function confirmWipe(){
+    const pass = adminPass();
+    if(!pass) return toast("Digite a senha admin");
+
+    const typed = String(document.getElementById("wipeType").value||"").trim().toUpperCase();
+    if(typed !== "APAGAR"){
+      const box = document.querySelector("#wipeModal .modal");
+      box.classList.remove("shake");
+      void box.offsetWidth;
+      box.classList.add("shake");
+      return toast("Digite APAGAR para liberar");
+    }
+
+    const poolTotal = Number(document.getElementById("wipePool").value || 0);
+
+    overlay(true);
+    const r = await api("vipAdminWipeAll", { adminPass: pass, poolTotal });
+    overlay(false);
+
+    if(!r.ok) return toast("❌ " + r.error);
+
+    toast("✅ Reset total feito");
+    closeWipe();
+    await refreshAll();
+  }
+
+  // ===== RENDER =====
+  function renderSlots(list){
     const grid = document.getElementById("slotsGrid");
 
     if(!list || !list.length){
       grid.innerHTML = `
         <div class="card" style="grid-column:1/-1">
-          <b>${esc(title || "Slots")}: vazio.</b>
+          <b>Slots: vazio.</b>
           <div class="sub" style="margin-top:6px">Crie o Pool e/ou selecione um código.</div>
         </div>`;
       return;
@@ -817,8 +859,6 @@
         ? `<div class="info muted">Código: <b>#${esc(s.code)}</b></div>`
         : `<div class="info muted">Código: <span class="muted">— (Pool)</span></div>`;
 
-      const showActions = (status!=="BLOQUEADO"); // simples
-
       return `
         <div class="slot ${cls}">
           <div>
@@ -832,22 +872,16 @@
           </div>
 
           <div class="miniActions">
-            ${showActions ? `
-              <button class="miniBtn miniBlue" onclick="clearSlot('${escJS(s.slot)}')">🧹</button>
-              <button class="miniBtn miniGreen" onclick="confirmSlot('${escJS(s.slot)}')">✅</button>
-              <button class="miniBtn miniRed" onclick="blockToggle('${escJS(s.slot)}')">⛔</button>
-            ` : `
-              <button class="miniBtn miniBlue" onclick="blockToggle('${escJS(s.slot)}')">🔓</button>
-              <button class="miniBtn miniRed" onclick="clearSlot('${escJS(s.slot)}')">🧹</button>
-              <button class="miniBtn miniGreen" onclick="confirmSlot('${escJS(s.slot)}')">✅</button>
-            `}
+            <button class="miniBtn miniBlue" onclick="clearSlot('${escJS(s.slot)}')">🧹</button>
+            <button class="miniBtn miniGreen" onclick="confirmSlot('${escJS(s.slot)}')">✅</button>
+            <button class="miniBtn miniRed" onclick="blockToggle('${escJS(s.slot)}')">⛔</button>
           </div>
         </div>
       `;
     }).join("");
   }
 
-  // ========= ACTIONS =========
+  // ===== ACTIONS =====
   async function clearSlot(slotId){
     const pass = adminPass();
     if(!pass) return toast("Digite a senha admin");
@@ -881,7 +915,7 @@
     await loadAllSlots();
   }
 
-  // ========= UTIL =========
+  // ===== UTIL =====
   function esc(s){
     return String(s??"").replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m]));
   }
@@ -889,18 +923,17 @@
     return String(s??"").replace(/['\\]/g, "\\$&");
   }
 
-  // fecha resumo clicando fora
   document.getElementById("summaryModal").addEventListener("click", (e)=>{
     if(e.target && e.target.id==="summaryModal") closeSummary();
   });
+  document.getElementById("wipeModal").addEventListener("click", (e)=>{
+    if(e.target && e.target.id==="wipeModal") closeWipe();
+  });
 
-  // ✅ auto-carregar dropdown (quando abre)
   window.addEventListener("DOMContentLoaded", ()=>{
-    // não tenta chamar API sem senha, mas deixa pronto:
     fillCodes([]);
     setKpis({totalCodes:0,totalAllowed:0,totalAssigned:0,pool:null});
 
-    // melhoria: quando o admin digita a senha, já atualiza dropdown + slots
     const passEl = document.getElementById("adminPass");
     let t=null;
     passEl.addEventListener("input", ()=>{
