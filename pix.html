@@ -1,67 +1,459 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title><!-- TROQUE AQUI --> | OFF Company</title>
-  <link rel="stylesheet" href="assets/off-ui.css">
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>PIX | OFF Company</title>
+
+<style>
+  @font-face{
+    font-family:"Rokiest";
+    src:url("https://waycompanygg.github.io/roteiro/assets/fonts/Rokiest-Extrabold.otf") format("opentype");
+    font-weight:800; font-display:swap;
+  }
+  :root{
+    --bg1:#060812; --bg2:#0b1220;
+    --panel:rgba(10,16,28,.78);
+    --stroke:rgba(255,255,255,.10);
+    --text:#e5e7eb; --muted:rgba(229,231,235,.62);
+    --blue:#2563eb; --green:#22c55e; --red:#ef4444; --amber:#f59e0b; --cyan:#06b6d4; --purple:#7c3aed;
+    --shadow:0 24px 80px rgba(0,0,0,.68);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; min-height:100vh;
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+    color:var(--text);
+    background:
+      radial-gradient(900px 520px at 14% 12%, rgba(124,58,237,.16), transparent 60%),
+      radial-gradient(900px 520px at 86% 18%, rgba(6,182,212,.14), transparent 60%),
+      radial-gradient(900px 520px at 70% 90%, rgba(34,197,94,.10), transparent 60%),
+      linear-gradient(135deg,var(--bg1),var(--bg2));
+    display:flex; justify-content:center;
+    padding:22px;
+  }
+
+  .home{
+    position:fixed; top:16px; left:16px;
+    background:rgba(17,24,39,.92);
+    border:1px solid rgba(255,255,255,.12);
+    color:#fff; text-decoration:none;
+    font-weight:900; font-size:14px;
+    padding:10px 12px;
+    border-radius:12px;
+    box-shadow:0 12px 30px rgba(0,0,0,.45);
+    transition:.15s;
+    z-index:10;
+  }
+  .home:hover{transform:translateY(-1px); opacity:.92}
+
+  .wrap{
+    width:min(1100px,100%);
+    background:var(--panel);
+    border:1px solid var(--stroke);
+    border-radius:24px;
+    box-shadow:var(--shadow);
+    padding:18px;
+    backdrop-filter:blur(10px);
+    animation: in .45s ease both;
+  }
+  @keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+  .topbar{
+    display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    align-items:flex-end;
+    padding:6px 6px 14px;
+  }
+  h1{font-family:"Rokiest"; margin:0; letter-spacing:.9px; font-size:34px}
+  .sub{margin:6px 0 0; color:var(--muted); font-size:13px}
+  .pill{
+    display:inline-flex; gap:8px; align-items:center;
+    padding:8px 10px;
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:999px;
+    background:rgba(255,255,255,.04);
+    color:rgba(229,231,235,.72);
+    font-size:12px; font-weight:900;
+  }
+
+  .grid2{
+    display:grid;
+    grid-template-columns: 1.2fr .8fr;
+    gap:12px;
+  }
+  @media(max-width:980px){ .grid2{grid-template-columns:1fr} }
+
+  .card{
+    background:rgba(255,255,255,.04);
+    border:1px solid var(--stroke);
+    border-radius:18px;
+    padding:14px;
+    position:relative;
+    overflow:hidden;
+  }
+  .card::before{
+    content:"";
+    position:absolute; inset:-2px;
+    background: radial-gradient(600px 200px at 10% 20%, rgba(124,58,237,.10), transparent 60%),
+                radial-gradient(600px 200px at 90% 10%, rgba(6,182,212,.10), transparent 60%);
+    filter: blur(0px);
+    pointer-events:none;
+  }
+  .card > *{position:relative}
+
+  .cardTitle{
+    font-family:"Rokiest";
+    letter-spacing:.6px;
+    font-size:18px;
+    margin:0 0 10px;
+  }
+
+  .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+  .btn{
+    height:44px; border-radius:12px; border:0;
+    padding:0 14px; font-weight:900;
+    cursor:pointer; color:#fff;
+    transition:.15s;
+    display:inline-flex; align-items:center; justify-content:center; gap:10px;
+    user-select:none;
+  }
+  .btn:hover{transform:translateY(-1px); opacity:.95}
+  .btn:active{transform:translateY(0); opacity:.90}
+  .b{background:var(--blue); box-shadow:0 10px 26px rgba(37,99,235,.24)}
+  .g{background:var(--green); box-shadow:0 10px 26px rgba(34,197,94,.18)}
+  .ghost{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.10)}
+  .danger{background:rgba(239,68,68,.18); border:1px solid rgba(239,68,68,.35)}
+  .chip{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:6px 10px; border-radius:999px;
+    border:1px solid rgba(255,255,255,.10);
+    background:rgba(2,6,23,.35);
+    color:rgba(229,231,235,.82);
+    font-size:12px; font-weight:900;
+    white-space:nowrap;
+  }
+
+  .bigKey{
+    margin-top:12px;
+    border:1px solid rgba(255,255,255,.10);
+    background: rgba(2,6,23,.40);
+    border-radius:16px;
+    padding:14px;
+  }
+  .bigKey .label{font-size:12px; color:rgba(229,231,235,.62); font-weight:900}
+  .bigKey .value{
+    margin-top:8px;
+    font-size:18px;
+    font-weight:900;
+    letter-spacing:.2px;
+    word-break:break-all;
+  }
+  .meta{
+    margin-top:10px;
+    display:flex; gap:10px; flex-wrap:wrap;
+  }
+
+  .list{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:10px;
+    margin-top:10px;
+  }
+  .item{
+    border:1px solid rgba(255,255,255,.10);
+    background: rgba(2,6,23,.35);
+    border-radius:16px;
+    padding:12px;
+    display:flex; gap:10px; justify-content:space-between; align-items:center;
+  }
+  .item .left{min-width:0}
+  .item .fav{font-weight:900}
+  .item .k{color:rgba(229,231,235,.68); font-size:12px; margin-top:4px; word-break:break-all}
+  .item .right{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+
+  .divider{height:1px; background:rgba(255,255,255,.08); margin:12px 0}
+
+  /* overlay */
+  .overlay{
+    position:fixed; inset:0;
+    display:none;
+    align-items:center; justify-content:center;
+    background:rgba(0,0,0,.55);
+    backdrop-filter:blur(10px);
+    z-index:99999;
+    padding:18px;
+  }
+  .modal{
+    width:min(520px, 96vw);
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,.14);
+    background:rgba(11,18,32,.92);
+    box-shadow:0 20px 70px rgba(0,0,0,.70);
+    padding:16px;
+    text-align:center;
+    animation: pop .22s ease both;
+  }
+  @keyframes pop{from{opacity:0;transform:scale(.98)}to{opacity:1;transform:scale(1)}}
+  .ring{
+    width:56px; height:56px;
+    border-radius:999px;
+    border:3px solid rgba(255,255,255,.18);
+    border-top-color:rgba(37,99,235,.95);
+    margin:10px auto 12px;
+    animation:spin .9s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* toast */
+  .toast{
+    position:fixed; bottom:18px; left:50%;
+    transform:translateX(-50%);
+    background:rgba(17,24,39,.95);
+    border:1px solid rgba(255,255,255,.12);
+    padding:10px 12px;
+    border-radius:12px;
+    font-weight:900;
+    opacity:0; pointer-events:none;
+    transition:.2s;
+    z-index: 999999;
+    box-shadow:0 12px 30px rgba(0,0,0,.45);
+  }
+  .toast.show{opacity:1}
+
+  .footer{
+    margin-top:14px;
+    padding:10px 6px 0;
+    color:rgba(229,231,235,.55);
+    font-size:12px;
+    display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+  }
+
+  .empty{
+    border:1px dashed rgba(255,255,255,.18);
+    background: rgba(2,6,23,.18);
+    border-radius:16px;
+    padding:14px;
+    color:rgba(229,231,235,.75);
+  }
+</style>
 </head>
+
 <body>
+<a class="home" href="index.html">🏠 Home</a>
 
-<div class="off-shell">
-  <aside class="off-side">
-    <div class="off-logo">OFF</div>
-    <div class="off-nav">
-      <a class="off-navbtn" href="index.html">🏠<span class="tip">Home</span></a>
-      <a class="off-navbtn" href="vip.html">🎟️<span class="tip">Lista VIP</span></a>
-      <a class="off-navbtn" href="vip-admin.html">🧠<span class="tip">VIP Admin</span></a>
-      <a class="off-navbtn" href="pix.html">💸<span class="tip">PIX</span></a>
-      <a class="off-navbtn" href="pix-admin.html">🛡️<span class="tip">PIX Admin</span></a>
-      <a class="off-navbtn" href="pix-cadastro.html">➕<span class="tip">Cadastro PIX</span></a>
-      <a class="off-navbtn" href="ajustar-cronograma.html">🗓️<span class="tip">Cronograma</span></a>
-      <a class="off-navbtn" href="diaria.html">📒<span class="tip">Diária</span></a>
-      <a class="off-navbtn" href="van.html">🚐<span class="tip">Van</span></a>
-    </div>
-  </aside>
-
-  <main class="off-main">
-    <div class="off-topbar">
-      <div class="off-title">
-        <h1><!-- TROQUE AQUI --></h1>
-        <div class="off-sub">OFF Company • Desenvolvido por Lucas Santos</div>
-      </div>
-      <div class="off-actions">
-        <span class="off-pill">⚙️ Painel</span>
-      </div>
-    </div>
-
-    <section class="off-card">
-      <div class="off-cardTitle">
-        <h2>Conteúdo</h2>
-        <div class="off-muted">—</div>
-      </div>
-
-      <!-- ✅ COLE AQUI O BODY DA SUA PÁGINA ATUAL -->
-      <div class="off-muted">Cole aqui o conteúdo atual desta página.</div>
-    </section>
-
-    <div class="off-footer">
-      <div>© OFF Company</div>
-      <div>Desenvolvido por Lucas Santos</div>
-    </div>
-  </main>
-</div>
-
-<div class="off-overlay" id="loadingOverlay">
-  <div class="off-modal" style="max-width:520px;text-align:center">
-    <div class="off-loading"></div>
-    <div style="font-family:Rokiest;letter-spacing:.7px;font-size:20px">Carregando…</div>
-    <div class="off-muted" style="margin-top:6px">Aguarde</div>
+<div id="overlay" class="overlay">
+  <div class="modal">
+    <div class="ring"></div>
+    <div style="font-family:Rokiest;letter-spacing:.6px;font-size:22px;">Carregando PIX…</div>
+    <div style="margin-top:6px;color:rgba(229,231,235,.7);font-size:13px;">Aguarde</div>
   </div>
 </div>
 
-<div class="off-toast" id="toast">✅</div>
+<div class="wrap">
+  <div class="topbar">
+    <div>
+      <h1>PIX</h1>
+      <div class="sub">OFF Company • Copie a chave e envie seu pagamento</div>
+    </div>
+    <div class="pill">💸 Pagamento rápido</div>
+  </div>
 
-<script src="assets/off-ui.js"></script>
+  <div class="grid2">
+    <!-- Principal -->
+    <div class="card">
+      <div class="cardTitle">PIX Principal</div>
+      <div class="sub">Favorito para pagamentos. Clique em copiar e pronto.</div>
+
+      <div class="divider"></div>
+
+      <div id="primaryBox" class="empty">Carregando…</div>
+
+      <div class="divider"></div>
+
+      <div class="row">
+        <button class="btn b" onclick="copyPrimary()">📋 Copiar PIX</button>
+        <button class="btn ghost" onclick="loadPix()">🔄 Atualizar</button>
+      </div>
+    </div>
+
+    <!-- Ajuda/Info -->
+    <div class="card">
+      <div class="cardTitle">Dicas</div>
+      <div class="sub">Copie a chave e cole no seu banco. Se for QR, use o app do banco.</div>
+
+      <div class="divider"></div>
+
+      <div class="row" style="gap:8px; align-items:flex-start; flex-direction:column">
+        <div class="chip">🔐 Seguro</div>
+        <div class="chip">⚡ Instantâneo</div>
+        <div class="chip">📎 Copiar com 1 clique</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sub">
+        Se aparecer “Nenhum PIX cadastrado”, o admin precisa cadastrar no painel.
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:12px;">
+    <div class="row" style="justify-content:space-between; align-items:flex-end;">
+      <div>
+        <div class="cardTitle" style="margin:0;">Outros PIX disponíveis</div>
+        <div class="sub">Se existir mais de um favorecido, aparece aqui.</div>
+      </div>
+      <button class="btn ghost" onclick="loadPix()">🔄</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <div id="list" class="list"></div>
+  </div>
+
+  <div class="footer">
+    <div>© OFF Company</div>
+    <div>Desenvolvido por Lucas Santos</div>
+  </div>
+</div>
+
+<div id="toast" class="toast">✅</div>
+
+<script>
+  // ========= COLE SUA URL /exec AQUI =========
+  const API_URL = "COLE_SUA_URL_EXEC_AQUI";
+
+  let primary = null;
+  let list = [];
+
+  function toast(msg){
+    const t=document.getElementById("toast");
+    t.textContent=msg;
+    t.classList.add("show");
+    setTimeout(()=>t.classList.remove("show"), 1600);
+  }
+  function overlay(on){
+    document.getElementById("overlay").style.display = on ? "flex" : "none";
+  }
+
+  async function api(fn, payload){
+    const controller = new AbortController();
+    const timeout = setTimeout(()=>controller.abort(), 20000);
+    try{
+      const res = await fetch(API_URL, {
+        method:"POST",
+        cache:"no-store",
+        // NÃO setar Content-Type -> evita preflight
+        body: JSON.stringify({ fn, payload }),
+        signal: controller.signal
+      });
+      const text = await res.text();
+      try { return JSON.parse(text); }
+      catch { return { ok:false, error:"Resposta inválida: " + text.slice(0,160) }; }
+    }catch(err){
+      return { ok:false, error:(err.name==="AbortError" ? "Timeout (20s)" : String(err)) };
+    }finally{
+      clearTimeout(timeout);
+    }
+  }
+
+  function esc(s){
+    return String(s??"").replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m]));
+  }
+
+  function renderPrimary(){
+    const box = document.getElementById("primaryBox");
+    if(!primary){
+      box.className = "empty";
+      box.innerHTML = `<b>Nenhum PIX cadastrado.</b><div class="sub" style="margin-top:6px">Peça para o admin cadastrar um favorecido.</div>`;
+      return;
+    }
+
+    box.className = "bigKey";
+    box.innerHTML = `
+      <div class="row" style="justify-content:space-between; align-items:flex-start">
+        <div style="min-width:0">
+          <div style="font-weight:900; font-size:18px">${esc(primary.favorecido || "Favorecido")}</div>
+          <div class="sub" style="margin-top:2px">${esc(primary.banco || "")}</div>
+        </div>
+        <span class="chip">⭐ Principal</span>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="label">Chave PIX</div>
+      <div class="value" id="primaryKey">${esc(primary.chave || "")}</div>
+
+      <div class="meta">
+        ${primary.tipo ? `<span class="chip">🔑 ${esc(primary.tipo)}</span>` : ``}
+        ${primary.documento ? `<span class="chip">🧾 ${esc(primary.documento)}</span>` : ``}
+      </div>
+    `;
+  }
+
+  function renderList(){
+    const el = document.getElementById("list");
+    const others = (list || []).filter(x => !primary || x.id !== primary.id);
+
+    if(!others.length){
+      el.innerHTML = `<div class="empty">Sem outros PIX no momento.</div>`;
+      return;
+    }
+
+    el.innerHTML = others.map(x => `
+      <div class="item">
+        <div class="left">
+          <div class="fav">${esc(x.favorecido || "Favorecido")}</div>
+          <div class="k">${esc(x.tipo || "PIX")} • ${esc(x.chave || "")}</div>
+        </div>
+        <div class="right">
+          ${x.banco ? `<span class="chip">${esc(x.banco)}</span>` : ``}
+          <button class="btn ghost" style="height:38px" onclick="copyText('${escJS(x.chave||"")}')">📋 Copiar</button>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  function escJS(s){
+    return String(s??"").replace(/['\\]/g, "\\$&");
+  }
+
+  async function copyText(txt){
+    if(!txt) return toast("Sem chave para copiar");
+    try{
+      await navigator.clipboard.writeText(txt);
+      toast("📋 Copiado!");
+    }catch{
+      toast("❌ Não foi possível copiar");
+    }
+  }
+
+  function copyPrimary(){
+    if(!primary || !primary.chave) return toast("Sem PIX principal");
+    copyText(primary.chave);
+  }
+
+  async function loadPix(){
+    overlay(true);
+    const r = await api("pixPublicGet", {});
+    overlay(false);
+
+    if(!r.ok){
+      document.getElementById("primaryBox").className="empty";
+      document.getElementById("primaryBox").innerHTML = `<b>Erro ao carregar.</b><div class="sub" style="margin-top:6px">${esc(r.error||"")}</div>`;
+      document.getElementById("list").innerHTML = `<div class="empty">—</div>`;
+      return toast("❌ " + (r.error||"Erro"));
+    }
+
+    primary = r.primary || null;
+    list = r.list || [];
+
+    renderPrimary();
+    renderList();
+    toast("✅ PIX carregado");
+  }
+
+  window.addEventListener("DOMContentLoaded", loadPix);
+</script>
 </body>
 </html>
