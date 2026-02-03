@@ -523,10 +523,13 @@
       left:50%;
       transform:translate(-50%, -50%);
       width:auto;
-      height:90%;
-      opacity:0.3;
+      max-width:90%;
+      height:auto;
+      max-height:95%;
+      opacity:0.5;
       pointer-events:none;
       z-index:1;
+      object-fit:contain;
     }
 
     .canvas-placeholder{
@@ -1137,7 +1140,7 @@
 
         <div class="editor-canvas" id="editorCanvas">
           <!-- Imagem da van como fundo -->
-          <img src="folder/van.png" alt="Van" class="canvas-background">
+          <img src="folder/van.png" alt="Van" class="canvas-background" onerror="console.error('Erro ao carregar van.png. Caminho:', this.src); this.style.display='none';" onload="console.log('Van carregada com sucesso!');">
           <div class="canvas-placeholder">
             Clique em "Adicionar Assento" e arraste para posicionar
           </div>
