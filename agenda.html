@@ -8,7 +8,7 @@
 <style>
   @font-face{
     font-family:"Rokiest";
-    src:url("https://waycompanygg.github.io/roteiro/assets/fonts/Rokiest-Extrabold.otf") format("opentype");
+    src:url("https://raw.githubusercontent.com/WAYCOMPANYGG/roteiro/main/assets/fonts/Rokiest-Extrabold.otf") format("opentype");
     font-weight:800; font-display:swap;
   }
 
@@ -56,7 +56,7 @@
   
   html,body{
     height:100%;
-    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    font-family:'Rokiest','Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
     color:var(--text-primary);
     background:var(--bg-dark);
     overflow-x:hidden;
@@ -152,27 +152,44 @@
   }
 
   .logo{
-    width:56px;
-    height:56px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:2px;
+    padding:8px 16px;
     border-radius:var(--radius-md);
-    display:grid;
-    place-items:center;
-    background:linear-gradient(135deg, var(--purple-bright), var(--cyan-bright));
-    box-shadow:0 0 0 3px rgba(167,139,250,.2), 0 8px 32px rgba(167,139,250,.4), inset 0 1px 0 rgba(255,255,255,.3);
+    background:transparent;
     font-weight:900;
-    font-size:22px;
-    letter-spacing:1px;
+    font-size:18px;
+    letter-spacing:-1px;
     position:relative;
-    overflow:hidden;
+    overflow:visible;
+    height:56px;
   }
 
-  .logo::before{
-    content:'';
+  .logo-text{
+    display:flex;
+    align-items:center;
+    position:relative;
+    color:var(--text-primary);
+    text-shadow:0 2px 8px rgba(0,0,0,.3);
+  }
+
+  .logo-k{
+    position:relative;
+    display:inline-block;
+    margin-right:-4px;
+  }
+
+  .logo-lightning{
     position:absolute;
-    inset:0;
-    background:linear-gradient(135deg, transparent, rgba(255,255,255,.3), transparent);
-    transform:translateX(-100%);
-    animation:shimmer 3s ease-in-out infinite;
+    right:-8px;
+    top:50%;
+    transform:translateY(-50%);
+    width:20px;
+    height:auto;
+    filter:drop-shadow(0 0 8px rgba(255, 215, 0, 0.8)) drop-shadow(0 2px 4px rgba(0,0,0,.3));
+    z-index:2;
   }
 
   @keyframes shimmer{
@@ -1750,9 +1767,19 @@
   <!-- TOPBAR -->
   <div class="topbar">
     <div class="brand">
-      <div class="logo">NBK</div>
+      <div class="logo">
+        <div class="logo-text">
+          <span>NOBREA</span>
+          <span class="logo-k">
+            K
+            <svg class="logo-lightning" viewBox="0 0 100 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M50 0L14 90H40L25 180L75 63H50L65 18L50 0Z" fill="#ffd700"/>
+            </svg>
+          </span>
+        </div>
+      </div>
       <div class="titles">
-        <h1>Agenda</h1>
+        <h1>AGENDA</h1>
         <div class="sub">Nobrake Company • Premium Calendar Experience</div>
       </div>
     </div>
