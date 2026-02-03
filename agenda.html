@@ -600,6 +600,55 @@
     pointer-events:none;
   }
 
+  /* Add button - subtle and animated */
+  .cell::after{
+    content:'＋';
+    position:absolute;
+    top:8px;
+    right:8px;
+    width:28px;
+    height:28px;
+    border-radius:50%;
+    background:linear-gradient(135deg, rgba(167,139,250,.8), rgba(34,211,238,.7));
+    color:#fff;
+    font-size:18px;
+    font-weight:700;
+    display:grid;
+    place-items:center;
+    opacity:0;
+    transform:scale(0.5) rotate(-90deg);
+    transition:all .4s cubic-bezier(.34,1.56,.64,1);
+    cursor:pointer;
+    pointer-events:none;
+    box-shadow:0 4px 12px rgba(167,139,250,.4),
+               inset 0 1px 0 rgba(255,255,255,.3);
+    z-index:10;
+  }
+
+  .cell:hover::after{
+    opacity:1;
+    transform:scale(1) rotate(0deg);
+    pointer-events:auto;
+    animation:addButtonPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes addButtonPulse{
+    0%, 100%{ 
+      box-shadow:0 4px 12px rgba(167,139,250,.4),
+                 0 0 0 0 rgba(167,139,250,.4),
+                 inset 0 1px 0 rgba(255,255,255,.3);
+    }
+    50%{ 
+      box-shadow:0 6px 16px rgba(167,139,250,.5),
+                 0 0 0 8px rgba(167,139,250,0),
+                 inset 0 1px 0 rgba(255,255,255,.4);
+    }
+  }
+
+  .cell::after:active{
+    transform:scale(0.9) rotate(0deg);
+  }
+
   /* Cells with events - subtle highlight */
   .cell.hasEvents{
     background:rgba(2,6,20,.4);
@@ -665,6 +714,14 @@
     color:var(--purple-bright);
     box-shadow:0 0 0 3px rgba(167,139,250,.1), 0 0 16px rgba(167,139,250,.3);
     animation:pulse 2s ease-in-out infinite;
+    transition:all .4s cubic-bezier(.34,1.56,.64,1);
+    position:relative;
+    z-index:5;
+  }
+
+  .cell:hover .tagToday{
+    transform:translateX(-36px);
+    opacity:.8;
   }
 
   @keyframes pulse{
