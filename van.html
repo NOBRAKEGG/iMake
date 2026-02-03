@@ -837,30 +837,30 @@
     <div class="van-container">
       <!-- Vista Superior - APENAS A IMAGEM PNG -->
       <div style="margin-bottom:40px">
-        <h3 style="text-align:center; font-size:16px; margin-bottom:20px; color:var(--text-dim); font-weight:700">SELECIONE SEU ASSENTO</h3>
-        <div style="max-width:600px; margin:0 auto; position:relative">
-          <img src="assets/folder/van.png" alt="Vista superior da van" style="width:100%; height:auto; border-radius:20px; box-shadow:0 20px 60px rgba(0,0,0,.8)">
+        <h3 style="text-align:center; font-size:16px; margin-bottom:20px; color:var(--text-dim); font-weight:700; text-transform:uppercase; letter-spacing:1px">SELECIONE SEU ASSENTO</h3>
+        <div style="max-width:450px; margin:0 auto; position:relative">
+          <img src="folder/van.png" alt="Vista superior da van" style="width:100%; height:auto; border-radius:16px; box-shadow:0 30px 80px rgba(0,0,0,.9)">
           
           <!-- Overlay clicável nos assentos -->
-          <div style="position:absolute; inset:0; display:grid; padding:15% 8% 8% 8%">
-            <div style="display:grid; grid-template-rows:auto auto auto auto auto; gap:3%">
+          <div style="position:absolute; inset:0; display:grid; padding:12% 10% 10% 10%">
+            <div style="display:grid; grid-template-rows:auto auto auto auto auto; gap:2.5%">
               
               <!-- Motorista + F1 + F2 (frente) -->
-              <div style="display:grid; grid-template-columns:20% 1fr 1fr; gap:2%; height:50px">
+              <div style="display:grid; grid-template-columns:22% 1fr 1fr; gap:2%; height:55px">
                 <div class="seat-overlay driver" title="Motorista"></div>
                 <div class="seat-overlay" data-seat="F1" title="Assento F1" onclick="openModal()"></div>
                 <div class="seat-overlay" data-seat="F2" title="Assento F2" onclick="openModal()"></div>
               </div>
 
               <!-- Fila 1: 3 assentos -->
-              <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:2%; height:50px">
+              <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:2%; height:55px">
                 <div class="seat-overlay" data-seat="1" title="Assento 1" onclick="openModal()"></div>
                 <div class="seat-overlay" data-seat="2" title="Assento 2" onclick="openModal()"></div>
                 <div class="seat-overlay" data-seat="3" title="Assento 3" onclick="openModal()"></div>
               </div>
 
               <!-- Fila 2: 2 + corredor + 1 -->
-              <div style="display:grid; grid-template-columns:1fr 1fr 15% 1fr; gap:2%; height:50px">
+              <div style="display:grid; grid-template-columns:1fr 1fr 15% 1fr; gap:2%; height:55px">
                 <div class="seat-overlay" data-seat="4" title="Assento 4" onclick="openModal()"></div>
                 <div class="seat-overlay" data-seat="5" title="Assento 5" onclick="openModal()"></div>
                 <div></div>
@@ -868,7 +868,7 @@
               </div>
 
               <!-- Fila 3: 2 + corredor + 1 -->
-              <div style="display:grid; grid-template-columns:1fr 1fr 15% 1fr; gap:2%; height:50px">
+              <div style="display:grid; grid-template-columns:1fr 1fr 15% 1fr; gap:2%; height:55px">
                 <div class="seat-overlay" data-seat="7" title="Assento 7" onclick="openModal()"></div>
                 <div class="seat-overlay" data-seat="8" title="Assento 8" onclick="openModal()"></div>
                 <div></div>
@@ -876,7 +876,7 @@
               </div>
 
               <!-- Fila 4: 4 assentos -->
-              <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:2%; height:50px">
+              <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:2%; height:55px">
                 <div class="seat-overlay" data-seat="10" title="Assento 10" onclick="openModal()"></div>
                 <div class="seat-overlay" data-seat="11" title="Assento 11" onclick="openModal()"></div>
                 <div class="seat-overlay" data-seat="12" title="Assento 12" onclick="openModal()"></div>
@@ -887,10 +887,12 @@
         </div>
       </div>
 
-      <!-- Cards interativos embaixo -->
-      <h3 style="text-align:center; font-size:16px; margin-bottom:20px; color:var(--text-dim); font-weight:700">DETALHES DOS ASSENTOS</h3>
-
-      <!-- Você vai criar seus próprios cards de assentos aqui -->
+      <!-- Área para você criar o mapa de assentos -->
+      <h3 style="text-align:center; font-size:16px; margin-bottom:20px; color:var(--text-dim); font-weight:700; text-transform:uppercase; letter-spacing:1px">DETALHES DOS ASSENTOS</h3>
+      
+      <div id="seats-map" style="max-width:900px; margin:0 auto 40px">
+        <!-- Você cria seus cards de assentos aqui -->
+      </div>
 
       <div class="legend">
         <div class="legend-item">
