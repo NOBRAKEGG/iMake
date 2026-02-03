@@ -337,11 +337,16 @@
     to{ opacity:1; transform:translateY(0); }
   }
 
-  .leftTools, .rightTools{
+  .leftTools, .rightTools, .centerTools{
     display:flex;
     align-items:center;
     gap:12px;
     flex-wrap:wrap;
+  }
+
+  .centerTools{
+    flex:1;
+    justify-content:center;
   }
 
   .select{
@@ -431,22 +436,6 @@
     flex-wrap:wrap;
   }
 
-  .monthTitle{
-    display:flex;
-    align-items:center;
-    gap:14px;
-  }
-
-  .monthTitle .m{
-    font-family:"Rokiest";
-    letter-spacing:1px;
-    font-size:28px;
-    background:linear-gradient(135deg, var(--text-primary), var(--purple-bright));
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-    background-clip:text;
-  }
-
   .pill{
     display:inline-flex;
     align-items:center;
@@ -463,8 +452,20 @@
 
   .navMonth{
     display:flex;
-    gap:10px;
+    gap:20px;
     align-items:center;
+  }
+
+  .monthTitle .m{
+    font-family:"Rokiest";
+    letter-spacing:1px;
+    font-size:28px;
+    background:linear-gradient(135deg, var(--text-primary), var(--purple-bright));
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+    min-width:220px;
+    text-align:center;
   }
 
   .iconBtn{
@@ -988,6 +989,20 @@
     .cell{
       min-height:120px;
     }
+    .toolbar{
+      flex-direction:column;
+      align-items:stretch;
+    }
+    .centerTools{
+      order:1;
+    }
+    .leftTools{
+      order:2;
+    }
+    .rightTools{
+      order:3;
+      justify-content:center;
+    }
   }
 
   @media(max-width:560px){
@@ -1019,6 +1034,10 @@
     .dow div{
       font-size:11px;
       padding:10px 8px;
+    }
+    .monthTitle .m{
+      font-size:24px;
+      min-width:180px;
     }
   }
 </style>
@@ -1071,18 +1090,20 @@
       </div>
     </div>
 
-    <div class="rightTools">
-      <div class="monthHeader" style="margin:0">
-        <div class="monthTitle">
-          <div class="m" id="monthLabel">—</div>
-          <div class="pill" id="countLabel">0 compromissos</div>
-        </div>
-      </div>
-
+    <div class="centerTools">
       <div class="navMonth">
         <div class="iconBtn" id="prevMonth" title="Mês anterior">←</div>
+        <div class="monthHeader" style="margin:0">
+          <div class="monthTitle">
+            <div class="m" id="monthLabel">—</div>
+          </div>
+        </div>
         <div class="iconBtn" id="nextMonth" title="Próximo mês">→</div>
       </div>
+    </div>
+
+    <div class="rightTools">
+      <div class="pill" id="countLabel">0 compromissos</div>
     </div>
   </div>
 
