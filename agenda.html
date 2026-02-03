@@ -356,17 +356,42 @@
     background:rgba(15,23,42,.6);
     color:var(--text-primary);
     padding:12px 20px;
+    padding-right:44px;
     outline:none;
     font-weight:700;
     font-size:14px;
     cursor:pointer;
     transition:all .3s cubic-bezier(.4,0,.2,1);
+    appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg width='18' height='18' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 7.5L10 12.5L15 7.5' stroke='%2322d3ee' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 16px center;
+    background-size:18px;
+  }
+
+  .select:hover{
+    border-color:rgba(34,211,238,.4);
+    background:rgba(15,23,42,.75);
+    transform:translateY(-1px);
   }
 
   .select:focus{
     border-color:var(--purple);
     box-shadow:0 0 0 3px rgba(167,139,250,.2);
     transform:translateY(-1px);
+    background-image:url("data:image/svg+xml,%3Csvg width='18' height='18' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 7.5L10 12.5L15 7.5' stroke='%23a78bfa' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  }
+
+  .select option{
+    background:rgba(10,16,28,.98);
+    color:var(--text-primary);
+    padding:12px;
+    font-weight:600;
+  }
+
+  .select option:checked{
+    background:linear-gradient(90deg, rgba(139,92,246,.25), rgba(34,211,238,.15));
+    font-weight:800;
   }
 
   /* Premium chips */
@@ -751,7 +776,7 @@
 
   .drawer{
     width:100%;
-    max-width:680px;
+    max-width:900px;
     max-height:90vh;
     background:linear-gradient(180deg, rgba(15,23,42,.98), rgba(10,16,28,.98));
     border:1px solid var(--glass-border);
@@ -759,7 +784,7 @@
     box-shadow:0 40px 100px rgba(0,0,0,.9), 
                0 0 0 1px rgba(255,255,255,.08),
                inset 0 1px 0 rgba(255,255,255,.1);
-    padding:32px;
+    padding:36px;
     animation:modalPop .4s cubic-bezier(.16,1,.3,1);
     overflow-y:auto;
     position:relative;
@@ -1196,7 +1221,41 @@
     font-family:inherit;
   }
 
-  .inp:focus, .txt:focus{
+  /* Premium select dropdown */
+  select.inp{
+    appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 7.5L10 12.5L15 7.5' stroke='%23a78bfa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 14px center;
+    background-size:20px;
+    padding-right:44px;
+    cursor:pointer;
+  }
+
+  select.inp:hover{
+    border-color:rgba(167,139,250,.4);
+    background-color:rgba(2,6,23,.75);
+  }
+
+  /* Animated dropdown options */
+  select.inp option{
+    background:rgba(10,16,28,.98);
+    color:var(--text-primary);
+    padding:12px 16px;
+    font-weight:600;
+    transition:all .2s;
+  }
+
+  select.inp option:hover{
+    background:rgba(167,139,250,.15);
+  }
+
+  select.inp option:checked{
+    background:linear-gradient(90deg, rgba(167,139,250,.25), rgba(34,211,238,.15));
+    font-weight:800;
+  }
+
+  .inp:focus, .txt:focus, select.inp:focus{
     border-color:var(--purple);
     box-shadow:0 0 0 4px rgba(167,139,250,.2), 0 8px 24px rgba(167,139,250,.15);
     background:rgba(2,6,23,.8);
@@ -1205,6 +1264,11 @@
 
   .inp:hover, .txt:hover{
     border-color:rgba(167,139,250,.3);
+  }
+
+  /* Select arrow animation on focus */
+  select.inp:focus{
+    background-image:url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 7.5L10 12.5L15 7.5' stroke='%23c4b5fd' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   }
 
   .statusRow{
@@ -1466,7 +1530,7 @@
     .drawer{
       max-width:95vw;
       max-height:85vh;
-      padding:24px;
+      padding:28px;
     }
     .drawerHeader .t{
       font-size:22px;
