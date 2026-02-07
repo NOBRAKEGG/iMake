@@ -321,12 +321,13 @@
       position:absolute;
       inset:0;
       margin:auto;
-      width:70%;
-      height:90%;
+      width:90%; /* ← Aumentado para horizontal */
+      height:70%; /* ← Ajustado para horizontal */
       opacity:0.3;
       pointer-events:none;
       object-fit:contain;
       filter:brightness(1.1) contrast(1.05);
+      transform:rotate(90deg); /* ← ROTACIONA A VAN PARA HORIZONTAL */
     }
 
     .canvas-hint{
