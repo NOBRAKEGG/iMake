@@ -261,6 +261,60 @@
       color:#fff;
     }
 
+    .btn-danger:hover{
+      opacity:0.9;
+    }
+
+    /* WHATSAPP BUTTON WITH ANIMATION */
+    .btn-whatsapp{
+      background:#25d366 !important;
+      border:none !important;
+      color:#fff !important;
+      position:relative;
+      animation:whatsappPulse 2s ease-in-out infinite;
+      box-shadow:0 4px 15px rgba(37,211,102,0.4) !important;
+    }
+
+    .btn-whatsapp:hover{
+      animation:none;
+      transform:translateY(-3px) !important;
+      box-shadow:0 8px 25px rgba(37,211,102,0.6) !important;
+    }
+
+    .btn-whatsapp::before{
+      content:"NOVO";
+      position:absolute;
+      top:-8px;
+      right:-8px;
+      background:linear-gradient(135deg, #ff3b3b, #ff6b6b);
+      color:#fff;
+      font-size:9px;
+      font-weight:900;
+      padding:3px 8px;
+      border-radius:10px;
+      box-shadow:0 2px 8px rgba(255,59,59,0.5);
+      animation:badgeBounce 1s ease-in-out infinite;
+      z-index:10;
+    }
+
+    @keyframes whatsappPulse{
+      0%, 100%{
+        transform:scale(1);
+      }
+      50%{
+        transform:scale(1.05);
+      }
+    }
+
+    @keyframes badgeBounce{
+      0%, 100%{
+        transform:translateY(0);
+      }
+      50%{
+        transform:translateY(-3px);
+      }
+    }
+
     /* CANVAS */
     .canvas{
       background:var(--elevated);
@@ -527,6 +581,7 @@
       border-color:var(--primary);
       transform:translateY(-2px);
       box-shadow:0 8px 20px rgba(167,139,250,0.3);
+      background:var(--surface-hover);
     }
 
     .passenger-num{
@@ -567,19 +622,23 @@
     }
 
     .passenger-card.status-livre{
-      border-left:4px solid rgba(37,99,235,1);
+      border-left:4px solid rgba(59,130,246,1);
+      background:linear-gradient(90deg, rgba(59,130,246,0.08), transparent 50%);
     }
 
     .passenger-card.status-reservado{
       border-left:4px solid rgba(245,158,11,1);
+      background:linear-gradient(90deg, rgba(245,158,11,0.08), transparent 50%);
     }
 
     .passenger-card.status-confirmado{
       border-left:4px solid rgba(16,185,129,1);
+      background:linear-gradient(90deg, rgba(16,185,129,0.08), transparent 50%);
     }
 
     .passenger-card.status-bloqueado{
       border-left:4px solid rgba(239,68,68,1);
+      background:linear-gradient(90deg, rgba(239,68,68,0.08), transparent 50%);
     }
 
     /* TOAST */
@@ -728,7 +787,7 @@
           <button class="btn" style="background:var(--purple); border:none; color:#fff" onclick="exportLayout()">
             <span>📥</span> Exportar
           </button>
-          <button class="btn" style="background:#25d366; border:none; color:#fff" onclick="shareWhatsApp()">
+          <button class="btn btn-whatsapp" onclick="shareWhatsApp()">
             <span>📱</span> WhatsApp
           </button>
         </div>
