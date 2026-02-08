@@ -70,6 +70,29 @@
       height:400px;
       background:radial-gradient(circle, rgba(167,139,250,0.15), transparent 70%);
       pointer-events:none;
+      animation:headerGlow 8s ease-in-out infinite;
+    }
+
+    .header::after{
+      content:"";
+      position:absolute;
+      top:-30%;
+      left:-5%;
+      width:300px;
+      height:300px;
+      background:radial-gradient(circle, rgba(34,211,238,0.1), transparent 70%);
+      pointer-events:none;
+      animation:headerGlowAlt 10s ease-in-out infinite;
+    }
+
+    @keyframes headerGlow{
+      0%, 100%{ transform:translate(0, 0) scale(1); opacity:0.15; }
+      50%{ transform:translate(-20px, 20px) scale(1.1); opacity:0.25; }
+    }
+
+    @keyframes headerGlowAlt{
+      0%, 100%{ transform:translate(0, 0) scale(1); opacity:0.1; }
+      50%{ transform:translate(20px, -20px) scale(1.15); opacity:0.2; }
     }
 
     .header-content{
@@ -85,6 +108,12 @@
       -webkit-background-clip:text;
       -webkit-text-fill-color:transparent;
       background-clip:text;
+      animation:titleShimmer 3s ease-in-out infinite;
+    }
+
+    @keyframes titleShimmer{
+      0%, 100%{ filter:brightness(1); }
+      50%{ filter:brightness(1.2); }
     }
 
     .header-subtitle{
@@ -98,6 +127,7 @@
       display:flex;
       gap:12px;
       flex-wrap:wrap;
+      align-items:center;
       position:relative;
       z-index:1;
     }
@@ -113,6 +143,35 @@
       align-items:center;
       gap:8px;
       box-shadow:0 8px 20px rgba(0,0,0,0.2);
+      transition:all 0.3s ease;
+    }
+
+    .badge:hover{
+      transform:translateY(-2px);
+      box-shadow:0 12px 28px rgba(167,139,250,0.3);
+      border-color:var(--primary);
+    }
+
+    .btn-home{
+      background:linear-gradient(135deg, var(--primary), var(--accent));
+      border:none;
+      color:#fff;
+      padding:12px 24px;
+      border-radius:12px;
+      font-size:14px;
+      font-weight:800;
+      cursor:pointer;
+      transition:all 0.3s ease;
+      box-shadow:0 8px 20px rgba(167,139,250,0.3);
+      display:flex;
+      align-items:center;
+      gap:8px;
+      text-decoration:none;
+    }
+
+    .btn-home:hover{
+      transform:translateY(-3px);
+      box-shadow:0 12px 32px rgba(167,139,250,0.5);
     }
 
     /* STATS BAR */
@@ -319,7 +378,7 @@
       background:var(--elevated);
       border:2px dashed var(--border);
       border-radius:14px;
-      min-height:900px; /* ← AUMENTADO de 750px para 900px - mais alto */
+      min-height:900px;
       position:relative;
       overflow:hidden;
     }
@@ -328,11 +387,11 @@
       position:absolute;
       inset:0;
       margin:auto;
-      width:auto; /* ← AUTO para manter proporção */
-      height:95%; /* ← AUMENTADO para 95% da altura - van mais alta */
+      width:auto;
+      height:95%;
       opacity:0.3;
       pointer-events:none;
-      object-fit:contain; /* ← CONTAIN garante que não distorce */
+      object-fit:contain;
       filter:brightness(1.1) contrast(1.05);
     }
 
@@ -553,12 +612,12 @@
       overflow-y:auto;
       overflow-x:hidden;
       padding-right:6px;
-      scrollbar-width:none; /* Firefox */
-      -ms-overflow-style:none; /* IE/Edge */
+      scrollbar-width:none;
+      -ms-overflow-style:none;
     }
 
     .passenger-list::-webkit-scrollbar{
-      display:none; /* Chrome/Safari/Opera */
+      display:none;
     }
 
     .passenger-card{
@@ -1017,8 +1076,10 @@
       <p class="header-subtitle">Nobreak Company • Gestão de Transporte</p>
     </div>
     <div class="header-badges">
-      <div class="badge">🚐 Transporte</div>
       <div class="badge">⚡ Sistema Ativo</div>
+      <a href="index.html" class="btn-home">
+        <span>🏠</span> Home
+      </a>
     </div>
   </header>
 
@@ -1238,7 +1299,16 @@ function toggleSnap(){
 
 function toggleVan(){
   const img = document.getElementById('vanBg');
-  vanOpacity = vanOpacity === 0.3 ? 0.15 : vanOpacity === 0.15 ? 0.5 : 0.7;
+  
+  // Ciclo: 30% → 50% → 70% → 30% (reseta)
+  if(vanOpacity === 0.3){
+    vanOpacity = 0.5;
+  }else if(vanOpacity === 0.5){
+    vanOpacity = 0.7;
+  }else{
+    vanOpacity = 0.3; // Reseta para 30%
+  }
+  
   img.style.opacity = vanOpacity;
   document.getElementById('btnVan').innerHTML = 
     `<span>🖼️</span> Van: ${Math.round(vanOpacity * 100)}%`;
@@ -1628,7 +1698,7 @@ async function exportAsPDF(){
 
   try{
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF('portrait', 'mm', 'a4'); // ← PORTRAIT para van vertical
+    const doc = new jsPDF('portrait', 'mm', 'a4');
 
     // Header - COMPACTO PARA PORTRAIT
     doc.setFillColor(20, 24, 37);
@@ -2394,7 +2464,7 @@ window.toggleSnap = toggleSnap;
 window.toggleVan = toggleVan;
 window.toggleLock = toggleLock;
 window.setAll = setAll;
-window.updateName = updateName;
+window.updateField = updateField;
 window.updateStatus = updateStatus;
 window.exportLayout = exportLayout;
 window.closeExportModal = closeExportModal;
