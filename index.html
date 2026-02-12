@@ -254,36 +254,42 @@
       cursor:pointer;
       position:relative;
       overflow:hidden;
-      transition:.28s cubic-bezier(.4,0,.2,1);
       backdrop-filter:blur(8px);
-      /* scroll reveal default */
-      opacity:0; transform:translateY(18px);
+      /* CSS stagger entrance */
+      animation:cardIn .5s cubic-bezier(.4,0,.2,1) both;
     }
-    .module.visible{
-      opacity:1; transform:translateY(0);
+    @keyframes cardIn{
+      from{ opacity:0; transform:translateY(20px) scale(.97); }
+      to{ opacity:1; transform:translateY(0) scale(1); }
     }
+    /* stagger delays per grid */
+    .grid .module:nth-child(1){ animation-delay:.05s }
+    .grid .module:nth-child(2){ animation-delay:.12s }
+    .grid .module:nth-child(3){ animation-delay:.19s }
+    .grid .module:nth-child(4){ animation-delay:.26s }
+    .grid .module:nth-child(5){ animation-delay:.33s }
+    .grid .module:nth-child(6){ animation-delay:.40s }
 
-    /* animated gradient border on hover */
+    /* glow border on hover (no z-index tricks) */
     .module::before{
-      content:''; position:absolute; inset:-1px;
+      content:''; position:absolute; inset:0;
       border-radius:18px;
+      border:2px solid transparent;
       background:conic-gradient(from var(--border-angle, 0deg),
-        transparent 40%, var(--card-color, var(--vibrant-purple)) 50%, transparent 60%);
+        transparent 35%, var(--card-color, var(--vibrant-purple)) 50%, transparent 65%) border-box;
+      -webkit-mask:linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite:xor;
+      mask:linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
+      mask-composite:exclude;
       opacity:0;
       transition:opacity .35s;
-      z-index:-1;
-    }
-    .module::after{
-      content:''; position:absolute; inset:1px;
-      border-radius:17px;
-      background:rgba(14,18,32,.90);
-      z-index:-1;
-      transition:background .3s;
+      pointer-events:none;
+      z-index:2;
     }
 
     .module:hover{
       transform:translateY(-5px) scale(1.01);
-      border-color:transparent;
+      border-color:rgba(255,255,255,.12);
       box-shadow:
         0 20px 50px rgba(0,0,0,.45),
         0 0 30px var(--card-glow, rgba(147,51,234,.10));
@@ -295,12 +301,12 @@
     .module .mouse-glow{
       position:absolute; width:250px; height:250px;
       border-radius:50%;
-      background:radial-gradient(circle, var(--card-glow, rgba(147,51,234,.08)), transparent 70%);
+      background:radial-gradient(circle, var(--card-glow, rgba(147,51,234,.12)), transparent 70%);
       pointer-events:none;
       opacity:0;
       transition:opacity .3s;
       transform:translate(-50%,-50%);
-      z-index:0;
+      z-index:1;
     }
     .module:hover .mouse-glow{ opacity:1; }
 
@@ -318,7 +324,7 @@
       display:flex; align-items:center; justify-content:center;
       border:1px solid rgba(255,255,255,.08);
       transition:.3s cubic-bezier(.4,0,.2,1);
-      position:relative; z-index:1;
+      position:relative; z-index:3;
     }
     .mod-icon svg{ width:22px; height:22px; }
     .module:hover .mod-icon{
@@ -357,7 +363,7 @@
       box-shadow:0 4px 16px rgba(79,140,255,.10);
     }
 
-    .mod-info{ display:flex; flex-direction:column; gap:4px; min-width:0; position:relative; z-index:1; }
+    .mod-info{ display:flex; flex-direction:column; gap:4px; min-width:0; position:relative; z-index:3; }
     .mod-name{
       font-weight:800; font-size:13.5px; letter-spacing:.3px;
       color:#f0f0f5;
@@ -433,8 +439,8 @@
     }
     .off-footer:hover{ opacity:.8; }
 
-    /* ===== animation stagger for scroll-reveal (handled by JS) ===== */
-    .module{ transition: opacity .45s cubic-bezier(.4,0,.2,1), transform .45s cubic-bezier(.4,0,.2,1), box-shadow .28s, border-color .28s; }
+    /* hover transitions (separate from entrance animation) */
+    .module{ transition: box-shadow .28s, border-color .28s, transform .28s cubic-bezier(.4,0,.2,1); }
 
     /* ===== responsive ===== */
 
@@ -710,23 +716,6 @@
 </div>
 
 <script>
-// ===== Scroll-reveal staggered animation =====
-(function(){
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if(e.isIntersecting){
-        const cards = e.target.querySelectorAll('.module');
-        cards.forEach((c, i) => {
-          setTimeout(() => c.classList.add('visible'), i * 70);
-        });
-        obs.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.15 });
-
-  document.querySelectorAll('.grid').forEach(g => obs.observe(g));
-})();
-
 // ===== Mouse-follow glow on cards =====
 document.querySelectorAll('.module').forEach(card => {
   const glow = card.querySelector('.mouse-glow');
