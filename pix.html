@@ -1,459 +1,581 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>PIX | OFF Company</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PIX - Voltz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<style>
-  @font-face{
-    font-family:"Rokiest";
-    src:url("https://waycompanygg.github.io/roteiro/assets/fonts/Rokiest-Extrabold.otf") format("opentype");
-    font-weight:800; font-display:swap;
-  }
-  :root{
-    --bg1:#060812; --bg2:#0b1220;
-    --panel:rgba(10,16,28,.78);
-    --stroke:rgba(255,255,255,.10);
-    --text:#e5e7eb; --muted:rgba(229,231,235,.62);
-    --blue:#2563eb; --green:#22c55e; --red:#ef4444; --amber:#f59e0b; --cyan:#06b6d4; --purple:#7c3aed;
-    --shadow:0 24px 80px rgba(0,0,0,.68);
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0; min-height:100vh;
-    font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
-    color:var(--text);
-    background:
-      radial-gradient(900px 520px at 14% 12%, rgba(124,58,237,.16), transparent 60%),
-      radial-gradient(900px 520px at 86% 18%, rgba(6,182,212,.14), transparent 60%),
-      radial-gradient(900px 520px at 70% 90%, rgba(34,197,94,.10), transparent 60%),
-      linear-gradient(135deg,var(--bg1),var(--bg2));
-    display:flex; justify-content:center;
-    padding:22px;
-  }
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
 
-  .home{
-    position:fixed; top:16px; left:16px;
-    background:rgba(17,24,39,.92);
-    border:1px solid rgba(255,255,255,.12);
-    color:#fff; text-decoration:none;
-    font-weight:900; font-size:14px;
-    padding:10px 12px;
-    border-radius:12px;
-    box-shadow:0 12px 30px rgba(0,0,0,.45);
-    transition:.15s;
-    z-index:10;
-  }
-  .home:hover{transform:translateY(-1px); opacity:.92}
+        .header {
+            background: rgba(30, 30, 46, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-  .wrap{
-    width:min(1100px,100%);
-    background:var(--panel);
-    border:1px solid var(--stroke);
-    border-radius:24px;
-    box-shadow:var(--shadow);
-    padding:18px;
-    backdrop-filter:blur(10px);
-    animation: in .45s ease both;
-  }
-  @keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
 
-  .topbar{
-    display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
-    align-items:flex-end;
-    padding:6px 6px 14px;
-  }
-  h1{font-family:"Rokiest"; margin:0; letter-spacing:.9px; font-size:34px}
-  .sub{margin:6px 0 0; color:var(--muted); font-size:13px}
-  .pill{
-    display:inline-flex; gap:8px; align-items:center;
-    padding:8px 10px;
-    border:1px solid rgba(255,255,255,.10);
-    border-radius:999px;
-    background:rgba(255,255,255,.04);
-    color:rgba(229,231,235,.72);
-    font-size:12px; font-weight:900;
-  }
+        .btn-back {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
 
-  .grid2{
-    display:grid;
-    grid-template-columns: 1.2fr .8fr;
-    gap:12px;
-  }
-  @media(max-width:980px){ .grid2{grid-template-columns:1fr} }
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
 
-  .card{
-    background:rgba(255,255,255,.04);
-    border:1px solid var(--stroke);
-    border-radius:18px;
-    padding:14px;
-    position:relative;
-    overflow:hidden;
-  }
-  .card::before{
-    content:"";
-    position:absolute; inset:-2px;
-    background: radial-gradient(600px 200px at 10% 20%, rgba(124,58,237,.10), transparent 60%),
-                radial-gradient(600px 200px at 90% 10%, rgba(6,182,212,.10), transparent 60%);
-    filter: blur(0px);
-    pointer-events:none;
-  }
-  .card > *{position:relative}
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-  .cardTitle{
-    font-family:"Rokiest";
-    letter-spacing:.6px;
-    font-size:18px;
-    margin:0 0 10px;
-  }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
 
-  .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
-  .btn{
-    height:44px; border-radius:12px; border:0;
-    padding:0 14px; font-weight:900;
-    cursor:pointer; color:#fff;
-    transition:.15s;
-    display:inline-flex; align-items:center; justify-content:center; gap:10px;
-    user-select:none;
-  }
-  .btn:hover{transform:translateY(-1px); opacity:.95}
-  .btn:active{transform:translateY(0); opacity:.90}
-  .b{background:var(--blue); box-shadow:0 10px 26px rgba(37,99,235,.24)}
-  .g{background:var(--green); box-shadow:0 10px 26px rgba(34,197,94,.18)}
-  .ghost{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.10)}
-  .danger{background:rgba(239,68,68,.18); border:1px solid rgba(239,68,68,.35)}
-  .chip{
-    display:inline-flex; align-items:center; gap:8px;
-    padding:6px 10px; border-radius:999px;
-    border:1px solid rgba(255,255,255,.10);
-    background:rgba(2,6,23,.35);
-    color:rgba(229,231,235,.82);
-    font-size:12px; font-weight:900;
-    white-space:nowrap;
-  }
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
 
-  .bigKey{
-    margin-top:12px;
-    border:1px solid rgba(255,255,255,.10);
-    background: rgba(2,6,23,.40);
-    border-radius:16px;
-    padding:14px;
-  }
-  .bigKey .label{font-size:12px; color:rgba(229,231,235,.62); font-weight:900}
-  .bigKey .value{
-    margin-top:8px;
-    font-size:18px;
-    font-weight:900;
-    letter-spacing:.2px;
-    word-break:break-all;
-  }
-  .meta{
-    margin-top:10px;
-    display:flex; gap:10px; flex-wrap:wrap;
-  }
+        .page-info h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
 
-  .list{
-    display:grid;
-    grid-template-columns:1fr;
-    gap:10px;
-    margin-top:10px;
-  }
-  .item{
-    border:1px solid rgba(255,255,255,.10);
-    background: rgba(2,6,23,.35);
-    border-radius:16px;
-    padding:12px;
-    display:flex; gap:10px; justify-content:space-between; align-items:center;
-  }
-  .item .left{min-width:0}
-  .item .fav{font-weight:900}
-  .item .k{color:rgba(229,231,235,.68); font-size:12px; margin-top:4px; word-break:break-all}
-  .item .right{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+        .page-info p {
+            color: rgba(255, 255, 255, 0.6);
+        }
 
-  .divider{height:1px; background:rgba(255,255,255,.08); margin:12px 0}
+        .btn {
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-family: 'Space Grotesk', sans-serif;
+        }
 
-  /* overlay */
-  .overlay{
-    position:fixed; inset:0;
-    display:none;
-    align-items:center; justify-content:center;
-    background:rgba(0,0,0,.55);
-    backdrop-filter:blur(10px);
-    z-index:99999;
-    padding:18px;
-  }
-  .modal{
-    width:min(520px, 96vw);
-    border-radius:18px;
-    border:1px solid rgba(255,255,255,.14);
-    background:rgba(11,18,32,.92);
-    box-shadow:0 20px 70px rgba(0,0,0,.70);
-    padding:16px;
-    text-align:center;
-    animation: pop .22s ease both;
-  }
-  @keyframes pop{from{opacity:0;transform:scale(.98)}to{opacity:1;transform:scale(1)}}
-  .ring{
-    width:56px; height:56px;
-    border-radius:999px;
-    border:3px solid rgba(255,255,255,.18);
-    border-top-color:rgba(37,99,235,.95);
-    margin:10px auto 12px;
-    animation:spin .9s linear infinite;
-  }
-  @keyframes spin{to{transform:rotate(360deg)}}
+        .btn-primary {
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+            color: #fff;
+        }
 
-  /* toast */
-  .toast{
-    position:fixed; bottom:18px; left:50%;
-    transform:translateX(-50%);
-    background:rgba(17,24,39,.95);
-    border:1px solid rgba(255,255,255,.12);
-    padding:10px 12px;
-    border-radius:12px;
-    font-weight:900;
-    opacity:0; pointer-events:none;
-    transition:.2s;
-    z-index: 999999;
-    box-shadow:0 12px 30px rgba(0,0,0,.45);
-  }
-  .toast.show{opacity:1}
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(236, 72, 153, 0.4);
+        }
 
-  .footer{
-    margin-top:14px;
-    padding:10px 6px 0;
-    color:rgba(229,231,235,.55);
-    font-size:12px;
-    display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
-  }
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
 
-  .empty{
-    border:1px dashed rgba(255,255,255,.18);
-    background: rgba(2,6,23,.18);
-    border-radius:16px;
-    padding:14px;
-    color:rgba(229,231,235,.75);
-  }
-</style>
+        .summary-card {
+            background: rgba(30, 30, 46, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+        }
+
+        .summary-card h3 {
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .summary-card .value {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card {
+            background: rgba(30, 30, 46, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .transactions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .transaction-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .transaction-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .transaction-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .icon-received {
+            background: rgba(16, 185, 129, 0.2);
+        }
+
+        .icon-sent {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .transaction-details h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .transaction-details p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .transaction-right {
+            text-align: right;
+        }
+
+        .transaction-amount {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .amount-received {
+            color: #10b981;
+        }
+
+        .amount-sent {
+            color: #ef4444;
+        }
+
+        .transaction-date {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(30, 30, 46, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .modal-header {
+            margin-bottom: 30px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ec4899;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .modal-actions .btn {
+            flex: 1;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .transaction-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .transaction-right {
+                text-align: left;
+            }
+        }
+    </style>
 </head>
-
 <body>
-<a class="home" href="index.html">🏠 Home</a>
-
-<div id="overlay" class="overlay">
-  <div class="modal">
-    <div class="ring"></div>
-    <div style="font-family:Rokiest;letter-spacing:.6px;font-size:22px;">Carregando PIX…</div>
-    <div style="margin-top:6px;color:rgba(229,231,235,.7);font-size:13px;">Aguarde</div>
-  </div>
-</div>
-
-<div class="wrap">
-  <div class="topbar">
-    <div>
-      <h1>PIX</h1>
-      <div class="sub">OFF Company • Copie a chave e envie seu pagamento</div>
-    </div>
-    <div class="pill">💸 Pagamento rápido</div>
-  </div>
-
-  <div class="grid2">
-    <!-- Principal -->
-    <div class="card">
-      <div class="cardTitle">PIX Principal</div>
-      <div class="sub">Favorito para pagamentos. Clique em copiar e pronto.</div>
-
-      <div class="divider"></div>
-
-      <div id="primaryBox" class="empty">Carregando…</div>
-
-      <div class="divider"></div>
-
-      <div class="row">
-        <button class="btn b" onclick="copyPrimary()">📋 Copiar PIX</button>
-        <button class="btn ghost" onclick="loadPix()">🔄 Atualizar</button>
-      </div>
-    </div>
-
-    <!-- Ajuda/Info -->
-    <div class="card">
-      <div class="cardTitle">Dicas</div>
-      <div class="sub">Copie a chave e cole no seu banco. Se for QR, use o app do banco.</div>
-
-      <div class="divider"></div>
-
-      <div class="row" style="gap:8px; align-items:flex-start; flex-direction:column">
-        <div class="chip">🔐 Seguro</div>
-        <div class="chip">⚡ Instantâneo</div>
-        <div class="chip">📎 Copiar com 1 clique</div>
-      </div>
-
-      <div class="divider"></div>
-
-      <div class="sub">
-        Se aparecer “Nenhum PIX cadastrado”, o admin precisa cadastrar no painel.
-      </div>
-    </div>
-  </div>
-
-  <div class="card" style="margin-top:12px;">
-    <div class="row" style="justify-content:space-between; align-items:flex-end;">
-      <div>
-        <div class="cardTitle" style="margin:0;">Outros PIX disponíveis</div>
-        <div class="sub">Se existir mais de um favorecido, aparece aqui.</div>
-      </div>
-      <button class="btn ghost" onclick="loadPix()">🔄</button>
-    </div>
-
-    <div class="divider"></div>
-
-    <div id="list" class="list"></div>
-  </div>
-
-  <div class="footer">
-    <div>© OFF Company</div>
-    <div>Desenvolvido por Lucas Santos</div>
-  </div>
-</div>
-
-<div id="toast" class="toast">✅</div>
-
-<script>
-  // ========= COLE SUA URL /exec AQUI =========
-  const API_URL = "COLE_SUA_URL_EXEC_AQUI";
-
-  let primary = null;
-  let list = [];
-
-  function toast(msg){
-    const t=document.getElementById("toast");
-    t.textContent=msg;
-    t.classList.add("show");
-    setTimeout(()=>t.classList.remove("show"), 1600);
-  }
-  function overlay(on){
-    document.getElementById("overlay").style.display = on ? "flex" : "none";
-  }
-
-  async function api(fn, payload){
-    const controller = new AbortController();
-    const timeout = setTimeout(()=>controller.abort(), 20000);
-    try{
-      const res = await fetch(API_URL, {
-        method:"POST",
-        cache:"no-store",
-        // NÃO setar Content-Type -> evita preflight
-        body: JSON.stringify({ fn, payload }),
-        signal: controller.signal
-      });
-      const text = await res.text();
-      try { return JSON.parse(text); }
-      catch { return { ok:false, error:"Resposta inválida: " + text.slice(0,160) }; }
-    }catch(err){
-      return { ok:false, error:(err.name==="AbortError" ? "Timeout (20s)" : String(err)) };
-    }finally{
-      clearTimeout(timeout);
-    }
-  }
-
-  function esc(s){
-    return String(s??"").replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m]));
-  }
-
-  function renderPrimary(){
-    const box = document.getElementById("primaryBox");
-    if(!primary){
-      box.className = "empty";
-      box.innerHTML = `<b>Nenhum PIX cadastrado.</b><div class="sub" style="margin-top:6px">Peça para o admin cadastrar um favorecido.</div>`;
-      return;
-    }
-
-    box.className = "bigKey";
-    box.innerHTML = `
-      <div class="row" style="justify-content:space-between; align-items:flex-start">
-        <div style="min-width:0">
-          <div style="font-weight:900; font-size:18px">${esc(primary.favorecido || "Favorecido")}</div>
-          <div class="sub" style="margin-top:2px">${esc(primary.banco || "")}</div>
+    <div class="header">
+        <div class="header-left">
+            <a href="dashboard.html" class="btn-back">← Voltar</a>
+            <div class="logo">
+                <h1>PIX</h1>
+            </div>
         </div>
-        <span class="chip">⭐ Principal</span>
-      </div>
+    </div>
 
-      <div class="divider"></div>
-
-      <div class="label">Chave PIX</div>
-      <div class="value" id="primaryKey">${esc(primary.chave || "")}</div>
-
-      <div class="meta">
-        ${primary.tipo ? `<span class="chip">🔑 ${esc(primary.tipo)}</span>` : ``}
-        ${primary.documento ? `<span class="chip">🧾 ${esc(primary.documento)}</span>` : ``}
-      </div>
-    `;
-  }
-
-  function renderList(){
-    const el = document.getElementById("list");
-    const others = (list || []).filter(x => !primary || x.id !== primary.id);
-
-    if(!others.length){
-      el.innerHTML = `<div class="empty">Sem outros PIX no momento.</div>`;
-      return;
-    }
-
-    el.innerHTML = others.map(x => `
-      <div class="item">
-        <div class="left">
-          <div class="fav">${esc(x.favorecido || "Favorecido")}</div>
-          <div class="k">${esc(x.tipo || "PIX")} • ${esc(x.chave || "")}</div>
+    <div class="container">
+        <div class="page-header">
+            <div class="page-info">
+                <h1>Gestão de PIX</h1>
+                <p>Controle de pagamentos e transferências</p>
+            </div>
+            <button class="btn btn-primary" onclick="openPixModal()">+ Nova Transferência</button>
         </div>
-        <div class="right">
-          ${x.banco ? `<span class="chip">${esc(x.banco)}</span>` : ``}
-          <button class="btn ghost" style="height:38px" onclick="copyText('${escJS(x.chave||"")}')">📋 Copiar</button>
+
+        <div class="summary-cards">
+            <div class="summary-card">
+                <h3>Total Recebido</h3>
+                <div class="value amount-received" id="totalReceived">R$ 0,00</div>
+            </div>
+            <div class="summary-card">
+                <h3>Total Enviado</h3>
+                <div class="value amount-sent" id="totalSent">R$ 0,00</div>
+            </div>
+            <div class="summary-card">
+                <h3>Saldo</h3>
+                <div class="value" id="balance">R$ 0,00</div>
+            </div>
         </div>
-      </div>
-    `).join("");
-  }
 
-  function escJS(s){
-    return String(s??"").replace(/['\\]/g, "\\$&");
-  }
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Histórico de Transações</h2>
+            </div>
+            <div class="transactions-list" id="transactionsList">
+                <!-- Transações serão renderizadas aqui -->
+            </div>
+        </div>
+    </div>
 
-  async function copyText(txt){
-    if(!txt) return toast("Sem chave para copiar");
-    try{
-      await navigator.clipboard.writeText(txt);
-      toast("📋 Copiado!");
-    }catch{
-      toast("❌ Não foi possível copiar");
-    }
-  }
+    <!-- Modal de Nova Transferência -->
+    <div class="modal" id="pixModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Nova Transferência PIX</h2>
+            </div>
+            <form id="pixForm">
+                <div class="form-group">
+                    <label>Tipo</label>
+                    <select id="pixType" required>
+                        <option value="received">Recebido</option>
+                        <option value="sent">Enviado</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Valor</label>
+                        <input type="number" id="pixAmount" step="0.01" placeholder="0.00" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Data</label>
+                        <input type="date" id="pixDate" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Nome do Contato</label>
+                    <input type="text" id="pixContact" placeholder="Ex: João Silva" required>
+                </div>
+                <div class="form-group">
+                    <label>Descrição</label>
+                    <input type="text" id="pixDescription" placeholder="Ex: Pagamento evento SP" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closePixModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-  function copyPrimary(){
-    if(!primary || !primary.chave) return toast("Sem PIX principal");
-    copyText(primary.chave);
-  }
+    <script>
+        // Verificar autenticação
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (!currentUser) {
+            window.location.href = 'login.html';
+        }
 
-  async function loadPix(){
-    overlay(true);
-    const r = await api("pixPublicGet", {});
-    overlay(false);
+        // Inicializar dados de exemplo
+        if (!localStorage.getItem('pixTransactions')) {
+            const sampleTransactions = [
+                {
+                    id: 1,
+                    type: 'received',
+                    amount: 5000.00,
+                    contact: 'João Silva',
+                    description: 'Pagamento evento SP',
+                    date: '2026-02-10'
+                },
+                {
+                    id: 2,
+                    type: 'sent',
+                    amount: 1500.00,
+                    contact: 'Maria Santos',
+                    description: 'Adiantamento cachê',
+                    date: '2026-02-12'
+                },
+                {
+                    id: 3,
+                    type: 'received',
+                    amount: 8000.00,
+                    contact: 'Pedro Costa',
+                    description: 'Festival Rio',
+                    date: '2026-02-13'
+                },
+                {
+                    id: 4,
+                    type: 'sent',
+                    amount: 2500.00,
+                    contact: 'Fornecedor XYZ',
+                    description: 'Equipamentos',
+                    date: '2026-02-14'
+                }
+            ];
+            localStorage.setItem('pixTransactions', JSON.stringify(sampleTransactions));
+        }
 
-    if(!r.ok){
-      document.getElementById("primaryBox").className="empty";
-      document.getElementById("primaryBox").innerHTML = `<b>Erro ao carregar.</b><div class="sub" style="margin-top:6px">${esc(r.error||"")}</div>`;
-      document.getElementById("list").innerHTML = `<div class="empty">—</div>`;
-      return toast("❌ " + (r.error||"Erro"));
-    }
+        let pixTransactions = JSON.parse(localStorage.getItem('pixTransactions'));
 
-    primary = r.primary || null;
-    list = r.list || [];
+        function calculateSummary() {
+            let totalReceived = 0;
+            let totalSent = 0;
 
-    renderPrimary();
-    renderList();
-    toast("✅ PIX carregado");
-  }
+            pixTransactions.forEach(t => {
+                if (t.type === 'received') {
+                    totalReceived += t.amount;
+                } else {
+                    totalSent += t.amount;
+                }
+            });
 
-  window.addEventListener("DOMContentLoaded", loadPix);
-</script>
+            const balance = totalReceived - totalSent;
+
+            document.getElementById('totalReceived').textContent = formatCurrency(totalReceived);
+            document.getElementById('totalSent').textContent = formatCurrency(totalSent);
+            document.getElementById('balance').textContent = formatCurrency(balance);
+        }
+
+        function renderTransactions() {
+            const list = document.getElementById('transactionsList');
+            
+            const sortedTransactions = pixTransactions.sort((a, b) => 
+                new Date(b.date) - new Date(a.date)
+            );
+
+            list.innerHTML = sortedTransactions.map(t => `
+                <div class="transaction-item">
+                    <div class="transaction-left">
+                        <div class="transaction-icon icon-${t.type}">
+                            ${t.type === 'received' ? '📥' : '📤'}
+                        </div>
+                        <div class="transaction-details">
+                            <h4>${t.contact}</h4>
+                            <p>${t.description}</p>
+                        </div>
+                    </div>
+                    <div class="transaction-right">
+                        <div class="transaction-amount amount-${t.type}">
+                            ${t.type === 'received' ? '+' : '-'} ${formatCurrency(t.amount)}
+                        </div>
+                        <div class="transaction-date">${formatDate(t.date)}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openPixModal() {
+            document.getElementById('pixModal').classList.add('active');
+            document.getElementById('pixDate').valueAsDate = new Date();
+        }
+
+        function closePixModal() {
+            document.getElementById('pixModal').classList.remove('active');
+            document.getElementById('pixForm').reset();
+        }
+
+        document.getElementById('pixForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newTransaction = {
+                id: Date.now(),
+                type: document.getElementById('pixType').value,
+                amount: parseFloat(document.getElementById('pixAmount').value),
+                contact: document.getElementById('pixContact').value,
+                description: document.getElementById('pixDescription').value,
+                date: document.getElementById('pixDate').value
+            };
+
+            pixTransactions.push(newTransaction);
+            localStorage.setItem('pixTransactions', JSON.stringify(pixTransactions));
+            
+            closePixModal();
+            calculateSummary();
+            renderTransactions();
+        });
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(value);
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString + 'T00:00:00');
+            return date.toLocaleDateString('pt-BR', { 
+                day: '2-digit', 
+                month: 'short',
+                year: 'numeric'
+            });
+        }
+
+        calculateSummary();
+        renderTransactions();
+    </script>
 </body>
 </html>
