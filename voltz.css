@@ -1,0 +1,223 @@
+/* Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Variáveis */
+:root {
+  --bg-dark: #12131A;
+  --bg-light: #1E1F2B;
+  --text-color: #F7F8FA; 
+  --primary-color: #7B22EA;
+  --secondary-color: #00F0FF;
+  --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: var(--bg-dark);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+h1, h2, h3 {
+  font-family: 'Syne', sans-serif;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+a {
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+}
+
+.gradient-bg {
+  background: radial-gradient(ellipse at top, var(--bg-light), transparent),
+              radial-gradient(ellipse at bottom, var(--bg-dark), transparent);
+}
+
+.gradient-text {
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Header */
+.header {
+  position: absolute;
+  width: 100%;
+  padding: 1.5rem;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header-content nav {
+  display: flex;
+  gap: 2rem;
+}
+
+.header-content nav a {
+  position: relative;
+  font-weight: 500;
+}
+
+.header-content nav a::before {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  width: 100%;
+  height: 2px;
+  background: var(--gradient);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.header-content nav a:hover::before,
+.header-content nav a.active::before {
+  transform: scaleX(1);
+}
+
+.cta-link {
+  font-weight: 600;
+  padding: 0.5rem 1.25rem;
+  background: var(--gradient);
+  border-radius: 99px;
+}
+
+/* Hero */
+.hero {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 8rem 1.5rem 4rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3rem;
+  align-items: center;
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 6vw, 4rem);
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.cta-button {
+  display: inline-block;
+  font-weight: 600;
+  padding: 1rem 2rem;
+  background: var(--gradient);
+  border-radius: 99px;
+  transition: transform 0.3s ease;
+}
+
+.cta-button:hover {
+  transform: translateY(-4px);
+}
+
+.secondary-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+}
+
+.secondary-link::after {
+  content: '';
+  width: 20px;
+  height: 20px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M17 8l4 4m0 0l-4 4m4-4H3' /%3E%3C/svg%3E") center/contain no-repeat;
+}
+
+.hero-image {
+  perspective: 1000px;
+}
+
+.hero-image img {
+  max-width: 500px;
+  transform: rotateY(-20deg) rotateX(10deg);
+  border-radius: 0.5rem;
+  box-shadow: 0 0 50px rgba(0,0,0,0.5), 0 0 0 10px rgba(255,255,255,0.1);
+}
+
+/* Features */
+.features {
+  max-width: 1200px;
+  margin: 4rem auto;
+  padding: 0 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  text-align: center;
+}
+
+.features .icon-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--gradient);
+  margin-bottom: 1.5rem;
+}
+
+.features .icon-wrapper img {
+  width: 36px;
+  height: 36px;
+}
+
+.features h3 {
+  font-size: 1.5rem;
+}
+
+/* CTA Section */
+.cta {
+  max-width: 1200px;
+  margin: 4rem auto;
+  padding: 4rem 1.5rem;
+  background: var(--bg-light);
+  border-radius: 1rem;
+  text-align: center;
+}
+
+.cta h2 {
+  font-size: clamp(1.5rem, 5vw, 3rem);
+  margin-bottom: 2rem;
+}
+
+/* Footer */
+footer {
+  padding: 4rem 1.5rem;
+  text-align: center;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+footer .logo {
+  opacity: 0.7;
+  margin-bottom: 1rem;
+}
+
+footer p {
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
